@@ -15,6 +15,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
     private boolean isOK;
+    //test
     private Bitmap balka;
     private float x, y;
 
