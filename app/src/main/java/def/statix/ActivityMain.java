@@ -10,30 +10,16 @@ import def.statix.rendering.RenderingSurface;
 
 public class ActivityMain extends ActionBarActivity {
 
-    private RenderingSurface surface;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        surface = new RenderingSurface(this);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new RenderingSurfaceFragment(surface))
+                    .add(R.id.container, new RenderingSurfaceFragment())
                     .commit();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        surface.pause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        surface.resume();
     }
 
     @Override

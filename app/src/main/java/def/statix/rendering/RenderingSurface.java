@@ -8,6 +8,8 @@ import android.view.SurfaceView;
 
 /**
  * Created by Lux on 15.02.14.
+ * General SurfaceView for rendering all the scene graphics.
+ * Operates in the separate from the UI thread.
  */
 public class RenderingSurface extends SurfaceView implements Runnable{
 
