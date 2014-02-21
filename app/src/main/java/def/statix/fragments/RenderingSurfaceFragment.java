@@ -1,7 +1,5 @@
 package def.statix.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,56 +8,45 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import def.statix.R;
-import def.statix.rendering.Renderer;
 import def.statix.rendering.RenderingSurface;
+import def.statix.rendering.SceneController;
 
 /**
  * Created by Lux on 16.02.14.
  */
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
-    //test
-    private Bitmap balka;
-    private Renderer renderer;
-    private RenderingSurface surface;
+    private SceneController sceneController;
 
     public RenderingSurfaceFragment() {
-        renderer = new Renderer(getActivity());
-        surface = renderer.getRenderingSurface();
+        sceneController = new SceneController(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //test demo
-            balka = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-            surface.setBalka(balka);
-        //
-        surface.setOnTouchListener(this);
-        return surface;
+        sceneController.getSurface().setOnTouchListener(this);
+        return sceneController.getSurface();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        surface.pause();
-        Log.d("TEST", "PAUSED");
+        sceneController.getSurface().pause();
+        Log.d("DEBUG", "PAUSED");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        surface.resume();
-        Log.d("TEST", "RESUMED");
+        sceneController.getSurface().resume();
+        Log.d("DEBUG", "RESUMED");
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if(motionEvent.getAction() == MotionEvent.ACTION_DOWN ||
-                motionEvent.getAction() == MotionEvent.ACTION_MOVE){
-            //test
-            surface.moveBalka(motionEvent.getX(), motionEvent.getY());
+           motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+           // perform scene controller calls.
         }
         return true;
     }
-
 }

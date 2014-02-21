@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import def.statix.fragments.RenderingSurfaceFragment;
-import def.statix.rendering.RenderingSurface;
 
 public class ActivityMain extends ActionBarActivity {
 
