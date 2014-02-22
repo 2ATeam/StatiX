@@ -19,13 +19,22 @@ public class ConstructionUnit extends Renderable {
 
     public ConstructionUnit(Force outgoingForce, PointF location) {
         this.outgoingForce = outgoingForce;
-        this.position = location; // TODO: position should be converted from location(screen coordinates).
+        this.position = new PointF();
     }
 
     public ConstructionUnit() {
         outgoingForce = new Force();
+        this.position = new PointF();
         // some default initialization will be here.
         // maybe applying the gravity or smth. like that.
+    }
+
+    public void setPosition(PointF location){
+        this.position = location; // TODO: position should be converted from location(screen coordinates).
+    }
+
+    public void setPosition(float x, float y){
+        this.position.set(x, y); // TODO: position should be converted from location(screen coordinates).
     }
 
     public void loadImage(Bitmap image) {

@@ -14,6 +14,7 @@ public abstract class ConstructionUnitBuilder {
 
     public abstract void loadBitmap(Context context);
     public abstract void setType(ConstructionUnitType type);
+    public abstract void setPosition(float x, float y);
 
     public void createNewUnit() {
         unit = new ConstructionUnit();

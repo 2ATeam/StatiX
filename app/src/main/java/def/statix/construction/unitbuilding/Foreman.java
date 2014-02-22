@@ -20,9 +20,10 @@ public class Foreman {
         return builder.getUnit();
     }
 
-    //if we constructing beam, type parameter is redundant(type of constructed beam is always null).
-    public void constructUnit(Context context, ConstructionUnitType type){
+    //NOTE: if we constructing beam, type parameter is redundant(type of constructed beam is always null)
+    public void constructUnit(Context context, float x, float y, ConstructionUnitType type){
         builder.createNewUnit();
+        builder.setPosition(x, y);
         builder.loadBitmap(context);
         builder.setType(type);
     }

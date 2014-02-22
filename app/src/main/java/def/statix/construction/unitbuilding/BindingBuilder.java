@@ -19,6 +19,11 @@ public class BindingBuilder extends ConstructionUnitBuilder{
 
     @Override
     public void setType(ConstructionUnitType type) {
-        this.setType(type);
+        unit.setType(type);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        unit.setPosition(x, y);
     }
 }

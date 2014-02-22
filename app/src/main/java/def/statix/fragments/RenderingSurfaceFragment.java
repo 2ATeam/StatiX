@@ -14,16 +14,23 @@ import def.statix.rendering.SceneController;
  * Created by Lux on 16.02.14.
  */
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
+
     private SceneController sceneController;
 
     public RenderingSurfaceFragment() {
-        sceneController = new SceneController(getActivity());
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        sceneController = new SceneController(getActivity());
         sceneController.getSurface().setOnTouchListener(this);
         return sceneController.getSurface();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -42,9 +49,14 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN ||
-           motionEvent.getAction() == MotionEvent.ACTION_MOVE){
-           // perform scene controller calls.
+        switch(motionEvent.getAction()){
+            case MotionEvent.ACTION_DOWN:{
+                sceneController.addBeam(motionEvent.getX(), motionEvent.getY());
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                break;
+            }
         }
         return true;
     }

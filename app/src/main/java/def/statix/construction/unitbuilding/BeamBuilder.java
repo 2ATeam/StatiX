@@ -21,4 +21,9 @@ public class BeamBuilder extends ConstructionUnitBuilder {
     public void setType(ConstructionUnitType type) {
         unit.setType(null); // there is no type of beam now. it is just beam. nothing else.
     }
+
+    @Override
+    public void setPosition(float x, float y) {
+        unit.setPosition(x, y);
+    }
 }

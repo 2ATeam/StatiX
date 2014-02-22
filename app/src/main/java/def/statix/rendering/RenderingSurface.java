@@ -7,6 +7,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Lux on 15.02.14.
@@ -18,7 +20,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
 
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
-    private ArrayList<Renderable> renderableData; // a reference to the data to render.
+    private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
     private Paint paint;
     private boolean isOK;
 
@@ -35,12 +37,15 @@ public class RenderingSurface extends SurfaceView implements Runnable{
                 continue;
             }
             Canvas canvas = surfaceHolder.lockCanvas();
-            assert canvas != null;
+            assert canvas != null && renderableData != null;
             canvas.drawARGB(255, 250, 150, 20);
-            //TODO: refactoring needed. too long chain of method calls.
-            for (Renderable renderable : renderableData) {
-                canvas.drawBitmap(renderable.getSprite().getImage(),
-                                  renderable.getSprite().getTransform(), paint);
+            Iterator<Renderable> iterator = renderableData.iterator();
+            Renderable item;
+            while(iterator.hasNext()) {
+                item = iterator.next();
+                //TODO: refactoring needed. too long chain of method calls.
+                canvas.drawBitmap(item.getSprite().getImage(),
+                                  item.getSprite().getTransform(), paint);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
@@ -63,5 +68,9 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         isOK = true;
         renderingThread = new Thread(this);
         renderingThread.start();
+    }
+
+    public void setModel(CopyOnWriteArrayList<Renderable> model){
+        this.renderableData = model;
     }
 }
