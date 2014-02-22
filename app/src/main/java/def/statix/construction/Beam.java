@@ -13,6 +13,4 @@ public class Beam extends ConstructionUnit{
     public float getLenght() {
         return lenght;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package def.statix.construction;
 
+import def.statix.construction.unittypes.ForceType;
 import def.statix.rendering.Renderable;
 
 /**

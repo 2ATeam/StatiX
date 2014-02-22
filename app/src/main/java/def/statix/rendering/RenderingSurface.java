@@ -18,7 +18,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
 
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
-    private ArrayList<Renderable> renderableData;
+    private ArrayList<Renderable> renderableData; // a reference to the data to render.
     private Paint paint;
     private boolean isOK;
 

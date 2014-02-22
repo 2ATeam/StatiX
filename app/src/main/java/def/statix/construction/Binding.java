@@ -5,9 +5,5 @@ package def.statix.construction;
  *
  */
 public class Binding extends ConstructionUnit {
-   BindingType type;
 
-    public Binding(BindingType type) {
-        this.type = type;
-    }
 }
