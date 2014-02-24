@@ -3,6 +3,7 @@ package def.statix.rendering;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.util.Log;
 
 /**
  * Created by Lux on 19.02.14.
@@ -21,8 +22,7 @@ public class Sprite {
         this.matrix = new Matrix();
         this.matrix.postTranslate(location.x, location.y);
         this.location = location;
-
-        this.angle = 0;
+        this.angle = 0.0f;
     }
 
     public Sprite(Bitmap image, float x, float y) {
@@ -35,12 +35,16 @@ public class Sprite {
     }
 
     public void scale(float newWidth, float newHeight) {
-        matrix.postScale(newWidth, newHeight);
+        matrix.reset();
+        matrix.postScale(newWidth / image.getWidth(), newHeight / image.getHeight());
+        matrix.postTranslate(location.x, location.y);
+        Log.d("SPRITE", "scaled at " + newWidth + "x" + newHeight);
     }
 
     public void rotate(float angle) {
         matrix.postRotate(angle, centredLocation.x, centredLocation.y);
         this.angle = angle;
+        Log.d("SPRITE", "rotated at " + angle);
     }
 
     public void translate(PointF newLocation) {
@@ -48,6 +52,7 @@ public class Sprite {
         location = newLocation;
         centredLocation.set(newLocation.x + (image.getWidth() / 2),
                             newLocation.y + (image.getHeight() / 2));
+        Log.d("SPRITE", "translated at " + newLocation.toString());
     }
 
     public Matrix getTransform() {
@@ -76,6 +81,7 @@ public class Sprite {
 
     public void update() {
         image = Bitmap.createBitmap(image, 0, 0, getWidth(), getHeight(), matrix, true);
+        Log.d("SPRITE", "transform applied");
     }
 
     public Bitmap getImage() {

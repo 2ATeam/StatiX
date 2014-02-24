@@ -13,8 +13,7 @@ public class BeamBuilder extends ConstructionUnitBuilder {
 
     @Override
     public void loadBitmap(Context context) {
-        //TODO: replace the placeholder image.
-        unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
+        unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.plank));
     }
 
     @Override

@@ -20,14 +20,17 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
     private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
-    private Paint paint;
+    private Paint unitPaint;
+    private Paint boundingBoxPaint;
     private boolean isOK;
 
     public RenderingSurface(Context context) {
         super(context);
         surfaceHolder = getHolder();
         // some bitmap smoothing here:
-        paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
+        unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
+        boundingBoxPaint = new Paint();
+        boundingBoxPaint.setARGB(50, 0, 0, 200);
     }
 
     @Override
@@ -38,13 +41,14 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             }
             Canvas canvas = surfaceHolder.lockCanvas();
             assert canvas != null && renderableData != null;
-            canvas.drawARGB(255, 250, 150, 20);
+            canvas.drawARGB(255, 40, 40, 40);
             Iterator<Renderable> iterator = renderableData.iterator();
             Renderable item;
             while(iterator.hasNext()) {
                 item = iterator.next();
-                //TODO: refactoring needed. too long chain of method calls.
-                canvas.drawBitmap(item.getSprite().getImage(), item.getSprite().getTransform(), paint);
+                canvas.drawRect(item.getBoundingRect(), boundingBoxPaint);
+                canvas.drawBitmap(item.getSprite().getImage(), item.getLocation().x,
+                                                               item.getLocation().y, unitPaint);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

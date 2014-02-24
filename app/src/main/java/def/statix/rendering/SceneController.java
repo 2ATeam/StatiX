@@ -56,19 +56,16 @@ public class SceneController {
         selectedObject = foreman.getUnit(); // added object becomes selected.
     }
 
-    public void initRenderingSurface(Context context) {
-        this.context = context;
-        this.renderingSurface = new RenderingSurface(context);
-        this.renderingSurface.setModel(sceneObjects);
-    }
-
     public void rotateSelected(float angle){
         selectedObject.rotate(angle);
     }
 
-    @Deprecated
-    public void addRenderableObject(Renderable object) {
-        sceneObjects.add(object);
+    public void scaleSelected(float width, float height) {
+        selectedObject.scale(20.0f, 20.0f);
+    }
+
+    public void applyTransformToSelected(){
+        selectedObject.updateSprite();
     }
 
     public RenderingSurface getSurface(){
