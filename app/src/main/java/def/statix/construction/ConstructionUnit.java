@@ -38,7 +38,8 @@ public class ConstructionUnit extends Renderable {
     }
 
     public void loadImage(Bitmap image) {
-        setSprite(new Sprite(image, position));
+        setSprite(new Sprite(image, position.x - (image.getWidth() / 2),
+                                    position.y - (image.getHeight() / 2)));
     }
 
     public ConstructionUnitType getType() {

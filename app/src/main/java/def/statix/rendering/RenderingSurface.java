@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,7 +26,8 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     public RenderingSurface(Context context) {
         super(context);
         surfaceHolder = getHolder();
-        paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG); // some bitmap smoothing here :D
+        // some bitmap smoothing here:
+        paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
     }
 
     @Override
@@ -44,8 +44,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             while(iterator.hasNext()) {
                 item = iterator.next();
                 //TODO: refactoring needed. too long chain of method calls.
-                canvas.drawBitmap(item.getSprite().getImage(),
-                                  item.getSprite().getTransform(), paint);
+                canvas.drawBitmap(item.getSprite().getImage(), item.getSprite().getTransform(), paint);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

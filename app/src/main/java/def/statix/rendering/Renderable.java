@@ -28,4 +28,8 @@ public class Renderable {
     protected PointF getLocation() {
         return sprite.getLocation();
     }
+
+    public void rotate(float angle){
+        this.sprite.rotate(angle);
+    }
 }

@@ -9,9 +9,11 @@ import android.graphics.PointF;
  */
 
 public class Sprite {
+
     private Bitmap image;
     private Matrix matrix;
     private PointF location; // screen coordinates
+    private PointF centredLocation;
     private float angle;
 
     public Sprite(Bitmap image, PointF location) {
@@ -19,6 +21,16 @@ public class Sprite {
         this.matrix = new Matrix();
         this.matrix.postTranslate(location.x, location.y);
         this.location = location;
+
+        this.angle = 0;
+    }
+
+    public Sprite(Bitmap image, float x, float y) {
+        this.image = image;
+        this.matrix = new Matrix();
+        this.location = new PointF(x, y);
+        this.centredLocation = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2));
+        this.matrix.postTranslate(location.x, location.y);
         this.angle = 0;
     }
 
@@ -27,13 +39,15 @@ public class Sprite {
     }
 
     public void rotate(float angle) {
-        matrix.postRotate(angle);
+        matrix.postRotate(angle, centredLocation.x, centredLocation.y);
         this.angle = angle;
     }
 
     public void translate(PointF newLocation) {
         matrix.postTranslate(newLocation.x, newLocation.y);
         location = newLocation;
+        centredLocation.set(newLocation.x + (image.getWidth() / 2),
+                            newLocation.y + (image.getHeight() / 2));
     }
 
     public Matrix getTransform() {
@@ -50,6 +64,10 @@ public class Sprite {
 
     public PointF getLocation(){
         return location;
+    }
+
+    public PointF getCentredLocation() {
+        return centredLocation;
     }
 
     public float getRotation() {

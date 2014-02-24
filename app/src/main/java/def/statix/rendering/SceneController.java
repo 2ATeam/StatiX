@@ -2,13 +2,14 @@ package def.statix.rendering;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import def.statix.construction.unitbuilding.BeamBuilder;
 import def.statix.construction.unitbuilding.BindingBuilder;
+import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
 import def.statix.construction.unitbuilding.Foreman;
 import def.statix.construction.unittypes.BindingType;
+import def.statix.construction.unittypes.ConstructionUnitType;
 
 /**
  * Created by Lux on 20.02.14.
@@ -16,12 +17,13 @@ import def.statix.construction.unittypes.BindingType;
 public class SceneController {
 
     private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
-    private RenderingSurface renderingSurface;
+    private Renderable selectedObject;
 
+    private RenderingSurface renderingSurface;
     private Foreman foreman;
     private BeamBuilder beamBuilder;
-    private BindingBuilder bindingBuilder;
 
+    private BindingBuilder bindingBuilder;
     private Context context;
 
     public SceneController(Context context) {
@@ -36,24 +38,32 @@ public class SceneController {
         this.foreman = new Foreman();
         this.beamBuilder = new BeamBuilder();
         this.bindingBuilder = new BindingBuilder();
+        this.selectedObject = null;
     }
 
     public void addBeam(float x, float y) {
-        foreman.setBuilder(beamBuilder);
-        foreman.constructUnit(context, x, y, null);
-        sceneObjects.add(foreman.getUnit());
+        addUnit(beamBuilder, x, y, null);
     }
 
     public void addBinding(float x, float y, BindingType type) {
-        foreman.setBuilder(bindingBuilder);
+        addUnit(bindingBuilder, x, y, type);
+    }
+    
+    private void addUnit(ConstructionUnitBuilder builder, float x, float y, ConstructionUnitType type){
+        foreman.setBuilder(builder);
         foreman.constructUnit(context, x, y, type);
         sceneObjects.add(foreman.getUnit());
+        selectedObject = foreman.getUnit(); // added object becomes selected.
     }
 
     public void initRenderingSurface(Context context) {
         this.context = context;
         this.renderingSurface = new RenderingSurface(context);
         this.renderingSurface.setModel(sceneObjects);
+    }
+
+    public void rotateSelected(float angle){
+        selectedObject.rotate(angle);
     }
 
     @Deprecated

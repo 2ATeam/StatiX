@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import def.statix.construction.unittypes.BindingType;
 import def.statix.rendering.SceneController;
 
 /**
@@ -55,6 +56,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
+                sceneController.rotateSelected(10.0f);
                 break;
             }
         }
