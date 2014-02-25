@@ -13,23 +13,15 @@ public class Sprite {
 
     private Bitmap image;
     private Matrix matrix;
-    private PointF location; // screen coordinates
-    private PointF centredLocation;
+    private PointF location; // screen coordinates.
+    private PointF pivotPoint; // pivot point.
     private float angle;
-
-    public Sprite(Bitmap image, PointF location) {
-        this.image = image;
-        this.matrix = new Matrix();
-        this.matrix.postTranslate(location.x, location.y);
-        this.location = location;
-        this.angle = 0.0f;
-    }
 
     public Sprite(Bitmap image, float x, float y) {
         this.image = image;
         this.matrix = new Matrix();
         this.location = new PointF(x, y);
-        this.centredLocation = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2));
+        this.pivotPoint = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2));
         this.matrix.postTranslate(location.x, location.y);
         this.angle = 0;
     }
@@ -42,17 +34,13 @@ public class Sprite {
     }
 
     public void rotate(float angle) {
-        matrix.postRotate(angle, centredLocation.x, centredLocation.y);
+        matrix.postRotate(angle, pivotPoint.x, pivotPoint.y);
         this.angle = angle;
         Log.d("SPRITE", "rotated at " + angle);
     }
 
-    public void translate(PointF newLocation) {
-        matrix.postTranslate(newLocation.x, newLocation.y);
-        location = newLocation;
-        centredLocation.set(newLocation.x + (image.getWidth() / 2),
-                            newLocation.y + (image.getHeight() / 2));
-        Log.d("SPRITE", "translated at " + newLocation.toString());
+    public void translate(float x, float y) {
+        location.set(x - (image.getWidth() / 2), y - (image.getHeight() / 2)); // for better UX.
     }
 
     public Matrix getTransform() {
@@ -71,17 +59,18 @@ public class Sprite {
         return location;
     }
 
-    public PointF getCentredLocation() {
-        return centredLocation;
+    public PointF getPivotPoint() {
+        return pivotPoint;
     }
 
-    public float getRotation() {
+    public float getAngle() {
         return angle;
     }
 
     public void update() {
         image = Bitmap.createBitmap(image, 0, 0, getWidth(), getHeight(), matrix, true);
-        Log.d("SPRITE", "transform applied");
+        //pivot point is translated to the center of the unit by default.
+        pivotPoint.set(location.x + (image.getWidth() / 2), location.y + (image.getHeight() / 2));
     }
 
     public Bitmap getImage() {

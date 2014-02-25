@@ -59,4 +59,16 @@ public class Renderable {
     protected void setPosition(PointF position) {
         this.position = position;
     }
+
+    protected void setPosition(float x, float y) {
+        this.position.set(x, y);
+        this.getSprite().translate(x, y);
+    }
+
+    public boolean hitTest(int x, int y) {
+        if (boundingRect.contains(x, y)) {
+            return true;
+        }
+        return false;
+    }
 }

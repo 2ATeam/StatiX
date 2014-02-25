@@ -1,6 +1,7 @@
 package def.statix.rendering;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -64,8 +65,28 @@ public class SceneController {
         selectedObject.scale(20.0f, 20.0f);
     }
 
+    public void translateSelected(float x, float y){
+        selectedObject.getSprite().translate(x, y);
+    }
+
     public void applyTransformToSelected(){
         selectedObject.updateSprite();
+    }
+
+    public void select(int x, int y) {
+        for (Renderable sceneObject : sceneObjects) {
+            if (sceneObject.hitTest(x, y)) {
+                selectedObject = sceneObject;
+                Log.d("SPRITE", "Sprite selected");
+                return;
+            }
+        }
+        selectedObject = null; // user tapped on the free space deselecting.
+        Log.d("SPRITE", "Sprite DEselected");
+    }
+
+    public boolean isObjectSelected(){
+        return selectedObject != null;
     }
 
     public RenderingSurface getSurface(){

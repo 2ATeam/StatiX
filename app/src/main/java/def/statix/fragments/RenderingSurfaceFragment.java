@@ -24,6 +24,13 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
+        //NOTE: test:
+            sceneController.addBeam(100.0f, 190.0f);
+            sceneController.addBeam(100.0f, 340.0f);
+            sceneController.addBeam(100.0f, 490.0f);
+            sceneController.addBeam(100.0f, 650.0f);
+            sceneController.addBeam(100.0f, 800.0f);
+        //====================================//
         sceneController.getSurface().setOnTouchListener(this);
         return sceneController.getSurface();
     }
@@ -51,16 +58,17 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch(motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:{
-                sceneController.addBeam(motionEvent.getX(), motionEvent.getY());
-                sceneController.rotateSelected(45.0f);
+                sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-
+                if (sceneController.isObjectSelected())
+                    sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                sceneController.applyTransformToSelected();
+                if (sceneController.isObjectSelected())
+                    sceneController.applyTransformToSelected();
                 break;
             }
         }
