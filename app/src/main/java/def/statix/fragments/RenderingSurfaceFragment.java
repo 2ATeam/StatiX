@@ -1,5 +1,6 @@
 package def.statix.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,10 +17,6 @@ import def.statix.rendering.SceneController;
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
 
     private SceneController sceneController;
-
-    public RenderingSurfaceFragment() {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
