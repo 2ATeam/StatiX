@@ -1,13 +1,15 @@
 package def.statix;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import def.statix.fragments.RenderingSurfaceFragment;
+import def.statix.fragments.ToolboxFragment;
 
-public class ActivityMain extends ActionBarActivity {
+public class ActivityMain extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,9 +17,15 @@ public class ActivityMain extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new RenderingSurfaceFragment())
                     .commit();
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.toolbox, new ToolboxFragment())
+                    .commit();
+
         }
     }
 
