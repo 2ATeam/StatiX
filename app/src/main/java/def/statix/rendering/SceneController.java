@@ -77,12 +77,10 @@ public class SceneController {
         for (Renderable sceneObject : sceneObjects) {
             if (sceneObject.hitTest(x, y)) {
                 selectedObject = sceneObject;
-                Log.d("SPRITE", "Sprite selected");
                 return;
             }
         }
         selectedObject = null; // user tapped on the free space deselecting.
-        Log.d("SPRITE", "Sprite DEselected");
     }
 
     public boolean isObjectSelected(){

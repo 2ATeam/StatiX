@@ -10,15 +10,12 @@ public class Renderable {
 
     protected PointF position;
     protected Sprite sprite;
-    protected Rect boundingRect;
-
-    public Renderable() {
-        boundingRect = new Rect();
-    }
+    protected UnitOverlay overlay;
 
     protected void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        this.calcBoundingRect();
+        this.overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
+        this.overlay.update();
     }
 
     public void rotate(float angle){
@@ -29,19 +26,9 @@ public class Renderable {
         this.sprite.scale(width, height);
     }
 
-    public void calcBoundingRect(){
-        int x = (int)sprite.getLocation().x;
-        int y = (int)sprite.getLocation().y;
-        boundingRect = new Rect(x, y, x + sprite.getWidth(), y + sprite.getHeight());
-    }
-
     public void updateSprite(){
         this.sprite.update();
-        this.calcBoundingRect();
-    }
-
-    public Rect getBoundingRect() {
-        return boundingRect;
+        this.overlay.update();
     }
 
     protected PointF getLocation() {
@@ -65,8 +52,12 @@ public class Renderable {
         this.getSprite().translate(x, y);
     }
 
+    public Rect getBoundingRect() {
+        return overlay.getBoundingRect();
+    }
+
     public boolean hitTest(int x, int y) {
-        if (boundingRect.contains(x, y)) {
+        if (overlay.getBoundingRect().contains(x, y)) {
             return true;
         }
         return false;

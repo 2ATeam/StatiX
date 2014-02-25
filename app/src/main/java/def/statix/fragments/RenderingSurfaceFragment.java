@@ -2,7 +2,6 @@ package def.statix.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,10 +15,6 @@ import def.statix.rendering.SceneController;
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
 
     private SceneController sceneController;
-
-    public RenderingSurfaceFragment() {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,14 +39,12 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public void onPause() {
         super.onPause();
         sceneController.getSurface().pause();
-        Log.d("DEBUG", "PAUSED");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         sceneController.getSurface().resume();
-        Log.d("DEBUG", "RESUMED");
     }
 
     @Override
