@@ -1,14 +1,18 @@
 package def.statix.fragments;
 
-import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import def.statix.R;
 import def.statix.rendering.SceneController;
+import utils.capricom.ArcMenu;
 
 /**
  * Created by Lux on 16.02.14.
@@ -16,6 +20,46 @@ import def.statix.rendering.SceneController;
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
 
     private SceneController sceneController;
+
+    protected ArcMenu menu;
+    private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
+            R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.composer_thought, R.drawable.composer_with};
+
+    private void initArcMenu() {
+        menu = new ArcMenu(this.getActivity());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        menu.setLayoutParams(params);
+        menu.setDegreeses(180, 360);
+        menu.setChildSize(30);
+        final int itemCount = ITEM_DRAWABLES.length;
+        for (int i = 0; i < itemCount; i++) {
+            ImageView item = new ImageView(this.getActivity());
+            item.setImageResource(ITEM_DRAWABLES[i]);
+
+            menu.addItem(item, new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                }
+            });
+        }
+        hideMenu();
+    }
+
+    private void moveMenu(int x, int y) {
+        ((FrameLayout.LayoutParams) menu.getLayoutParams()).setMargins(x - menu.getWidth() / 2, y - menu.getHeight() / 2, 0, 0);
+        menu.requestLayout();
+    }
+
+    private void hideMenu() {
+        menu.setVisibility(View.INVISIBLE);
+        menu.collapse();
+    }
+
+    private void showMenu() {
+        menu.setVisibility(View.VISIBLE);
+        menu.expand();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,9 +70,15 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             sceneController.addBeam(100.0f, 490.0f);
             sceneController.addBeam(100.0f, 650.0f);
             sceneController.addBeam(100.0f, 800.0f);
-        //====================================//
+        FrameLayout frame = new FrameLayout(this.getActivity());
+        frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         sceneController.getSurface().setOnTouchListener(this);
-        return sceneController.getSurface();
+        frame.addView(sceneController.getSurface());
+        initArcMenu();
+        frame.addView(menu);
+
+        //====================================//
+        return frame;
     }
 
     @Override
@@ -52,12 +102,21 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch(motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:{
-                sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
+                if (sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY())) {
+                    showMenu();
+                    Rect r = sceneController.getSelected().getBoundingRect();
+                    moveMenu(r.centerX(), r.centerY());
+                } else
+                    hideMenu();
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                if (sceneController.isObjectSelected())
+                if (sceneController.isObjectSelected()) {
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
+                    sceneController.applyTransformToSelected();
+                    Rect r = sceneController.getSelected().getBoundingRect();
+                    moveMenu(r.centerX(), r.centerY());
+                }
                 break;
             }
             case MotionEvent.ACTION_UP: {
