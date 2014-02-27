@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import def.statix.R;
-import def.statix.rendering.SceneController;
 
 /**
  * Created by AdYa on 24.02.14.

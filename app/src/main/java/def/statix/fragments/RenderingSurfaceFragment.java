@@ -1,6 +1,5 @@
 package def.statix.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,6 +20,16 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
         //NOTE: test:
+            sceneController.addBeam(100.0f, 190.0f);
+            sceneController.addBeam(100.0f, 340.0f);
+            sceneController.addBeam(100.0f, 490.0f);
+            sceneController.addBeam(100.0f, 650.0f);
+            sceneController.addBeam(100.0f, 800.0f);
+            sceneController.addBeam(100.0f, 190.0f);
+            sceneController.addBeam(100.0f, 340.0f);
+            sceneController.addBeam(100.0f, 490.0f);
+            sceneController.addBeam(100.0f, 650.0f);
+            sceneController.addBeam(100.0f, 800.0f);
             sceneController.addBeam(100.0f, 190.0f);
             sceneController.addBeam(100.0f, 340.0f);
             sceneController.addBeam(100.0f, 490.0f);

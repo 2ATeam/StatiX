@@ -11,6 +11,8 @@ public class Renderable {
     protected PointF position;
     protected Sprite sprite;
     protected UnitOverlay overlay;
+    protected boolean isResizeable;
+    protected boolean isRotatable;
 
     protected void setSprite(Sprite sprite) {
         this.sprite = sprite;
@@ -54,6 +56,22 @@ public class Renderable {
 
     public Rect getBoundingRect() {
         return overlay.getBoundingRect();
+    }
+
+    public boolean isResizeable() {
+        return isResizeable;
+    }
+
+    public void setResizeable(boolean isScaleable) {
+        this.isResizeable = isScaleable;
+    }
+
+    public boolean isRotatable() {
+        return isRotatable;
+    }
+
+    public void setRotatable(boolean isRotateable) {
+        this.isRotatable = isRotateable;
     }
 
     public boolean hitTest(int x, int y) {

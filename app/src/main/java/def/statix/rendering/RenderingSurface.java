@@ -20,6 +20,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
     private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
+    private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
     private Paint boundingBoxPaint;
     private boolean isOK;
@@ -46,7 +47,9 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             Renderable item;
             while(iterator.hasNext()) {
                 item = iterator.next();
-                canvas.drawRect(item.getBoundingRect(), boundingBoxPaint);
+                if (item == selectedObject){
+                    canvas.drawRect(item.getBoundingRect(), boundingBoxPaint);
+                }
                 canvas.drawBitmap(item.getSprite().getImage(), item.getLocation().x,
                                                                item.getLocation().y, unitPaint);
             }
@@ -75,5 +78,9 @@ public class RenderingSurface extends SurfaceView implements Runnable{
 
     public void setModel(CopyOnWriteArrayList<Renderable> model){
         this.renderableData = model;
+    }
+
+    public void setSelectedObject(Renderable selectedObject) {
+        this.selectedObject = selectedObject;
     }
 }

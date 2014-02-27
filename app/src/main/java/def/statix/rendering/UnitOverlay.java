@@ -15,23 +15,21 @@ public class UnitOverlay {
     private int width;
     private int height;
 
-    public UnitOverlay() {
+    public UnitOverlay(int width, int height) {
         joints = new ArrayList<>();
+        this.width = width;
+        this.height = height;
     }
 
     public UnitOverlay(float x, float y, int width, int height) {
-        this();
+        this(width, height);
         location = new PointF(x, y);
-        this.width = width;
-        this.height = height;
         update();
     }
 
     public UnitOverlay(PointF pos, int width, int height) {
-        this();
+        this(width, height);
         this.location = pos;
-        this.width = width;
-        this.height = height;
         update();
     }
 

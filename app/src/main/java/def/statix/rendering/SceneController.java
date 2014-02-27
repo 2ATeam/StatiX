@@ -1,7 +1,6 @@
 package def.statix.rendering;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -74,13 +73,14 @@ public class SceneController {
     }
 
     public void select(int x, int y) {
+        selectedObject = null; // deselect it.
         for (Renderable sceneObject : sceneObjects) {
             if (sceneObject.hitTest(x, y)) {
                 selectedObject = sceneObject;
-                return;
+                break;
             }
         }
-        selectedObject = null; // user tapped on the free space deselecting.
+        renderingSurface.setSelectedObject(selectedObject);
     }
 
     public boolean isObjectSelected(){
