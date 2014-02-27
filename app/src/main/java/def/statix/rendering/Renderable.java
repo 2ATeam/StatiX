@@ -20,7 +20,7 @@ public class Renderable {
         this.overlay.update();
     }
 
-    public void rotate(float angle){
+    public void rotate(float angle) {
         this.sprite.rotate(angle);
     }
 
@@ -28,12 +28,12 @@ public class Renderable {
         this.sprite.scale(width, height);
     }
 
-    public void updateSprite(){
+    public void updateSprite() {
         this.sprite.update();
         this.overlay.update();
     }
 
-    protected PointF getLocation() {
+    public PointF getLocation() {
         return sprite.getLocation();
     }
 
@@ -41,7 +41,7 @@ public class Renderable {
         return sprite;
     }
 
-    protected PointF getPosition() {
+    public PointF getPosition() {
         return position;
     }
 

@@ -48,15 +48,15 @@ public class SceneController {
     public void addBinding(float x, float y, BindingType type) {
         addUnit(bindingBuilder, x, y, type);
     }
-    
-    private void addUnit(ConstructionUnitBuilder builder, float x, float y, ConstructionUnitType type){
+
+    private void addUnit(ConstructionUnitBuilder builder, float x, float y, ConstructionUnitType type) {
         foreman.setBuilder(builder);
         foreman.constructUnit(context, x, y, type);
         sceneObjects.add(foreman.getUnit());
         selectedObject = foreman.getUnit(); // added object becomes selected.
     }
 
-    public void rotateSelected(float angle){
+    public void rotateSelected(float angle) {
         selectedObject.rotate(angle);
     }
 
@@ -64,11 +64,11 @@ public class SceneController {
         selectedObject.scale(20.0f, 20.0f);
     }
 
-    public void translateSelected(float x, float y){
+    public void translateSelected(float x, float y) {
         selectedObject.getSprite().translate(x, y);
     }
 
-    public void applyTransformToSelected(){
+    public void applyTransformToSelected() {
         selectedObject.updateSprite();
     }
 
@@ -83,11 +83,15 @@ public class SceneController {
         renderingSurface.setSelectedObject(selectedObject);
     }
 
-    public boolean isObjectSelected(){
+    public boolean isObjectSelected() {
         return selectedObject != null;
     }
 
-    public RenderingSurface getSurface(){
+    public RenderingSurface getSurface() {
         return renderingSurface;
+    }
+
+    public Renderable getSelected() {
+        return selectedObject;
     }
 }

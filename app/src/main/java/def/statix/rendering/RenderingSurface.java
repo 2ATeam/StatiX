@@ -3,6 +3,7 @@ package def.statix.rendering;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -32,6 +33,10 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
         boundingBoxPaint = new Paint();
         boundingBoxPaint.setARGB(50, 0, 0, 200);
+    }
+
+    public RenderingSurface(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     @Override
