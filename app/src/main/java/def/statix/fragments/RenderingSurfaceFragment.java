@@ -1,7 +1,5 @@
 package def.statix.fragments;
 
-import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,9 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import def.statix.R;
-import def.statix.rendering.Renderable;
 import def.statix.rendering.SceneController;
 import utils.capricom.ArcMenu;
+import utils.ui.StatusManager;
 
 /**
  * Created by Lux on 16.02.14.
@@ -55,8 +53,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     }
 
     private void hideMenu() {
-        menu.setVisibility(View.INVISIBLE);
         menu.collapse();
+        menu.setVisibility(View.INVISIBLE);
+
     }
 
     private void showMenu() {
@@ -112,21 +111,27 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         switch(motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:{
                 sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
+
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 if (sceneController.isObjectSelected()){
                     hideMenu();
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
+                    StatusManager.setWarning("Moving object");
                 }
                 break;
             }
             case MotionEvent.ACTION_UP: {
                 if (sceneController.isObjectSelected()){
                     sceneController.applyTransformToSelected();
+                    StatusManager.setSuccess("Object has been selected");
                     showMenu();
                     Rect r = sceneController.getSelected().getBoundingRect();
                     moveMenu(r.centerX(), r.centerY());
+                } else {
+                    StatusManager.setError("Object has been deselected");
+                    hideMenu();
                 }
                 break;
             }
