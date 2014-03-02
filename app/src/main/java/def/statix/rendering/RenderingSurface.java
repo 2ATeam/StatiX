@@ -3,7 +3,6 @@ package def.statix.rendering;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -23,7 +22,6 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
-    private Paint boundingBoxPaint;
     private boolean isOK;
 
     public RenderingSurface(Context context) {
@@ -31,12 +29,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         surfaceHolder = getHolder();
         // some bitmap smoothing here:
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
-        boundingBoxPaint = new Paint();
-        boundingBoxPaint.setARGB(50, 0, 0, 200);
-    }
-
-    public RenderingSurface(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        unitPaint.setAlpha(50);
     }
 
     @Override
@@ -53,10 +46,11 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             while(iterator.hasNext()) {
                 item = iterator.next();
                 if (item == selectedObject){
-                    canvas.drawRect(item.getBoundingRect(), boundingBoxPaint);
+                    UnitOverlay overlay = item.getOverlay();
+                    canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
                 }
-                canvas.drawBitmap(item.getSprite().getImage(), item.getLocation().x,
-                                                               item.getLocation().y, unitPaint);
+                canvas.drawBitmap(item.getSprite().getImage(), item.getSpriteLocation().x,
+                                                               item.getSpriteLocation().y, unitPaint);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

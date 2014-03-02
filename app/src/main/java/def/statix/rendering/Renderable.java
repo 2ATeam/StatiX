@@ -1,7 +1,7 @@
 package def.statix.rendering;
 
 import android.graphics.PointF;
-import android.graphics.Rect;
+import android.graphics.RectF;
 
 /**
  * Created by Lux on 19.02.14.
@@ -17,7 +17,6 @@ public class Renderable {
     protected void setSprite(Sprite sprite) {
         this.sprite = sprite;
         this.overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
-        this.overlay.update();
     }
 
     public void rotate(float angle) {
@@ -28,13 +27,25 @@ public class Renderable {
         this.sprite.scale(width, height);
     }
 
-    public void updateSprite() {
-        this.sprite.update();
-        this.overlay.update();
+    public void update() {
+        sprite.update();
+        overlay.setTransform(sprite.getTransform()); // overlay should be transformed as source sprite.
+        overlay.update();
     }
 
-    public PointF getLocation() {
+    public boolean hitTest(int x, int y) {
+        if (overlay.getBoundingRect().contains(x, y)) {
+            return true;
+        }
+        return false;
+    }
+
+    public PointF getSpriteLocation() {
         return sprite.getLocation();
+    }
+
+    public PointF getOverlayLocation(){
+        return overlay.getLocation();
     }
 
     protected Sprite getSprite() {
@@ -51,11 +62,14 @@ public class Renderable {
 
     protected void setPosition(float x, float y) {
         this.position.set(x, y);
-        this.getSprite().translate(x, y);
     }
 
-    public Rect getBoundingRect() {
+    public RectF getBoundingRect() {
         return overlay.getBoundingRect();
+    }
+
+    public UnitOverlay getOverlay() {
+        return overlay;
     }
 
     public boolean isResizeable() {
@@ -72,12 +86,5 @@ public class Renderable {
 
     public void setRotatable(boolean isRotateable) {
         this.isRotatable = isRotateable;
-    }
-
-    public boolean hitTest(int x, int y) {
-        if (overlay.getBoundingRect().contains(x, y)) {
-            return true;
-        }
-        return false;
     }
 }

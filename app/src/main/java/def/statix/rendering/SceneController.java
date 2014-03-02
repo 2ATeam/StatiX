@@ -27,7 +27,7 @@ public class SceneController {
     private Context context;
 
     public SceneController(Context context) {
-        this(); // constructor delegation. your cap.
+        this();
         this.renderingSurface = new RenderingSurface(context);
         this.renderingSurface.setModel(sceneObjects);
         this.context = context;
@@ -66,10 +66,11 @@ public class SceneController {
 
     public void translateSelected(float x, float y) {
         selectedObject.getSprite().translate(x, y);
+        selectedObject.getOverlay().translate(x, y);
     }
 
     public void applyTransformToSelected() {
-        selectedObject.updateSprite();
+        selectedObject.update();
     }
 
     public void select(int x, int y) {

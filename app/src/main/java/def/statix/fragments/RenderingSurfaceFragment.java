@@ -1,8 +1,7 @@
 package def.statix.fragments;
 
-import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import def.statix.R;
-import def.statix.rendering.Renderable;
 import def.statix.rendering.SceneController;
 import utils.capricom.ArcMenu;
 
@@ -50,6 +48,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     }
 
     private void moveMenu(int x, int y) {
+        assert menu.getLayoutParams() != null;
         ((FrameLayout.LayoutParams) menu.getLayoutParams()).setMargins(x - menu.getWidth() / 2, y - menu.getHeight() / 2, 0, 0);
         menu.requestLayout();
     }
@@ -68,16 +67,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
         //NOTE: test:
-            sceneController.addBeam(100.0f, 190.0f);
-            sceneController.addBeam(100.0f, 340.0f);
-            sceneController.addBeam(100.0f, 490.0f);
-            sceneController.addBeam(100.0f, 650.0f);
-            sceneController.addBeam(100.0f, 800.0f);
-            sceneController.addBeam(100.0f, 190.0f);
-            sceneController.addBeam(100.0f, 340.0f);
-            sceneController.addBeam(100.0f, 490.0f);
-            sceneController.addBeam(100.0f, 650.0f);
-            sceneController.addBeam(100.0f, 800.0f);
+            sceneController.addBeam(500.0f, 500.0f);
         //====================================//
         FrameLayout frame = new FrameLayout(this.getActivity());
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -85,8 +75,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         frame.addView(sceneController.getSurface());
         initArcMenu();
         frame.addView(menu);
-
-        //====================================//
         return frame;
     }
 
@@ -111,12 +99,12 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch(motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:{
+                hideMenu();
                 sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 if (sceneController.isObjectSelected()){
-                    hideMenu();
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
                 }
                 break;
@@ -124,9 +112,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_UP: {
                 if (sceneController.isObjectSelected()){
                     sceneController.applyTransformToSelected();
+                    RectF r = sceneController.getSelected().getBoundingRect();
+                    moveMenu((int) r.centerX(), (int)r.centerY());
                     showMenu();
-                    Rect r = sceneController.getSelected().getBoundingRect();
-                    moveMenu(r.centerX(), r.centerY());
                 }
                 break;
             }
