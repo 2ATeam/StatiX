@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import def.statix.R;
 import def.statix.rendering.SceneController;
 import utils.capricom.ArcMenu;
+import utils.ui.StatusManager;
 
 /**
  * Created by Lux on 16.02.14.
@@ -54,8 +55,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     }
 
     private void hideMenu() {
-        menu.setVisibility(View.INVISIBLE);
         menu.collapse();
+        menu.setVisibility(View.INVISIBLE);
+
     }
 
     private void showMenu() {
@@ -101,20 +103,26 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_DOWN:{
                 hideMenu();
                 sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
+
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 if (sceneController.isObjectSelected()){
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
+                    StatusManager.setWarning("Moving object");
                 }
                 break;
             }
             case MotionEvent.ACTION_UP: {
                 if (sceneController.isObjectSelected()){
                     sceneController.applyTransformToSelected();
-                    RectF r = sceneController.getSelected().getBoundingRect();
-                    moveMenu((int) r.centerX(), (int)r.centerY());
+                    StatusManager.setSuccess("Object has been selected");
                     showMenu();
+                    RectF r = sceneController.getSelected().getBoundingRect();
+                    moveMenu((int)r.centerX(), (int)r.centerY());
+                } else {
+                    StatusManager.setError("Object has been deselected");
+                    hideMenu();
                 }
                 break;
             }
