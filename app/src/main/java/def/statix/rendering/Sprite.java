@@ -74,6 +74,10 @@ public class Sprite {
         return location;
     }
 
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
     public void setLocation(PointF location) {
         this.location = location;
     }

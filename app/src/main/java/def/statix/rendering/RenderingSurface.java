@@ -22,6 +22,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
+    private Paint rectPaint;
     private boolean isOK;
 
     public RenderingSurface(Context context) {
@@ -30,6 +31,8 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         // some bitmap smoothing here:
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
         unitPaint.setAlpha(50);
+        rectPaint = new Paint();
+        rectPaint.setARGB(75, 0, 255, 0);
     }
 
     @Override
@@ -48,6 +51,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
                 if (item == selectedObject){
                     UnitOverlay overlay = item.getOverlay();
                     canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
+                    canvas.drawRect(overlay.getBoundingRect(), rectPaint);
                 }
                 canvas.drawBitmap(item.getSprite().getImage(), item.getSpriteLocation().x,
                                                                item.getSpriteLocation().y, unitPaint);

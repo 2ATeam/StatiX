@@ -70,6 +70,14 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         sceneController = new SceneController(getActivity());
         //NOTE: test:
             sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
+            sceneController.addBeam(500.0f, 500.0f);
         //====================================//
         FrameLayout frame = new FrameLayout(this.getActivity());
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -103,14 +111,11 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_DOWN:{
                 hideMenu();
                 sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
-
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                if (sceneController.isObjectSelected()){
+                if (sceneController.isObjectSelected())
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
-                    StatusManager.setWarning("Moving object");
-                }
                 break;
             }
             case MotionEvent.ACTION_UP: {

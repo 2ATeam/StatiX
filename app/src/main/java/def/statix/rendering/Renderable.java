@@ -29,7 +29,8 @@ public class Renderable {
 
     public void update() {
         sprite.update();
-        overlay.setTransform(sprite.getTransform()); // overlay should be transformed as source sprite.
+        // overlay should be transformed as source sprite.
+        overlay.setTransform(sprite.getTransform());
         overlay.update();
     }
 

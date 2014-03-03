@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -22,11 +21,11 @@ public final class UnitOverlay extends Sprite{
     private int height;
     private int sourceWidth;
     private int sourceHeight;
-    private PointF sourceLocation;
+    private PointF srcLocation;
 
     public UnitOverlay(PointF sourceLocation, int sourceWidth, int sourceHeight) {
         super(sourceLocation.x - JOINT_DIAMETER, sourceLocation.y - JOINT_DIAMETER);
-        this.sourceLocation = sourceLocation;
+        this.srcLocation = sourceLocation;
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
         joints = new ArrayList<>();
@@ -61,16 +60,11 @@ public final class UnitOverlay extends Sprite{
         updateBoundingRect();
     }
 
-    @Override
-    public void translate(float x, float y) {
-        this.location.set(x - (image.getWidth() / 2) - JOINT_DIAMETER, y - (image.getHeight() / 2) - JOINT_DIAMETER);
-    }
-
-    public void updateBoundingRect(){
+    public void updateBoundingRect() {
         // same dimensions as source.
-        boundingRect = new RectF(location.x, location.y,
-                                 location.x + sourceWidth, location.y + sourceHeight);
-        Log.d("DEBUG", "bounding rect updated to: x:" + location.x + " y:" + location.y);
+        boundingRect = new RectF(srcLocation.x, srcLocation.y,
+                srcLocation.x + sourceWidth,
+                srcLocation.y + sourceHeight);
     }
 
     public Paint getPaint() {
