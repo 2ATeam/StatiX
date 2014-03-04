@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import def.statix.R;
+import def.statix.construction.unittypes.BindingType;
 import def.statix.rendering.SceneController;
 import utils.capricom.ArcMenu;
 import utils.ui.StatusManager;
@@ -69,15 +70,11 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
         //NOTE: test:
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
-            sceneController.addBeam(500.0f, 500.0f);
+        sceneController.addBeam(500.0f, 500.0f);
+
+        sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
+        sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
+        sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
         //====================================//
         FrameLayout frame = new FrameLayout(this.getActivity());
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -111,6 +108,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_DOWN:{
                 hideMenu();
                 sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
+//                if (sceneController.isObjectSelected()) {
+//                    sceneController.rotateSelected(10.0f);
+//                }
                 break;
             }
             case MotionEvent.ACTION_MOVE: {

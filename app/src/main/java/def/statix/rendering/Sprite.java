@@ -18,19 +18,19 @@ public class Sprite {
 
     public Sprite(Bitmap image, float x, float y) {
         this.image = image;
-        this.matrix = new Matrix();
-        this.location = new PointF(x, y);
-        this.pivotPoint = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2));
-        this.matrix.postTranslate(location.x, location.y);
-        this.angle = 0;
+        matrix = new Matrix();
+        location = new PointF(x, y);
+        pivotPoint = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2));
+        matrix.postTranslate(location.x, location.y);
+        angle = 0;
     }
 
     public Sprite(float x, float y) {
-        this.matrix = new Matrix();
-        this.location = new PointF(x, y);
-        this.pivotPoint = new PointF();
-        this.matrix.postTranslate(location.x, location.y);
-        this.angle = 0;
+        matrix = new Matrix();
+        location = new PointF(x, y);
+        pivotPoint = new PointF();
+        matrix.postTranslate(location.x, location.y);
+        angle = 0;
     }
 
     public void scale(float newWidth, float newHeight) {
@@ -56,6 +56,10 @@ public class Sprite {
 
     public Matrix getTransform() {
         return this.matrix;
+    }
+
+    public void resetTransform(){
+        matrix.reset();
     }
 
     public void setTransform(Matrix transform){

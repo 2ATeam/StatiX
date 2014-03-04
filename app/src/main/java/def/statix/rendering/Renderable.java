@@ -3,6 +3,8 @@ package def.statix.rendering;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import java.util.Enumeration;
+
 /**
  * Created by Lux on 19.02.14.
  */
@@ -16,7 +18,8 @@ public class Renderable {
 
     protected void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        this.overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
+        overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
+        overlay.setTransform(sprite.getTransform());
     }
 
     public void rotate(float angle) {
@@ -29,9 +32,9 @@ public class Renderable {
 
     public void update() {
         sprite.update();
-        // overlay should be transformed as source sprite.
-        overlay.setTransform(sprite.getTransform());
+        overlay.setSrcPosAndLoc(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
         overlay.update();
+        sprite.resetTransform();
     }
 
     public boolean hitTest(int x, int y) {

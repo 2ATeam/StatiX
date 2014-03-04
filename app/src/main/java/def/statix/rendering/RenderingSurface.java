@@ -23,14 +23,13 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
     private Paint rectPaint;
-    private boolean isOK;
+    private boolean isOK; // thread is running now.
 
     public RenderingSurface(Context context) {
         super(context);
         surfaceHolder = getHolder();
         // some bitmap smoothing here:
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
-        unitPaint.setAlpha(50);
         rectPaint = new Paint();
         rectPaint.setARGB(75, 0, 255, 0);
     }
@@ -52,6 +51,9 @@ public class RenderingSurface extends SurfaceView implements Runnable{
                     UnitOverlay overlay = item.getOverlay();
                     canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
                     canvas.drawRect(overlay.getBoundingRect(), rectPaint);
+// visual debug of pivot points:
+//                    canvas.drawCircle(item.getSprite().getPivotPoint().x, item.getSprite().getPivotPoint().y, 20, unitPaint);
+//                    canvas.drawCircle(overlay.getPivotPoint().x, overlay.getPivotPoint().y, 10, overlay.getPaint());
                 }
                 canvas.drawBitmap(item.getSprite().getImage(), item.getSpriteLocation().x,
                                                                item.getSpriteLocation().y, unitPaint);

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -50,10 +51,6 @@ public final class UnitOverlay extends Sprite{
         canvas.drawCircle(joint2.x, joint2.y, jointRadius, overlayPaint);
     }
 
-    public RectF getBoundingRect() {
-        return boundingRect;
-    }
-
     @Override
     public void update() {
         super.update();
@@ -65,9 +62,22 @@ public final class UnitOverlay extends Sprite{
         boundingRect = new RectF(srcLocation.x, srcLocation.y,
                 srcLocation.x + sourceWidth,
                 srcLocation.y + sourceHeight);
+        Log.d("DEBUG", boundingRect.toString());
+        Log.d("DEBUG", "height: " + sourceHeight + " width: " + sourceWidth);
+        Log.d("DEBUG", "posX: " + srcLocation.x + " posY: " + srcLocation.y);
     }
 
     public Paint getPaint() {
         return overlayPaint;
+    }
+
+    public RectF getBoundingRect() {
+        return boundingRect;
+    }
+
+    public void setSrcPosAndLoc(PointF sourceLocation, int sourceWidth, int sourceHeight){
+        this.srcLocation = sourceLocation;
+        this.sourceWidth = sourceWidth;
+        this.sourceHeight = sourceHeight;
     }
 }
