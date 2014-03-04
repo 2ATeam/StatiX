@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import def.statix.construction.Force;
 import def.statix.construction.unitbuilding.BeamBuilder;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
@@ -56,6 +57,11 @@ public class SceneController {
         selectedObject = foreman.getUnit(); // added object becomes selected.
     }
 
+    public void addForce(Force force) {
+        sceneObjects.add(force);
+        selectedObject = force; // added force become selected.
+    }
+
     public void rotateSelected(float angle) {
         selectedObject.rotate(angle);
     }
@@ -76,8 +82,8 @@ public class SceneController {
     public void removeSelected(){
         if (selectedObject != null) {
             sceneObjects.remove(selectedObject);
+            selectedObject = null;
         }
-        selectedObject = null;
     }
 
     public void select(int x, int y) {

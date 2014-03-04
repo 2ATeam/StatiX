@@ -23,7 +23,6 @@ public class ConstructionUnit extends Renderable {
     }
 
     public ConstructionUnit() {
-        outgoingForce = new Force();
         this.position = new PointF();
         // some default initialization will be here.
         // maybe applying the gravity or smth. like that.
@@ -48,5 +47,13 @@ public class ConstructionUnit extends Renderable {
 
     public void setType(ConstructionUnitType type) {
         this.type = type;
+    }
+
+    public void applyForce(Force force) {
+        this.outgoingForce = force;
+    }
+
+    public Force getOutgoingForce() {
+        return outgoingForce;
     }
 }

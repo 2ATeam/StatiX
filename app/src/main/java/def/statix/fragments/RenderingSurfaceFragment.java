@@ -1,6 +1,5 @@
 package def.statix.fragments;
 
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import def.statix.R;
+import def.statix.construction.Force;
 import def.statix.construction.unittypes.BindingType;
+import def.statix.construction.unittypes.ForceType;
 import def.statix.rendering.SceneController;
 import utils.capricom.ArcMenu;
 import utils.ui.StatusManager;
@@ -69,13 +70,19 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
+
         //NOTE: test:
         sceneController.addBeam(500.0f, 500.0f);
 
         sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
         sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
         sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
+
+        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 100.0f, 400.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
         //====================================//
+
         FrameLayout frame = new FrameLayout(this.getActivity());
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         sceneController.getSurface().setOnTouchListener(this);
@@ -111,7 +118,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 //                if (sceneController.isObjectSelected()) {
 //                    sceneController.rotateSelected(10.0f);
 //                }
-                sceneController.removeSelected();
+//                sceneController.removeSelected();
                 break;
             }
             case MotionEvent.ACTION_MOVE: {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 
 import def.statix.R;
-import def.statix.construction.ConstructionUnit;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 
@@ -26,12 +25,20 @@ public class BindingBuilder extends ConstructionUnitBuilder{
     public void setType(ConstructionUnitType type) {
         unit.setType(type);
         // load specific image. if type is not of BindingType enumeration - the placeholder image will not be replaced.
-        if (type == BindingType.FIXED){
-            unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_const));
-        } else if (type == BindingType.MOVABLE) {
-            unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_movalbe));
-        } else if (type == BindingType.STATIC){
-            unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_stationary));
+        assert type instanceof BindingType;
+        switch ((BindingType)type){
+            case FIXED:{
+                unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_const));
+                break;
+            }
+            case MOVABLE:{
+                unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_movalbe));
+                break;
+            }
+            case STATIC:{
+                unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_stationary));
+                break;
+            }
         }
     }
 
