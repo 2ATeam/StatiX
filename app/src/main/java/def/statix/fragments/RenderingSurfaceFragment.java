@@ -111,6 +111,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 //                if (sceneController.isObjectSelected()) {
 //                    sceneController.rotateSelected(10.0f);
 //                }
+                sceneController.removeSelected();
                 break;
             }
             case MotionEvent.ACTION_MOVE: {

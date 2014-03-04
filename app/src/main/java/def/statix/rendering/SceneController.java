@@ -73,6 +73,13 @@ public class SceneController {
         selectedObject.update();
     }
 
+    public void removeSelected(){
+        if (selectedObject != null) {
+            sceneObjects.remove(selectedObject);
+        }
+        selectedObject = null;
+    }
+
     public void select(int x, int y) {
         selectedObject = null; // deselect it.
         for (Renderable sceneObject : sceneObjects) {
