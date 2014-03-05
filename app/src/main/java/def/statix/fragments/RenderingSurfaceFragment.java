@@ -70,19 +70,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
-
-        //NOTE: test:
-        sceneController.addBeam(500.0f, 500.0f);
-
-        sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
-        sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
-        sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
-
-        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 100.0f, 400.0f));
-        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
-        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
-        //====================================//
-
         FrameLayout frame = new FrameLayout(this.getActivity());
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         sceneController.getSurface().setOnTouchListener(this);
@@ -90,6 +77,39 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         initArcMenu();
         frame.addView(menu);
         return frame;
+    }
+
+    //TODO: remove on release.
+    private void testStage(){
+        sceneController.addBeam(500.0f, 500.0f);
+        sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
+        sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
+        sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
+        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 100.0f, 400.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
+
+        sceneController.addBeam(500.0f, 500.0f);
+        sceneController.rotateSelected(45.0f);
+        sceneController.applyTransformToSelected();
+        sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
+        sceneController.rotateSelected(90.0f);
+        sceneController.applyTransformToSelected();
+        sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
+        sceneController.rotateSelected(90.0f);
+        sceneController.applyTransformToSelected();
+        sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
+        sceneController.rotateSelected(90.0f);
+        sceneController.applyTransformToSelected();
+        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 100.0f, 400.0f));
+        sceneController.rotateSelected(90.0f);
+        sceneController.applyTransformToSelected();
+        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
+        sceneController.rotateSelected(90.0f);
+        sceneController.applyTransformToSelected();
+        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
+        sceneController.rotateSelected(90.0f);
+        sceneController.applyTransformToSelected();
     }
 
     @Override
@@ -115,10 +135,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_DOWN:{
                 hideMenu();
                 sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
-//                if (sceneController.isObjectSelected()) {
-//                    sceneController.rotateSelected(10.0f);
-//                }
-//                sceneController.removeSelected();
                 break;
             }
             case MotionEvent.ACTION_MOVE: {

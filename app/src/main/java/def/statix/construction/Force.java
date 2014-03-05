@@ -23,6 +23,7 @@ public class Force extends Renderable {
     public Force(Context context, ForceType type, float x, float y) {
         this.type = type;
         this.context = context;
+        overlayType = false;
         image = null;
         location = new PointF(x, y);
         loadImage();

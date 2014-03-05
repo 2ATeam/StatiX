@@ -13,10 +13,11 @@ public class Renderable {
     protected UnitOverlay overlay;
     protected boolean isResizeable;
     protected boolean isRotatable;
+    protected boolean overlayType;
 
     protected void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
+        overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight(), overlayType);
         overlay.setTransform(sprite.getTransform());
     }
 

@@ -37,6 +37,7 @@ public class ConstructionUnit extends Renderable {
     }
 
     public void loadImage(Bitmap image) {
+        overlayType = type == null; // if true - then we are dealing with the plank. Force or binding otherwise.
         setSprite(new Sprite(image, position.x - (image.getWidth() / 2),
                                     position.y - (image.getHeight() / 2)));
     }
