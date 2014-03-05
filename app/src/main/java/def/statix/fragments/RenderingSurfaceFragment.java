@@ -208,7 +208,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     //TODO: remove on release.
     private void testStage(){
-        sceneController.addBeam(500.0f, 500.0f);
+        sceneController.addBeam(800.0f, 250.0f);
         sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
         sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
         sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
@@ -216,25 +216,25 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
         sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
 
-        sceneController.addBeam(500.0f, 500.0f);
+        sceneController.addBeam(800.0f, 500.0f);
         sceneController.rotateSelected(45.0f);
         sceneController.applyTransformToSelected();
-        sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
+        sceneController.addBinding(500.0f, 100.0f, BindingType.FIXED);
         sceneController.rotateSelected(90.0f);
         sceneController.applyTransformToSelected();
-        sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
+        sceneController.addBinding(500.0f, 200.0f, BindingType.STATIC);
         sceneController.rotateSelected(90.0f);
         sceneController.applyTransformToSelected();
-        sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
+        sceneController.addBinding(500.0f, 300.0f, BindingType.MOVABLE);
         sceneController.rotateSelected(90.0f);
         sceneController.applyTransformToSelected();
-        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 100.0f, 400.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 500.0f, 400.0f));
         sceneController.rotateSelected(90.0f);
         sceneController.applyTransformToSelected();
-        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 500.0f, 500.0f));
         sceneController.rotateSelected(90.0f);
         sceneController.applyTransformToSelected();
-        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
+        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 500.0f, 600.0f));
         sceneController.rotateSelected(90.0f);
         sceneController.applyTransformToSelected();
     }
