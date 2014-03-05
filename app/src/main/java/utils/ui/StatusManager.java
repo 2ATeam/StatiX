@@ -25,19 +25,19 @@ public class StatusManager {
     }
 
     public static void setWarning(String warningText) {
-        setStatus(warningText, Color.argb(200, 230, 200, 55));
+        setStatus(warningText, Color.argb(255, 230, 200, 55));
     }
 
     public static void setError(String errorText) {
-        setStatus(errorText, Color.argb(200, 235, 0, 0));
+        setStatus(errorText, Color.argb(255, 235, 0, 0));
     }
 
     public static void setSuccess(String successText) {
-        setStatus(successText, Color.argb(200, 25, 195, 65));
+        setStatus(successText, Color.argb(255, 25, 195, 65));
     }
 
     public static void setStatus(String statusText) {
-        setStatus(statusText, Color.argb(200, 135, 135, 135));
+        setStatus(statusText, Color.argb(255, 175, 175, 175));
     }
 
 

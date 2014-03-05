@@ -46,6 +46,9 @@ public class ArcMenu extends RelativeLayout {
 
     private ImageView mHintView;
 
+    private ViewGroup mControlLayout;
+    private boolean defaultMiddleButton = true;
+
     public ArcMenu(Context context) {
         super(context);
         init(context);
@@ -62,13 +65,15 @@ public class ArcMenu extends RelativeLayout {
         li.inflate(R.layout.arc_menu, this);
 
         mArcLayout = (ArcLayout) findViewById(R.id.item_layout);
+        mHintView = (ImageView) findViewById(R.id.control_hint);
 
-        final ViewGroup controlLayout = (ViewGroup) findViewById(R.id.control_layout);
-        controlLayout.setClickable(true);
-        controlLayout.setOnTouchListener(new OnTouchListener() {
+        mControlLayout = (ViewGroup) findViewById(R.id.control_layout);
+        mControlLayout.setClickable(true);
+        mControlLayout.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (!defaultMiddleButton) return false;
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     mHintView.startAnimation(createHintSwitchAnimation(mArcLayout.isExpanded()));
                     mArcLayout.switchState(true);
@@ -78,7 +83,7 @@ public class ArcMenu extends RelativeLayout {
             }
         });
 
-        mHintView = (ImageView) findViewById(R.id.control_hint);
+
     }
 
     private void applyAttrs(AttributeSet attrs) {
@@ -203,14 +208,25 @@ public class ArcMenu extends RelativeLayout {
         mArcLayout.setChildSize(size);
     }
 
-    public void expand() {
-        if (!mArcLayout.isExpanded())
-            mArcLayout.switchState(true);
+    public void expand(boolean animated) {
+        if (!mArcLayout.isExpanded()) {
+            mArcLayout.switchState(animated);
+        }
     }
 
-    public void collapse() {
-        if (mArcLayout.isExpanded())
-            mArcLayout.switchState(true);
+    public void collapse(boolean animated) {
+        if (mArcLayout.isExpanded()) {
+            mArcLayout.switchState(animated);
+        }
+    }
+
+    public void setMainButtonVisible(boolean isVisible) {
+        mControlLayout.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    public void setMainButtonTouchListener(OnTouchListener listener) {
+        defaultMiddleButton = false;
+        mControlLayout.setOnTouchListener(listener);
     }
 
 

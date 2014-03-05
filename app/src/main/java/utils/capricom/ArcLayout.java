@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -219,22 +220,21 @@ public class ArcLayout extends ViewGroup {
         Animation animation = mExpanded ? createShrinkAnimation(0, toXDelta, 0, toYDelta, startOffset, duration,
                 interpolator) : createExpandAnimation(0, toXDelta, 0, toYDelta, startOffset, duration, interpolator);
 
-        final boolean isLast = getTransformedIndex(expanded, childCount, index) == childCount - 1;
-        animation.setAnimationListener(new AnimationListener() {
+        if (getTransformedIndex(expanded, childCount, index) == childCount - 1)
+            animation.setAnimationListener(new AnimationListener() {
 
-            @Override
-            public void onAnimationStart(Animation animation) {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                if (isLast) {
+                @Override
+                public void onAnimationEnd(Animation animation) {
                     postDelayed(new Runnable() {
 
                         @Override
@@ -243,8 +243,7 @@ public class ArcLayout extends ViewGroup {
                         }
                     }, 0);
                 }
-            }
-        });
+            });
 
         child.setAnimation(animation);
     }
@@ -285,18 +284,15 @@ public class ArcLayout extends ViewGroup {
      */
     public void switchState(final boolean showAnimation) {
         if (showAnimation) {
+            Log.i("SWITCH", mExpanded ? "Collapsing" : "Expanding");
             final int childCount = getChildCount();
             for (int i = 0; i < childCount; i++) {
                 bindChildAnimation(getChildAt(i), i, 300);
             }
-        }
+        } else
+            requestLayout();
 
         mExpanded = !mExpanded;
-
-        if (!showAnimation) {
-            requestLayout();
-        }
-
         invalidate();
     }
 

@@ -10,13 +10,14 @@ import def.statix.fragments.ToolboxFragment;
 
 public class ActivityMain extends FragmentActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
 
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new RenderingSurfaceFragment())
                     .commit();
@@ -24,9 +25,9 @@ public class ActivityMain extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.toolbox, new ToolboxFragment())
                     .commit();
-
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
