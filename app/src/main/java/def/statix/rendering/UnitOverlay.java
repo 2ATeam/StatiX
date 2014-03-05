@@ -23,24 +23,22 @@ public final class UnitOverlay extends Sprite{
     private int sourceWidth;
     private int sourceHeight;
     private PointF srcLocation;
-    private boolean isPlankOverlayType;
 
     public UnitOverlay(PointF sourceLocation, int sourceWidth, int sourceHeight, boolean overlayType) {
         super(sourceLocation.x - JOINT_DIAMETER, sourceLocation.y - JOINT_DIAMETER);
         this.srcLocation = sourceLocation;
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
-        isPlankOverlayType = overlayType;
         joints = new ArrayList<>();
         overlayPaint = new Paint();
         overlayPaint.setARGB(200, 0, 0, 200);
         width = sourceWidth + (2 * JOINT_DIAMETER); // some space for joints.
         height = sourceHeight + (2 * JOINT_DIAMETER);
         updateBoundingRect();
-        createPlankOverlay();
+        createPlankOverlay(overlayType);
     }
 
-    private void createPlankOverlay() {
+    private void createPlankOverlay(boolean isPlankOverlayType) {
         this.image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
         float jointRadius = JOINT_DIAMETER / 2;
@@ -82,10 +80,6 @@ public final class UnitOverlay extends Sprite{
 
     public RectF getBoundingRect() {
         return boundingRect;
-    }
-
-    public void setPlankOverlayType(boolean isPlankOverlay) {
-        this.isPlankOverlayType = isPlankOverlay;
     }
 
     public void setSrcPosAndLoc(PointF sourceLocation, int sourceWidth, int sourceHeight){
