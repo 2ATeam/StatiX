@@ -40,7 +40,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     private ArcMenu menu;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
-            R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.composer_icn_plus};
+            R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.shaolin, R.drawable.shaolin, R.drawable.composer_icn_plus}; // 2 shaolins are placeholders to move 'close' button down
     // create enum depending on this ids
     // 0 - scale left, 1 - rotate left, 2 - rotate right, 3 - scale right, 4 - close
 
@@ -55,14 +55,14 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         menu = new ArcMenu(this.getActivity());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         menu.setLayoutParams(params);
-        menu.setDegreeses(180, 360);
+        menu.setDegreeses(210, 450);
         menu.setChildSize(30);
         final int itemCount = ITEM_DRAWABLES.length;
 
         for (int i = 0; i < itemCount; i++) {
             ImageView item = new ImageView(this.getActivity());
             item.setImageResource(ITEM_DRAWABLES[i]);
-            item.setId(i + 1);
+            item.setId(i);
 
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -103,6 +103,10 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                     }
                 });
         }
+        // makes those 2 shaolins invisible....
+        menu.getItem(itemCount - 2).setVisibility(View.INVISIBLE);
+        menu.getItem(itemCount - 3).setVisibility(View.INVISIBLE);
+
         menu.setMainButtonVisible(false);
         menu.expand(false);
         hideMenu();
