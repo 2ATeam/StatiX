@@ -40,7 +40,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     private ArcMenu menu;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
-            R.drawable.composer_place, R.drawable.composer_sleep};
+            R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.composer_icn_plus};
 
     private void initArcMenu() {
         menu = new ArcMenu(this.getActivity());
@@ -55,17 +55,26 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             item.setId(i + 1);
 
             menu.addItem(item);
+            if (i == itemCount - 1)
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        sceneController.removeSelected();
+                        hideMenu();
+                    }
+                });
         }
-        menu.setMainButtonTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sceneController.removeSelected();
-                    hideMenu();
-                }
-                return false;
-            }
-        });
+        menu.setMainButtonVisible(false);
+//        menu.setMainButtonTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    sceneController.removeSelected();
+//                    hideMenu();
+//                }
+//                return false;
+//            }
+//        });
         menu.expand(false);
         hideMenu();
     }
@@ -269,7 +278,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public void onResume() {
         super.onResume();
         sceneController.getSurface().resume();
-    }
+    }/**/
 
 
     private void initializeGestures() {
