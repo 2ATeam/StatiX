@@ -18,11 +18,11 @@ public class Renderable {
     protected void setSprite(Sprite sprite) {
         this.sprite = sprite;
         overlay = new UnitOverlay(sprite.getLocation(), sprite.getWidth(), sprite.getHeight(), overlayType);
-        overlay.setTransform(sprite.getTransform());
     }
 
     public void rotate(float angle) {
         this.sprite.rotate(angle);
+        this.overlay.rotate(angle);
     }
 
     public void scale(float width, float height) {
@@ -31,9 +31,10 @@ public class Renderable {
 
     public void update() {
         sprite.update();
-        overlay.setSrcPosAndLoc(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
+        overlay.setSrcPosAndSize(sprite.getLocation(), sprite.getWidth(), sprite.getHeight());
         overlay.update();
         sprite.resetTransform();
+        overlay.resetTransform();
     }
 
     public boolean hitTest(int x, int y) {

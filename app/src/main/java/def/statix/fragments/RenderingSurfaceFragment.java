@@ -278,7 +278,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         gestureAdapter.setOnTapListener(new GestureAdapter.TapListener() {
             @Override
             public void onDoubleTap() {
-
             }
 
             @Override
@@ -308,11 +307,13 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
         switch(motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:{
-                hideMenu();
+               // hideMenu();
                 this.touch = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                 sceneController.select(touch.x, touch.y);
-                if (sceneController.isObjectSelected())
-                    StatusManager.setSuccess(getString(R.string.hint_selected_object));
+//                if (sceneController.isObjectSelected()){
+//                    StatusManager.setSuccess(getString(R.string.hint_selected_object));
+//                    sceneController.rotateSelected(30.0f);
+//                }
 
                 break;
             }
@@ -326,9 +327,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 if (sceneController.isObjectSelected()){
                     sceneController.applyTransformToSelected();
 
-                    RectF r = sceneController.getSelected().getBoundingRect();
-                    moveMenu((int) r.centerX(), (int) r.centerY());
-                    showMenu();
+                   RectF r = sceneController.getSelected().getBoundingRect();
+                   moveMenu((int) r.centerX(), (int) r.centerY());
+                   showMenu();
                 } else {
                     StatusManager.setStatus(menuAdd.isActivated() ? getString(R.string.hint_choose_object) : getString(R.string.hint_open_menu));
                     hideMenu();

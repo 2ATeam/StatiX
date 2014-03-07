@@ -71,7 +71,6 @@ public final class UnitOverlay extends Sprite{
                 srcLocation.y + sourceHeight);
         Log.d("DEBUG", boundingRect.toString());
         Log.d("DEBUG", "height: " + sourceHeight + " width: " + sourceWidth);
-        Log.d("DEBUG", "posX: " + srcLocation.x + " posY: " + srcLocation.y);
     }
 
     public Paint getPaint() {
@@ -82,7 +81,7 @@ public final class UnitOverlay extends Sprite{
         return boundingRect;
     }
 
-    public void setSrcPosAndLoc(PointF sourceLocation, int sourceWidth, int sourceHeight){
+    public void setSrcPosAndSize(PointF sourceLocation, int sourceWidth, int sourceHeight){
         this.srcLocation = sourceLocation;
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
