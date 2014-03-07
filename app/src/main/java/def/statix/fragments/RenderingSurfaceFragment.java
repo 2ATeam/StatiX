@@ -40,32 +40,74 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     private ArcMenu menu;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
-            R.drawable.composer_place, R.drawable.composer_sleep};
+            R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.shaolin, R.drawable.shaolin, R.drawable.composer_icn_plus}; // 2 shaolins are placeholders to move 'close' button down
+    // create enum depending on this ids
+    // 0 - scale left, 1 - rotate left, 2 - rotate right, 3 - scale right, 4 - close
+
+    private enum Actions {NONE, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT}
+
+    ;
+    private Actions action = Actions.NONE;
+    private float startX; /// TODO: move this somewhere else...
+    private float dx = 0;
 
     private void initArcMenu() {
         menu = new ArcMenu(this.getActivity());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         menu.setLayoutParams(params);
-        menu.setDegreeses(180, 360);
+        menu.setDegreeses(210, 450);
         menu.setChildSize(30);
         final int itemCount = ITEM_DRAWABLES.length;
+
         for (int i = 0; i < itemCount; i++) {
             ImageView item = new ImageView(this.getActivity());
             item.setImageResource(ITEM_DRAWABLES[i]);
-            item.setId(i + 1);
+            item.setId(i);
 
-            menu.addItem(item);
-        }
-        menu.setMainButtonTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sceneController.removeSelected();
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switch (view.getId()) {
+                        case 0:
+                            action = Actions.SCALE_LEFT;
+                            StatusManager.setWarning("Scaling left...");
+                            break;
+                        case 1:
+                            action = Actions.ROTATE_LEFT;
+                            StatusManager.setWarning("Rotating left...");
+                            break;
+                        case 2:
+                            action = Actions.ROTATE_RIGHT;
+                            StatusManager.setWarning("Rotating right...");
+                            break;
+                        case 3:
+                            action = Actions.SCALE_RIGHT;
+                            StatusManager.setWarning("Scaling right...");
+
+                            break;
+                        default:
+                            action = Actions.NONE;
+                            break;
+                    }
                     hideMenu();
                 }
-                return false;
-            }
-        });
+            });
+
+            menu.addItem(item);
+            if (i == itemCount - 1)
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        sceneController.removeSelected();
+                        hideMenu();
+                    }
+                });
+        }
+        // makes those 2 shaolins invisible....
+        menu.getItem(itemCount - 2).setVisibility(View.INVISIBLE);
+        menu.getItem(itemCount - 3).setVisibility(View.INVISIBLE);
+
+        menu.setMainButtonVisible(false);
         menu.expand(false);
         hideMenu();
     }
@@ -269,7 +311,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public void onResume() {
         super.onResume();
         sceneController.getSurface().resume();
-    }
+    }/**/
 
 
     private void initializeGestures() {
@@ -307,7 +349,14 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
         switch(motionEvent.getAction()){
             case MotionEvent.ACTION_DOWN:{
-               // hideMenu();
+                if (action == Actions.NONE) {
+                    dx = startX = 0;
+                } else {
+                    dx = 0;
+                    startX = motionEvent.getX();
+                }
+
+                hideMenu();
                 this.touch = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                 sceneController.select(touch.x, touch.y);
 //                if (sceneController.isObjectSelected()){
@@ -318,13 +367,37 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                if (sceneController.isObjectSelected()) {
+                if (action != Actions.NONE) {
+                    dx = motionEvent.getX() - startX;
+                    /// TODO: Transform here using the dx value (evaluated in density points)
+                    switch (action) {
+                        case ROTATE_LEFT:
+                            StatusManager.setWarning("Rotating left on " + dx + " points.");
+                            break;
+                        case ROTATE_RIGHT:
+                            StatusManager.setWarning("Rotating right on " + dx + " points.");
+                            break;
+                        case SCALE_LEFT:
+                            StatusManager.setWarning("Scaling left on " + dx + " points.");
+                            break;
+                        case SCALE_RIGHT:
+                            StatusManager.setWarning("Scaling left on " + dx + " points.");
+                            break;
+                        default:
+                            break;
+                    }
+                } else if (sceneController.isObjectSelected()) {
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
                 }
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                if (sceneController.isObjectSelected()){
+                if (action != Actions.NONE) {
+                    action = Actions.NONE;
+                    /// TODO: apply transform here if needed
+                    StatusManager.setSuccess("Applying transformation...Done!");
+                    dx = startX = 0;
+                } else if (sceneController.isObjectSelected()){
                     sceneController.applyTransformToSelected();
 
                    RectF r = sceneController.getSelected().getBoundingRect();

@@ -102,6 +102,14 @@ public class ArcMenu extends RelativeLayout {
         }
     }
 
+    public int getItemsCount() {
+        return mArcLayout.getChildCount();
+    }
+
+    public View getItem(int index) {
+        return mArcLayout.getChildAt(index);
+    }
+
     public void addItem(View item) {
         mArcLayout.addView(item);
     }
