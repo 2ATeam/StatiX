@@ -9,10 +9,10 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 /**
  * Created by Lux on 22.02.14.
  */
-public class BeamBuilder extends ConstructionUnitBuilder {
+public class PlankBuilder extends ConstructionUnitBuilder {
 
     @Override
-    public void loadBitmap(Context context) {
+    public void setRepresentation(Context context) {
         unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.plank));
     }
 

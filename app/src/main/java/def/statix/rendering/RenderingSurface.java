@@ -2,7 +2,9 @@ package def.statix.rendering;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -20,19 +22,22 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
     private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
+    private UnconfirmedBeam unconfirmedBeam;
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
     private Paint rectPaint;
+    private Paint ubPaint;
     private boolean isOK; // thread is running now.
     private boolean isDebugInfoVisible;
 
     public RenderingSurface(Context context) {
         super(context);
         surfaceHolder = getHolder();
-        // some bitmap smoothing here:
-        unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG);
+        unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG); // some bitmap smoothing here
         rectPaint = new Paint();
         rectPaint.setARGB(75, 0, 255, 0);
+        ubPaint = new Paint();
+        ubPaint.setColor(Color.BLACK);
         isDebugInfoVisible = true;
     }
 
@@ -47,20 +52,23 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             canvas.drawARGB(255, 40, 40, 40);
             Iterator<Renderable> iterator = renderableData.iterator();
             Renderable item;
+
+            if (unconfirmedBeam != null) { // user is drawing a beam now...
+                PointF start = unconfirmedBeam.getBegin();
+                PointF stop = unconfirmedBeam.getEnd();
+                canvas.drawLine(start.x, start.y, stop.x, stop.y, ubPaint);
+            }
+
             while(iterator.hasNext()) {
                 item = iterator.next();
                 if (item == selectedObject){
                     UnitOverlay overlay = item.getOverlay();
                     canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
-                    // TODO: remove this on release.
                     if (isDebugInfoVisible){
                           canvas.drawRect(overlay.getBoundingRect(), rectPaint); // bounding rect
-//                        canvas.drawCircle(item.getSprite().getPivotPoint().x, item.getSprite().getPivotPoint().y, 20, unitPaint); // sprite pivot
-//                        canvas.drawCircle(overlay.getPivotPoint().x, overlay.getPivotPoint().y, 10, overlay.getPaint()); // overlay pivot.
                     }
                 }
-                canvas.drawBitmap(item.getSprite().getImage(), item.getSpriteLocation().x,
-                                                               item.getSpriteLocation().y, unitPaint);
+                canvas.drawBitmap(item.getSprite().getImage(), item.getSpriteLocation().x, item.getSpriteLocation().y, unitPaint);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
@@ -95,5 +103,9 @@ public class RenderingSurface extends SurfaceView implements Runnable{
 
     public void setDebugInfoVisible(boolean isDebugInfoVisible) {
         this.isDebugInfoVisible = isDebugInfoVisible;
+    }
+
+    public void setUnconfirmedBeam(UnconfirmedBeam unconfirmedBeam) {
+        this.unconfirmedBeam = unconfirmedBeam;
     }
 }

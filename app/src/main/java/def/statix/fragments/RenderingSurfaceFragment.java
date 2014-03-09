@@ -40,13 +40,11 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     private ArcMenu menu;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
-            R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.shaolin, R.drawable.shaolin, R.drawable.composer_icn_plus}; // 2 shaolins are placeholders to move 'close' button down
-    // create enum depending on this ids
+            R.drawable.composer_place, R.drawable.composer_place, R.drawable.shaolin, R.drawable.shaolin, R.drawable.composer_sleep}; // 2 shaolins are placeholders to move 'close' button down
+    // create enum depending on this id's
     // 0 - scale left, 1 - rotate left, 2 - rotate right, 3 - scale right, 4 - close
 
-    private enum Actions {NONE, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT}
-
-    ;
+    private enum Actions { NONE, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT };
     private Actions action = Actions.NONE;
     private float startX; /// TODO: move this somewhere else...
     private float dx = 0;
@@ -129,7 +127,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         //    menu.expand(true);
     }
 
-
     private RadialMenuWidget menuAdd;
 
     private void initRadMenu() {
@@ -153,15 +150,16 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         menuAdd.setCenterCircle(close);
 
 
-        RadialMenuItem beam = new RadialMenuItem("beam", getString(R.string.units_beam));
-        beam.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
+        RadialMenuItem plank = new RadialMenuItem("plank", getString(R.string.units_beam));
+        plank.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
             @Override
             public void execute() {
-                sceneController.addBeam(touch.x, touch.y);
+                //sceneController.confirmBeam(touch.x, touch.y);
+                sceneController.beginPlank(touch.x, touch.y);
                 menuAdd.dismiss();
             }
         });
-        beam.setDisplayIcon(R.drawable.plank_icon);
+        plank.setDisplayIcon(R.drawable.plank_icon);
 
         RadialMenuItem bindings = new RadialMenuItem("binding", getString(R.string.units_bindings));
         bindings.setDisplayIcon(R.drawable.binding_const_icon);
@@ -235,58 +233,20 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             }
         });
 
-
         forcesChildren.add(fConc);
         forcesChildren.add(fDist);
         forcesChildren.add(fMom);
         forces.setMenuChildren(forcesChildren);
 
-        menuAdd.addMenuEntry(beam);
+        menuAdd.addMenuEntry(plank);
         menuAdd.addMenuEntry(bindings);
         menuAdd.addMenuEntry(forces);
-
-
-    }
-
-    //TODO: remove on release.
-    private void testStage(){
-        sceneController.addBeam(800.0f, 250.0f);
-        sceneController.addBinding(100.0f, 100.0f, BindingType.FIXED);
-        sceneController.addBinding(100.0f, 200.0f, BindingType.STATIC);
-        sceneController.addBinding(100.0f, 300.0f, BindingType.MOVABLE);
-        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 100.0f, 400.0f));
-        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 100.0f, 500.0f));
-        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 100.0f, 600.0f));
-
-        sceneController.addBeam(800.0f, 500.0f);
-        sceneController.rotateSelected(45.0f);
-        sceneController.applyTransformToSelected();
-        sceneController.addBinding(500.0f, 100.0f, BindingType.FIXED);
-        sceneController.rotateSelected(90.0f);
-        sceneController.applyTransformToSelected();
-        sceneController.addBinding(500.0f, 200.0f, BindingType.STATIC);
-        sceneController.rotateSelected(90.0f);
-        sceneController.applyTransformToSelected();
-        sceneController.addBinding(500.0f, 300.0f, BindingType.MOVABLE);
-        sceneController.rotateSelected(90.0f);
-        sceneController.applyTransformToSelected();
-        sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, 500.0f, 400.0f));
-        sceneController.rotateSelected(90.0f);
-        sceneController.applyTransformToSelected();
-        sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, 500.0f, 500.0f));
-        sceneController.rotateSelected(90.0f);
-        sceneController.applyTransformToSelected();
-        sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, 500.0f, 600.0f));
-        sceneController.rotateSelected(90.0f);
-        sceneController.applyTransformToSelected();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
         initializeGestures();
-
-        testStage();
         frame = new RelativeLayout(this.getActivity());
         frame.setClipChildren(false);
         frame.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -311,8 +271,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     public void onResume() {
         super.onResume();
         sceneController.getSurface().resume();
-    }/**/
-
+    }
 
     private void initializeGestures() {
         GestureAdapter gestureAdapter = new GestureAdapter();
@@ -359,11 +318,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 hideMenu();
                 this.touch = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
                 sceneController.select(touch.x, touch.y);
-//                if (sceneController.isObjectSelected()){
-//                    StatusManager.setSuccess(getString(R.string.hint_selected_object));
-//                    sceneController.rotateSelected(30.0f);
-//                }
-
+                if (sceneController.getUnconfirmedPlank() != null) {
+                    sceneController.editPlank(motionEvent.getX(), motionEvent.getY());
+                }
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
@@ -389,6 +346,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 } else if (sceneController.isObjectSelected()) {
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
                 }
+                else if(sceneController.getUnconfirmedPlank() != null) {
+                    sceneController.editPlank(motionEvent.getX(), motionEvent.getY());
+                }
                 break;
             }
             case MotionEvent.ACTION_UP: {
@@ -403,6 +363,8 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                    RectF r = sceneController.getSelected().getBoundingRect();
                    moveMenu((int) r.centerX(), (int) r.centerY());
                    showMenu();
+                }else if(sceneController.getUnconfirmedPlank() != null){
+                    sceneController.confirmBeam();
                 } else {
                     StatusManager.setStatus(menuAdd.isActivated() ? getString(R.string.hint_choose_object) : getString(R.string.hint_open_menu));
                     hideMenu();

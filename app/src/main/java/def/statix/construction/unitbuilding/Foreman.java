@@ -24,7 +24,7 @@ public class Foreman {
     public void constructUnit(Context context, float x, float y, ConstructionUnitType type){
         builder.createNewUnit();
         builder.setPosition(x, y);
-        builder.loadBitmap(context);
+        builder.setRepresentation(context);
         builder.setType(type);
     }
 }

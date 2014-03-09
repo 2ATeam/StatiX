@@ -15,7 +15,7 @@ public class BindingBuilder extends ConstructionUnitBuilder{
     private Context context; // TODO: refactor later.
 
     @Override
-    public void loadBitmap(Context context) {
+    public void setRepresentation(Context context) {
         //image is a placeholder
         unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin));
         this.context = context;

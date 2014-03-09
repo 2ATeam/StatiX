@@ -12,7 +12,7 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 public abstract class ConstructionUnitBuilder {
     protected ConstructionUnit unit;
 
-    public abstract void loadBitmap(Context context);
+    public abstract void setRepresentation(Context context);
     public abstract void setType(ConstructionUnitType type);
     public abstract void setPosition(float x, float y);
 

@@ -1,11 +1,13 @@
 package def.statix.rendering;
 
 import android.content.Context;
+import android.graphics.PointF;
+import android.util.Log;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import def.statix.construction.Force;
-import def.statix.construction.unitbuilding.BeamBuilder;
+import def.statix.construction.unitbuilding.PlankBuilder;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
 import def.statix.construction.unitbuilding.Foreman;
@@ -18,11 +20,12 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 public class SceneController {
 
     private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
+    private UnconfirmedBeam unconfirmedPlank; // cannot be renderable.
     private Renderable selectedObject;
 
     private RenderingSurface renderingSurface;
     private Foreman foreman;
-    private BeamBuilder beamBuilder;
+    private PlankBuilder beamBuilder;
 
     private BindingBuilder bindingBuilder;
     private Context context;
@@ -37,13 +40,29 @@ public class SceneController {
     public SceneController() {
         this.sceneObjects = new CopyOnWriteArrayList<>();
         this.foreman = new Foreman();
-        this.beamBuilder = new BeamBuilder();
+        this.beamBuilder = new PlankBuilder();
         this.bindingBuilder = new BindingBuilder();
         this.selectedObject = null;
     }
 
-    public void addBeam(float x, float y) {
+    public void beginPlank(float x, float y) {
+        unconfirmedPlank = new UnconfirmedBeam(new PointF(x, y));
+        renderingSurface.setUnconfirmedBeam(unconfirmedPlank);
+    }
+
+    public void editPlank(float x, float y) {
+        unconfirmedPlank.setEnd(x, y);
+    }
+
+    public void confirmBeam(float x, float y) {
         addUnit(beamBuilder, x, y, null);
+        unconfirmedPlank = null;
+    }
+
+    public void confirmBeam() {
+        //addUnit(beamBuilder, x, y, null);
+        /// TODO: implement beam building logic.
+        unconfirmedPlank = null; // no need to render unconfirmed plank any more.
     }
 
     public void addBinding(float x, float y, BindingType type) {
@@ -67,7 +86,7 @@ public class SceneController {
     }
 
     public void scaleSelected(float width, float height) {
-        selectedObject.scale(20.0f, 20.0f);
+        selectedObject.scale(width, height);
     }
 
     public void translateSelected(float x, float y) {
@@ -107,5 +126,9 @@ public class SceneController {
 
     public Renderable getSelected() {
         return selectedObject;
+    }
+
+    public UnconfirmedBeam getUnconfirmedPlank() {
+        return unconfirmedPlank;
     }
 }
