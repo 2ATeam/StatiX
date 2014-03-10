@@ -22,7 +22,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Thread renderingThread;
     private SurfaceHolder surfaceHolder;
     private CopyOnWriteArrayList<Renderable> renderableData; // a reference to the data to render.
-    private UnconfirmedBeam unconfirmedBeam;
+    private UnconfirmedPlank unconfirmedPlank;
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
     private Paint rectPaint;
@@ -36,8 +36,11 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG); // some bitmap smoothing here
         rectPaint = new Paint();
         rectPaint.setARGB(75, 0, 255, 0);
-        ubPaint = new Paint();
-        ubPaint.setColor(Color.BLACK);
+        ubPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        ubPaint.setColor(Color.BLUE);
+        ubPaint.setStyle(Paint.Style.STROKE);
+        ubPaint.setStrokeJoin(Paint.Join.ROUND);
+        ubPaint.setStrokeWidth(20.0f);
         isDebugInfoVisible = true;
     }
 
@@ -53,9 +56,9 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             Iterator<Renderable> iterator = renderableData.iterator();
             Renderable item;
 
-            if (unconfirmedBeam != null) { // user is drawing a beam now...
-                PointF start = unconfirmedBeam.getBegin();
-                PointF stop = unconfirmedBeam.getEnd();
+            if (unconfirmedPlank != null) { // user is drawing a beam now...
+                PointF start = unconfirmedPlank.getBegin();
+                PointF stop = unconfirmedPlank.getEnd();
                 canvas.drawLine(start.x, start.y, stop.x, stop.y, ubPaint);
             }
 
@@ -105,7 +108,19 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         this.isDebugInfoVisible = isDebugInfoVisible;
     }
 
-    public void setUnconfirmedBeam(UnconfirmedBeam unconfirmedBeam) {
-        this.unconfirmedBeam = unconfirmedBeam;
+    public void setUnconfirmedPlank(UnconfirmedPlank unconfirmedPlank) {
+        this.unconfirmedPlank = unconfirmedPlank;
+    }
+
+    public Paint getUnitPaint() {
+        return unitPaint;
+    }
+
+    public Paint getRectPaint() {
+        return rectPaint;
+    }
+
+    public Paint getUbPaint() {
+        return ubPaint;
     }
 }

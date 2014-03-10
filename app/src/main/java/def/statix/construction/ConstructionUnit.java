@@ -36,7 +36,7 @@ public class ConstructionUnit extends Renderable {
         this.position.set(x, y); // TODO: position should be converted from location(screen coordinates).
     }
 
-    public void loadImage(Bitmap image) {
+    public void setImage(Bitmap image) {
         overlayType = type == null; // if true - then we are dealing with the plank. Force or binding otherwise.
         setSprite(new Sprite(image, position.x - (image.getWidth() / 2),
                                     position.y - (image.getHeight() / 2)));

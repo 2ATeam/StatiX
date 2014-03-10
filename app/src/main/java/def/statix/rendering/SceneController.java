@@ -1,8 +1,9 @@
 package def.statix.rendering;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
-import android.util.Log;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,15 +21,14 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 public class SceneController {
 
     private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
-    private UnconfirmedBeam unconfirmedPlank; // cannot be renderable.
+    private UnconfirmedPlank unconfirmedPlank; // cannot be renderable.
     private Renderable selectedObject;
-
     private RenderingSurface renderingSurface;
     private Foreman foreman;
-    private PlankBuilder beamBuilder;
-
+    private PlankBuilder plankBuilder;
     private BindingBuilder bindingBuilder;
     private Context context;
+    private PointF unitLocation;
 
     public SceneController(Context context) {
         this();
@@ -38,31 +38,41 @@ public class SceneController {
     }
 
     public SceneController() {
-        this.sceneObjects = new CopyOnWriteArrayList<>();
-        this.foreman = new Foreman();
-        this.beamBuilder = new PlankBuilder();
-        this.bindingBuilder = new BindingBuilder();
-        this.selectedObject = null;
+        sceneObjects = new CopyOnWriteArrayList<>();
+        foreman = new Foreman();
+        plankBuilder = new PlankBuilder();
+        bindingBuilder = new BindingBuilder();
+        selectedObject = null;
     }
 
     public void beginPlank(float x, float y) {
-        unconfirmedPlank = new UnconfirmedBeam(new PointF(x, y));
-        renderingSurface.setUnconfirmedBeam(unconfirmedPlank);
+        unconfirmedPlank = new UnconfirmedPlank(new PointF(x, y));
+        renderingSurface.setUnconfirmedPlank(unconfirmedPlank);
     }
 
     public void editPlank(float x, float y) {
         unconfirmedPlank.setEnd(x, y);
     }
 
-    public void confirmBeam(float x, float y) {
-        addUnit(beamBuilder, x, y, null);
+    public void confirmPlank(float x, float y) {
+        addUnit(plankBuilder, x, y, null);
         unconfirmedPlank = null;
     }
 
-    public void confirmBeam() {
-        //addUnit(beamBuilder, x, y, null);
-        /// TODO: implement beam building logic.
+    public void confirmPlank() {
+        //calc top left corner offset of the plank:
+        float x = unconfirmedPlank.getBegin().x < unconfirmedPlank.getEnd().x ?
+                unconfirmedPlank.getBegin().x : unconfirmedPlank.getEnd().x;
+
+        float y = unconfirmedPlank.getBegin().y < unconfirmedPlank.getEnd().y ?
+                unconfirmedPlank.getBegin().y : unconfirmedPlank.getEnd().y;
+
+        unitLocation = new PointF(x, y);
+
+        plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUbPaint());
+        addUnit(plankBuilder, unitLocation.x, unitLocation.y, null);
         unconfirmedPlank = null; // no need to render unconfirmed plank any more.
+        renderingSurface.setUnconfirmedPlank(null);
     }
 
     public void addBinding(float x, float y, BindingType type) {
@@ -128,7 +138,7 @@ public class SceneController {
         return selectedObject;
     }
 
-    public UnconfirmedBeam getUnconfirmedPlank() {
+    public UnconfirmedPlank getUnconfirmedPlank() {
         return unconfirmedPlank;
     }
 }

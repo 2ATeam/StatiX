@@ -154,7 +154,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         plank.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
             @Override
             public void execute() {
-                //sceneController.confirmBeam(touch.x, touch.y);
                 sceneController.beginPlank(touch.x, touch.y);
                 menuAdd.dismiss();
             }
@@ -359,12 +358,11 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                     dx = startX = 0;
                 } else if (sceneController.isObjectSelected()){
                     sceneController.applyTransformToSelected();
-
-                   RectF r = sceneController.getSelected().getBoundingRect();
-                   moveMenu((int) r.centerX(), (int) r.centerY());
-                   showMenu();
+                    RectF r = sceneController.getSelected().getBoundingRect();
+                    moveMenu((int) r.centerX(), (int) r.centerY());
+                    showMenu();
                 }else if(sceneController.getUnconfirmedPlank() != null){
-                    sceneController.confirmBeam();
+                    sceneController.confirmPlank();
                 } else {
                     StatusManager.setStatus(menuAdd.isActivated() ? getString(R.string.hint_choose_object) : getString(R.string.hint_open_menu));
                     hideMenu();

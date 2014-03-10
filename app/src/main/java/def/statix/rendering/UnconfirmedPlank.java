@@ -5,17 +5,17 @@ import android.graphics.PointF;
 /**
  * Created by Lux on 08.03.14.
  */
-public class UnconfirmedBeam {
+public class UnconfirmedPlank {
 
     private PointF begin;
     private PointF end;
 
-    public UnconfirmedBeam(PointF begin) {
+    public UnconfirmedPlank(PointF begin) {
         this.begin = begin;
-        this.end = new PointF();
+        this.end = new PointF(begin.x, begin.y);
     }
 
-    public UnconfirmedBeam(PointF begin, PointF end) {
+    public UnconfirmedPlank(PointF begin, PointF end) {
         this.begin = begin;
         this.end = end;
     }

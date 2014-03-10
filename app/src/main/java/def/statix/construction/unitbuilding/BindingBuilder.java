@@ -17,7 +17,7 @@ public class BindingBuilder extends ConstructionUnitBuilder{
     @Override
     public void setRepresentation(Context context) {
         //image is a placeholder
-        unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin));
+        unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin));
         this.context = context;
     }
 
@@ -28,15 +28,15 @@ public class BindingBuilder extends ConstructionUnitBuilder{
         assert type instanceof BindingType;
         switch ((BindingType)type){
             case FIXED:{
-                unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_const));
+                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_const));
                 break;
             }
             case MOVABLE:{
-                unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_movalbe));
+                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_movalbe));
                 break;
             }
             case STATIC:{
-                unit.loadImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_stationary));
+                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_stationary));
                 break;
             }
         }
