@@ -5,7 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="hint_choose_object">Choose object to add</string>
-    <string name="hint_open_menu">Touch empty space to add objects</string>
+    <string name="hint_open_menu">Double-touch screen to add object</string>
     <string name="hint_selected_object">Object has been selected.</string>
     <string name="units_beam">Beam</string>
     <string name="units_bindings">Bindings</string>
@@ -16,5 +16,7 @@
     <string name="units_forces_concentrated">Concentrated</string>
     <string name="units_forces_distributed">Distributed</string>
     <string name="units_forces_moment">Moment</string>
+    <string name="hint_creating_object">Touch screen to set start position.</string>
+    <string name="hint_creation_edit_object">Move finger to edit plank. Release touch to finish creation</string>
 
 </resources>

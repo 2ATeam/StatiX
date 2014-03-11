@@ -5,7 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Настройки</string>
     <string name="hint_choose_object">Выберите объект</string>
-    <string name="hint_open_menu">Коснитесь пустого места для того, чтоб добавить объект</string>
+    <string name="hint_open_menu">Коснитесь два раза экрана, чтоб добавить объект</string>
     <string name="hint_selected_object">Объект выбран</string>
     <string name="units_beam">Балка</string>
     <string name="units_bindings">Опоры</string>
@@ -16,5 +16,7 @@
     <string name="units_forces_concentrated">Сосредоточеная</string>
     <string name="units_forces_distributed">Равномерная</string>
     <string name="units_forces_moment">Момент</string>
+    <string name="hint_creating_object">Укажите начальное положение балки.</string>
+    <string name="hint_creation_edit_object">Передвигайте палец для редактирования балки. Отпустите палец для завершения.</string>
 
 </resources>

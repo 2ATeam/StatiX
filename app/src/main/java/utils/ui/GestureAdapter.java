@@ -24,7 +24,7 @@ public class GestureAdapter implements GestureDetector.OnGestureListener, Gestur
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
-        notifyDoubleTap();
+        notifyDoubleTap(motionEvent.getX(), motionEvent.getY());
         return true;
     }
 
@@ -35,7 +35,7 @@ public class GestureAdapter implements GestureDetector.OnGestureListener, Gestur
 
     @Override
     public void onShowPress(MotionEvent motionEvent) {
-        notifyTapStarted();
+        notifyTapStarted(motionEvent.getX(), motionEvent.getY());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class GestureAdapter implements GestureDetector.OnGestureListener, Gestur
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-        notifyLongTap();
+        notifyLongTap(motionEvent.getX(), motionEvent.getY());
     }
 
     @Override
@@ -123,11 +123,11 @@ public class GestureAdapter implements GestureDetector.OnGestureListener, Gestur
     }
 
     public static interface TapListener {
-        public void onDoubleTap();
+        public void onDoubleTap(float touchX, float touchY);
 
-        public void onLongTap();
+        public void onLongTap(float touchX, float touchY);
 
-        public void onTapStarted();
+        public void onTapStarted(float touchX, float touchY);
     }
 
     private ArrayList<TapListener> tapListeners = new ArrayList<>();
@@ -136,21 +136,21 @@ public class GestureAdapter implements GestureDetector.OnGestureListener, Gestur
         tapListeners.add(listener);
     }
 
-    private void notifyLongTap() {
+    private void notifyLongTap(float x, float y) {
         for (TapListener listener : tapListeners) {
-            listener.onLongTap();
+            listener.onLongTap(x, y);
         }
     }
 
-    private void notifyDoubleTap() {
+    private void notifyDoubleTap(float x, float y) {
         for (TapListener listener : tapListeners) {
-            listener.onDoubleTap();
+            listener.onDoubleTap(x, y);
         }
     }
 
-    private void notifyTapStarted() {
+    private void notifyTapStarted(float x, float y) {
         for (TapListener listener : tapListeners) {
-            listener.onTapStarted();
+            listener.onTapStarted(x, y);
         }
     }
 }
