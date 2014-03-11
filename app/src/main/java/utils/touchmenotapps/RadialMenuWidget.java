@@ -83,7 +83,7 @@ public class RadialMenuWidget extends View {
     private int headerBackgroundAlpha = 180; // transparency of header
     // background
 
-    private int wedgeQty = 1; // Number of wedges
+    private int wedgeQty = 0; // Number of wedges
     private RadialMenuWedge[] Wedges = new RadialMenuWedge[wedgeQty];
     private RadialMenuWedge selected = null; // Keeps track of which wedge is
     // selected
@@ -233,7 +233,8 @@ public class RadialMenuWidget extends View {
 
                     inWedge2 = helper.pntInWedge(eventX, eventY, xPosition,
                             yPosition, r2MinSize, r2MaxSize, (i * slice)
-                            + start, slice);
+                                    + start, slice
+                    );
 
                     if (inWedge2 == true) {
                         selected2 = f;
@@ -789,7 +790,8 @@ public class RadialMenuWidget extends View {
             for (int i = 0; i < Wedges2.length; i++) {
                 this.Wedges2[i] = new RadialMenuWedge(xPosition, yPosition,
                         r2MinSize, r2MinSize + r2VariableSize, (i * slice2)
-                        + start_slice2, slice2);
+                        + start_slice2, slice2
+                );
                 float xCenter = (float) (Math
                         .cos(((rSlice2 * i) + (rSlice2 * 0.5)) + rStart2)
                         * (r2MinSize + r2VariableSize + r2MinSize) / 2)
@@ -827,11 +829,12 @@ public class RadialMenuWidget extends View {
                 }
                 this.textBoxRect
                         .set((xPosition - (widthOffset)), (int) (yPosition
-                                - (r2MinSize + r2VariableSize) - headerBuffer
-                                - this.textRect.height() - scalePX(3)),
+                                        - (r2MinSize + r2VariableSize) - headerBuffer
+                                        - this.textRect.height() - scalePX(3)),
                                 (xPosition + (widthOffset)), (yPosition
-                                - (r2MinSize + r2VariableSize)
-                                - headerBuffer + scalePX(3)));
+                                        - (r2MinSize + r2VariableSize)
+                                        - headerBuffer + scalePX(3))
+                        );
                 this.headerTextBottom = yPosition
                         - (r2MinSize + r2VariableSize) - headerBuffer
                         - this.textRect.bottom;
@@ -854,7 +857,8 @@ public class RadialMenuWidget extends View {
             for (int i = 0; i < Wedges2.length; i++) {
                 this.Wedges2[i] = new RadialMenuWedge(xPosition, yPosition,
                         r2MinSize, r2MaxSize - r2VariableSize, (i * slice2)
-                        + start_slice2, slice2);
+                        + start_slice2, slice2
+                );
 
                 float xCenter = (float) (Math
                         .cos(((rSlice2 * i) + (rSlice2 * 0.5)) + rStart2)
@@ -900,7 +904,8 @@ public class RadialMenuWidget extends View {
                         (int) (yPosition - (heightOffset) - headerBuffer
                                 - this.textRect.height() - scalePX(3)),
                         (xPosition + (widthOffset)), (yPosition
-                        - (heightOffset) - headerBuffer + scalePX(3)));
+                                - (heightOffset) - headerBuffer + scalePX(3))
+                );
                 this.headerTextBottom = yPosition - (heightOffset)
                         - headerBuffer - this.textRect.bottom;
 
@@ -1022,7 +1027,8 @@ public class RadialMenuWidget extends View {
                 (int) (yPosition - (MaxSize) - headerBuffer
                         - this.textRect.height() - scalePX(3)),
                 (xPosition + (offset)),
-                (yPosition - (MaxSize) - headerBuffer + scalePX(3)));
+                (yPosition - (MaxSize) - headerBuffer + scalePX(3))
+        );
 
     }
 
