@@ -45,20 +45,18 @@ public class SceneController {
         selectedObject = null;
     }
 
+    //start plank adding process:
     public void beginPlank(float x, float y) {
         unconfirmedPlank = new UnconfirmedPlank(new PointF(x, y));
         renderingSurface.setUnconfirmedPlank(unconfirmedPlank);
     }
 
+    //continue plank adding process:
     public void editPlank(float x, float y) {
         unconfirmedPlank.setEnd(x, y);
     }
 
-    public void confirmPlank(float x, float y) {
-        addUnit(plankBuilder, x, y, null);
-        unconfirmedPlank = null;
-    }
-
+    //end plank adding process. unconfirmed plank becomes renderable object.
     public void confirmPlank() {
         //calc top left corner offset of the plank:
         float x = unconfirmedPlank.getBegin().x < unconfirmedPlank.getEnd().x ?

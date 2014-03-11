@@ -40,7 +40,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         ubPaint.setColor(Color.BLUE);
         ubPaint.setStyle(Paint.Style.STROKE);
         ubPaint.setStrokeJoin(Paint.Join.ROUND);
-        ubPaint.setStrokeWidth(20.0f);
+        ubPaint.setStrokeWidth(10.0f);
         isDebugInfoVisible = true;
     }
 

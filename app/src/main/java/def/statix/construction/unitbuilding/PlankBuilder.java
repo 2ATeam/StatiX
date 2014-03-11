@@ -22,21 +22,18 @@ public class PlankBuilder extends ConstructionUnitBuilder {
 
     private Bitmap createBitmap(Context context) {
         if (plank != null && plankPaint != null) {
-            int strokeOffset = (int) plankPaint.getStrokeWidth() / 2;
-
-            int height = (int) ((plank.getBegin().y < plank.getEnd().y) ?
-                 (plank.getEnd().y - plank.getBegin().y) : (plank.getBegin().y - plank.getEnd().y));
-
-            int width =  (int) ((plank.getBegin().x < plank.getEnd().x) ?
-                 (plank.getEnd().x - plank.getBegin().x) : (plank.getBegin().x - plank.getEnd().x));
-
+            PointF begin = plank.getBegin();
+            PointF end = plank.getEnd();
+            int strokeOffset = 40;
+            int frameOffset = strokeOffset / 2;
+            int width =  (int) ((begin.x < end.x) ? (end.x - begin.x) : (begin.x - end.x));
+            int height = (int) ((begin.y < end.y) ? (end.y - begin.y) : (begin.y - end.y));
             Bitmap image = Bitmap.createBitmap(width + strokeOffset, height + strokeOffset, Bitmap.Config.ARGB_4444);
             Canvas canvas = new Canvas(image);
-            //have to translate plank coordinates to the origin. Because of using local canvas coords.
-            canvas.drawLine(plank.getBegin().x - location.x + strokeOffset,
-                            plank.getBegin().y - location.y + strokeOffset,
-                            plank.getEnd().x   - location.x,
-                            plank.getEnd().y   - location.y, plankPaint);
+            canvas.drawLine(begin.x - location.x + frameOffset,
+                            begin.y - location.y + frameOffset,
+                            end.x   - location.x + frameOffset,
+                            end.y   - location.y + frameOffset, plankPaint);
             return  image;
         }
         return BitmapFactory.decodeResource(context.getResources(), R.drawable.plank); // placeholder.
@@ -45,11 +42,12 @@ public class PlankBuilder extends ConstructionUnitBuilder {
     @Override
     public void setRepresentation(Context context) {
         unit.setImage(createBitmap(context));
+
     }
 
     @Override
     public void setType(ConstructionUnitType type) {
-        unit.setType(null); // there is no type of beam now. it is just beam. nothing else.
+        unit.setType(null); // there is no type of plank now. it is just plank. nothing else.
     }
 
     @Override
