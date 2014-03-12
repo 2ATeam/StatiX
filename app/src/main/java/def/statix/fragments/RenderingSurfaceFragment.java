@@ -430,7 +430,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 } else if (sceneController.isObjectSelected()) {
                     creationMenu = menuBuilder.getCreationMenu(CreationMenuType.FORCES);
                     PointF rotCenter = new PointF(sceneController.getSelected().getBoundingRect().centerX(),
-                            sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
+                    sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
                     gestureHandler.setRotationCenter(rotCenter);
                 } else
                     creationMenu = menuBuilder.getCreationMenu(CreationMenuType.PLANK);

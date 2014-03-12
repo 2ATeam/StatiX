@@ -39,6 +39,8 @@ public class Renderable {
 
     public boolean hitTest(int x, int y) {
         if (overlay.getBoundingRect().contains(x, y)) {
+            sprite.setHitPoint(x, y);
+            overlay.setHitPoint(x, y);
             return true;
         }
         return false;
