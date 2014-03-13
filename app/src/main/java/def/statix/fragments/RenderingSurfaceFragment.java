@@ -39,17 +39,23 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     private RelativeLayout frame;
     private SceneController sceneController;
     private Point touch; /// TODO: get rid of it as soon as possible...
-
+    private GestureHandler gestureHandler;
+    private RadialMenuWidget creationMenu;
+    private CreationMenuBuilder menuBuilder;
     private ArcMenu overlayMenu;
-    private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
-            R.drawable.composer_place, R.drawable.composer_place, R.drawable.shaolin, R.drawable.shaolin, R.drawable.composer_sleep}; // 2 shaolins are placeholders to move 'close' button down
+    private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera,
+                                                 R.drawable.composer_music,
+                                                 R.drawable.composer_place,
+                                                 R.drawable.composer_place,
+                                                 R.drawable.shaolin,
+                                                 R.drawable.shaolin,
+                                                 R.drawable.composer_sleep}; // 2 shaolins are placeholders to move 'close' button down
+
+    private enum ModifyActions      { NONE, CREATING, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT };
+    private enum CreationMenuType   { ALL, PLANK, FORCES, BINDINGS_AND_PLANKS };
+
     // create enum depending on this id's:
     // 0 - scale left, 1 - rotate left, 2 - rotate right, 3 - scale right, 4 - close
-
-
-    private enum ModifyActions {NONE, CREATING, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT}
-
-    ;
     private ModifyActions modifyAction = ModifyActions.NONE;
 
     private void initOverlayMenu() {
@@ -126,15 +132,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     private void showOverlayMenu() {
         overlayMenu.setVisibility(View.VISIBLE);
     }
-
-    private GestureHandler gestureHandler;
-
-    private RadialMenuWidget creationMenu;
-    private CreationMenuBuilder menuBuilder;
-
-    private enum CreationMenuType {ALL, PLANK, FORCES, BINDINGS_AND_PLANKS}
-
-    ;
 
     // Tool for building specific menus
     private class CreationMenuBuilder {
@@ -346,7 +343,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
@@ -430,7 +426,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 } else if (sceneController.isObjectSelected()) {
                     creationMenu = menuBuilder.getCreationMenu(CreationMenuType.FORCES);
                     PointF rotCenter = new PointF(sceneController.getSelected().getBoundingRect().centerX(),
-                    sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
+                                                  sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
                     gestureHandler.setRotationCenter(rotCenter);
                 } else
                     creationMenu = menuBuilder.getCreationMenu(CreationMenuType.PLANK);
@@ -456,7 +452,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                         break;
                 }
                 if (sceneController.getUnconfirmedPlank() != null) {
-                    sceneController.editPlank(motionEvent.getX(), motionEvent.getY());
+                    sceneController.editPlank(gestureHandler.getDX(), gestureHandler.getDY());
                 } else if (sceneController.isObjectSelected()) {
                     sceneController.translateSelected(motionEvent.getX(), motionEvent.getY());
                 }

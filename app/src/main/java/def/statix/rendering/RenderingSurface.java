@@ -28,7 +28,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private Paint rectPaint;
     private Paint ubPaint;
     private boolean isOK; // thread is running now.
-    private boolean isDebugInfoVisible;
+    private static final boolean IS_DEBUG_INFO_VISIBLE = false;
 
     public RenderingSurface(Context context) {
         super(context);
@@ -41,7 +41,6 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         ubPaint.setStyle(Paint.Style.STROKE);
         ubPaint.setStrokeJoin(Paint.Join.ROUND);
         ubPaint.setStrokeWidth(10.0f);
-        isDebugInfoVisible = true;
     }
 
     @Override
@@ -67,7 +66,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
                 if (item == selectedObject){
                     UnitOverlay overlay = item.getOverlay();
                     canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
-                    if (isDebugInfoVisible){
+                    if (IS_DEBUG_INFO_VISIBLE){
                           canvas.drawRect(overlay.getBoundingRect(), rectPaint); // bounding rect
                     }
                 }
@@ -104,20 +103,8 @@ public class RenderingSurface extends SurfaceView implements Runnable{
         this.selectedObject = selectedObject;
     }
 
-    public void setDebugInfoVisible(boolean isDebugInfoVisible) {
-        this.isDebugInfoVisible = isDebugInfoVisible;
-    }
-
     public void setUnconfirmedPlank(UnconfirmedPlank unconfirmedPlank) {
         this.unconfirmedPlank = unconfirmedPlank;
-    }
-
-    public Paint getUnitPaint() {
-        return unitPaint;
-    }
-
-    public Paint getRectPaint() {
-        return rectPaint;
     }
 
     public Paint getUbPaint() {

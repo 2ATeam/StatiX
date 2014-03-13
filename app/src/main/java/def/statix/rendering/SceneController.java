@@ -1,8 +1,6 @@
 package def.statix.rendering;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PointF;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -52,18 +50,21 @@ public class SceneController {
     }
 
     //continue plank adding process:
-    public void editPlank(float x, float y) {
-        unconfirmedPlank.setEnd(x, y);
+    public void editPlank(float dx, float dy) {
+        float offsetThreshold = 10.0f;
+        float newDx = dx >= offsetThreshold || dx <= -offsetThreshold ? dx : 0;
+        float newDy = dy >= offsetThreshold || dy <= -offsetThreshold ? dy : 0;
+        unconfirmedPlank.offset(newDx, newDy);
     }
 
     //end plank adding process. unconfirmed plank becomes renderable object.
     public void confirmPlank() {
         //calc top left corner offset of the plank:
         float x = unconfirmedPlank.getBegin().x < unconfirmedPlank.getEnd().x ?
-                unconfirmedPlank.getBegin().x : unconfirmedPlank.getEnd().x;
+                  unconfirmedPlank.getBegin().x : unconfirmedPlank.getEnd().x;
 
         float y = unconfirmedPlank.getBegin().y < unconfirmedPlank.getEnd().y ?
-                unconfirmedPlank.getBegin().y : unconfirmedPlank.getEnd().y;
+                  unconfirmedPlank.getBegin().y : unconfirmedPlank.getEnd().y;
 
         unitLocation = new PointF(x, y);
 

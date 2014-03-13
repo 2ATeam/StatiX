@@ -37,7 +37,7 @@ public class UnconfirmedPlank {
         this.end = end;
     }
 
-    public void setEnd(float x, float y) {
-        this.end.set(x, y);
+    public void offset(float dx, float dy) {
+        end.set(begin.x + dx, begin.y + dy);
     }
 }
