@@ -6,10 +6,10 @@ import android.graphics.PointF;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import def.statix.construction.Force;
-import def.statix.construction.unitbuilding.PlankBuilder;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
 import def.statix.construction.unitbuilding.Foreman;
+import def.statix.construction.unitbuilding.PlankBuilder;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 
@@ -26,7 +26,6 @@ public class SceneController {
     private PlankBuilder plankBuilder;
     private BindingBuilder bindingBuilder;
     private Context context;
-    private PointF unitLocation;
 
     public SceneController(Context context) {
         this();
@@ -66,7 +65,7 @@ public class SceneController {
         float y = unconfirmedPlank.getBegin().y < unconfirmedPlank.getEnd().y ?
                   unconfirmedPlank.getBegin().y : unconfirmedPlank.getEnd().y;
 
-        unitLocation = new PointF(x, y);
+        PointF unitLocation = new PointF(x, y);
 
         plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUbPaint());
         addUnit(plankBuilder, unitLocation.x, unitLocation.y, null);

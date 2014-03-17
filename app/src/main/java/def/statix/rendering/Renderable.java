@@ -13,6 +13,7 @@ public class Renderable {
     protected UnitOverlay overlay;
     protected boolean isResizeable;
     protected boolean isRotatable;
+    protected boolean isTranslatable;
     protected boolean overlayType;
 
     protected void setSprite(Sprite sprite) {
@@ -21,12 +22,12 @@ public class Renderable {
     }
 
     public void rotate(float angle) {
-        this.sprite.rotate(angle);
-        this.overlay.rotate(angle);
+        sprite.rotate(angle);
+        overlay.rotate(angle);
     }
 
     public void scale(float width, float height) {
-        this.sprite.scale(width, height);
+        sprite.scale(width, height);
     }
 
     public void update() {
@@ -82,15 +83,23 @@ public class Renderable {
         return isResizeable;
     }
 
-    public void setResizeable(boolean isScaleable) {
-        this.isResizeable = isScaleable;
+    public void setResizeable(boolean isScalable) {
+        this.isResizeable = isScalable;
     }
 
     public boolean isRotatable() {
         return isRotatable;
     }
 
-    public void setRotatable(boolean isRotateable) {
-        this.isRotatable = isRotateable;
+    public void setRotatable(boolean isRotatable) {
+        this.isRotatable = isRotatable;
+    }
+
+    public boolean isTranslatable() {
+        return isTranslatable;
+    }
+
+    public void setTranslatable(boolean isTranslatable) {
+        this.isTranslatable = isTranslatable;
     }
 }

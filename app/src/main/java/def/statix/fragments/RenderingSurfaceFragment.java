@@ -47,9 +47,9 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                                                  R.drawable.composer_music,
                                                  R.drawable.composer_place,
                                                  R.drawable.composer_place,
+                                                 R.drawable.shaolin, //shaolins are placeholders to move 'close' button down
                                                  R.drawable.shaolin,
-                                                 R.drawable.shaolin,
-                                                 R.drawable.composer_sleep}; // 2 shaolins are placeholders to move 'close' button down
+                                                 R.drawable.composer_sleep};
 
     private enum ModifyActions      { NONE, CREATING, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT };
     private enum CreationMenuType   { ALL, PLANK, FORCES, BINDINGS_AND_PLANKS };
@@ -136,7 +136,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
     // Tool for building specific menus
     private class CreationMenuBuilder {
 
-
         private RadialMenuWidget menuPlank;
         private RadialMenuWidget menuBindingsAndForces;
         private RadialMenuWidget menuForces;
@@ -182,7 +181,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                     r.addMenuEntry(createForcesItem());
                     break;
             }
-
             return r;
         }
 
@@ -234,7 +232,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                     creationMenu.dismiss();
                 }
             });
-
             return bStatic;
         }
 
@@ -381,7 +378,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             @Override
             public void onDoubleTap(float touchX, float touchY) {
                 if (RenderingSurfaceFragment.this.modifyAction != ModifyActions.NONE)
-                    return; // ignore accidently gestures while editing objects
+                    return; // ignore accidentally gestures while editing objects
                 int x = (int) touchX;
                 int y = (int) touchY;
                 if (x <= 70) x = 70;    // bound screen edges
@@ -397,7 +394,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
             @Override
             public void onLongTap(float touchX, float touchY) {
-                onDoubleTap(touchX, touchY); // support old way to add obejcts
+                onDoubleTap(touchX, touchY); // support old way to add objects
             }
 
             @Override

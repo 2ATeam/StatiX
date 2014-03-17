@@ -22,8 +22,7 @@ public class Sprite {
         this.image = image;
         matrix = new Matrix();
         location = new PointF(x, y);
-        pivotPoint = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2));
-        matrix.postTranslate(location.x, location.y);
+        pivotPoint = new PointF(x + (image.getWidth() / 2), y + (image.getHeight() / 2)); // center by default.
         angle = 0;
     }
 
@@ -31,7 +30,6 @@ public class Sprite {
         matrix = new Matrix();
         location = new PointF(x, y);
         pivotPoint = new PointF();
-        matrix.postTranslate(location.x, location.y);
         angle = 0;
     }
 

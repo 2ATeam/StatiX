@@ -42,7 +42,8 @@ public class PlankBuilder extends ConstructionUnitBuilder {
     @Override
     public void setRepresentation(Context context) {
         unit.setImage(createBitmap(context));
-
+        unit.getOverlay().setJoints(plank.getBegin(), plank.getEnd());
+        unit.getOverlay().createPlankOverlay();
     }
 
     @Override
@@ -61,3 +62,4 @@ public class PlankBuilder extends ConstructionUnitBuilder {
         this.location = unitLocation;
     }
 }
+
