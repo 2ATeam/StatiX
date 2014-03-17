@@ -91,10 +91,13 @@ public final class UnitOverlay extends Sprite{
         this.srcLocation = sourceLocation;
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
+}
+
+    public void addJoint(PointF joint) {
+        joints.add(joint);
     }
 
-    public void setJoints(PointF first, PointF second) {
-        joints.add(first);
-        joints.add(second);
+    public ArrayList<PointF> getJoints() {
+        return joints;
     }
 }

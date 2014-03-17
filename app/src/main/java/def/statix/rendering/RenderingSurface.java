@@ -51,7 +51,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             }
             Canvas canvas = surfaceHolder.lockCanvas();
             assert canvas != null && renderableData != null;
-            canvas.drawARGB(255, 40, 40, 40);
+            canvas.drawARGB(255, 90, 90, 90);
             Iterator<Renderable> iterator = renderableData.iterator();
             Renderable item;
 

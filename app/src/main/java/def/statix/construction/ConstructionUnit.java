@@ -20,10 +20,12 @@ public class ConstructionUnit extends Renderable {
     public ConstructionUnit(Force outgoingForce, PointF location) {
         this.outgoingForce = outgoingForce;
         position = new PointF(location.x, location.y);
+        isAttached = false;
     }
 
     public ConstructionUnit() {
-        this.position = new PointF();
+        position = new PointF();
+        isAttached = false;
         // some default initialization will be here.
         // maybe applying the gravity or smth. like that.
     }

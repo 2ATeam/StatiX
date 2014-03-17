@@ -11,9 +11,12 @@ public class Renderable {
     protected PointF position;
     protected Sprite sprite;
     protected UnitOverlay overlay;
+
     protected boolean isResizeable;
     protected boolean isRotatable;
     protected boolean isTranslatable;
+
+    protected boolean isAttached;
     protected boolean overlayType;
 
     protected void setSprite(Sprite sprite) {
@@ -101,5 +104,13 @@ public class Renderable {
 
     public void setTranslatable(boolean isTranslatable) {
         this.isTranslatable = isTranslatable;
+    }
+
+    public boolean isAttached() {
+        return isAttached;
+    }
+
+    public void setAttached(boolean isAttached) {
+        this.isAttached = isAttached;
     }
 }

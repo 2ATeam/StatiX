@@ -286,7 +286,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             fConc.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
                 @Override
                 public void execute() {
-                    sceneController.addForce(new Force(getActivity(), ForceType.CONCENTRATED, touch.x, touch.y));
+                    sceneController.addForce(touch.x, touch.y, ForceType.CONCENTRATED);
                     creationMenu.dismiss();
                     creationMenu.setActivated(false);
                 }
@@ -300,7 +300,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             fDist.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
                 @Override
                 public void execute() {
-                    sceneController.addForce(new Force(getActivity(), ForceType.DISTRIBUTED, touch.x, touch.y));
+                    sceneController.addForce(touch.x, touch.y, ForceType.DISTRIBUTED);
                     creationMenu.dismiss();
                 }
             });
@@ -313,7 +313,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             fMom.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
                 @Override
                 public void execute() {
-                    sceneController.addForce(new Force(getActivity(), ForceType.MOMENT, touch.x, touch.y));
+                    sceneController.addForce(touch.x, touch.y, ForceType.MOMENT);
                     creationMenu.dismiss();
                 }
             });

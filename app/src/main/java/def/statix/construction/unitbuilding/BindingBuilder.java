@@ -12,20 +12,18 @@ import def.statix.construction.unittypes.ConstructionUnitType;
  */
 public class BindingBuilder extends ConstructionUnitBuilder{
 
-    private Context context; // TODO: refactor later.
+    private Context context;
 
     @Override
     public void setRepresentation(Context context) {
-        //image is a placeholder
-        unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin));
         this.context = context;
+        unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin));
     }
 
     @Override
     public void setType(ConstructionUnitType type) {
         unit.setType(type);
         // load specific image. if type is not of BindingType enumeration - the placeholder image will not be replaced.
-        assert type instanceof BindingType;
         switch ((BindingType)type){
             case FIXED:{
                 unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_const));
@@ -40,6 +38,7 @@ public class BindingBuilder extends ConstructionUnitBuilder{
                 break;
             }
         }
+        unit.getOverlay().createForceOrBindingOverlay();
     }
 
     @Override

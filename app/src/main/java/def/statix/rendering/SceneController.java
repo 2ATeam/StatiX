@@ -8,10 +8,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import def.statix.construction.Force;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
+import def.statix.construction.unitbuilding.ForceBuilder;
 import def.statix.construction.unitbuilding.Foreman;
 import def.statix.construction.unitbuilding.PlankBuilder;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
+import def.statix.construction.unittypes.ForceType;
 
 /**
  * Created by Lux on 20.02.14.
@@ -25,6 +27,7 @@ public class SceneController {
     private Foreman foreman;
     private PlankBuilder plankBuilder;
     private BindingBuilder bindingBuilder;
+    private ForceBuilder forceBuilder;
     private Context context;
 
     public SceneController(Context context) {
@@ -39,6 +42,7 @@ public class SceneController {
         foreman = new Foreman();
         plankBuilder = new PlankBuilder();
         bindingBuilder = new BindingBuilder();
+        forceBuilder = new ForceBuilder();
         selectedObject = null;
     }
 
@@ -77,16 +81,15 @@ public class SceneController {
         addUnit(bindingBuilder, x, y, type);
     }
 
+    public void addForce(float x, float y, ForceType type) {
+        addUnit(forceBuilder, x, y, type);
+    }
+
     private void addUnit(ConstructionUnitBuilder builder, float x, float y, ConstructionUnitType type) {
         foreman.setBuilder(builder);
         foreman.constructUnit(context, x, y, type);
         sceneObjects.add(foreman.getUnit());
         selectedObject = foreman.getUnit(); // added object becomes selected.
-    }
-
-    public void addForce(Force force) {
-        sceneObjects.add(force);
-        selectedObject = force; // added force become selected.
     }
 
     public void rotateSelected(float angle) {
@@ -98,8 +101,21 @@ public class SceneController {
     }
 
     public void translateSelected(float x, float y) {
-        selectedObject.getSprite().translate(x, y);
-        selectedObject.getOverlay().translate(x, y);
+        float attachThreshold = 20.0f;
+        if (!selectedObject.isAttached()) {
+
+            selectedObject.getSprite().translate(x, y);
+            selectedObject.getOverlay().translate(x, y);
+        } else {
+            float dx = (x - selectedObject.getSpriteLocation().x) > attachThreshold ?
+                        x - selectedObject.getSpriteLocation().x : 0;
+
+            float dy = (y - selectedObject.getSpriteLocation().y) > attachThreshold ?
+                        y - selectedObject.getSpriteLocation().y : 0;
+
+            if (dx > 0 || dy > 0)
+                selectedObject.setAttached(false);
+        }
     }
 
     public void applyTransformToSelected() {

@@ -42,7 +42,8 @@ public class PlankBuilder extends ConstructionUnitBuilder {
     @Override
     public void setRepresentation(Context context) {
         unit.setImage(createBitmap(context));
-        unit.getOverlay().setJoints(plank.getBegin(), plank.getEnd());
+        unit.getOverlay().addJoint(plank.getBegin());
+        unit.getOverlay().addJoint(plank.getEnd());
         unit.getOverlay().createPlankOverlay();
     }
 
