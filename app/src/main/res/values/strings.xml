@@ -4,8 +4,7 @@
     <string name="app_name">StatiX</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="hint_choose_object">Choose object to add</string>
-    <string name="hint_open_menu">Double-touch screen to add object</string>
+    <string name="hint_create_object">Drag items from the toolbox</string>
     <string name="hint_selected_object">Object has been selected.</string>
     <string name="units_beam">Beam</string>
     <string name="units_bindings">Bindings</string>
@@ -18,5 +17,9 @@
     <string name="units_forces_moment">Moment</string>
     <string name="hint_creating_object">Touch screen to set start position.</string>
     <string name="hint_creation_edit_object">Move finger to edit plank. Release touch to finish creation</string>
+    <string name="label_binding_type">Binding type:</string>
+    <string name="label_angle">Angle:</string>
+    <string name="label_width">Width:</string>
+    <string name="label_force_type">Force type:</string>
 
 </resources>

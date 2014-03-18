@@ -1,4 +1,4 @@
-package utils.ui;
+package def.statix.utils.ui;
 
 import android.graphics.PointF;
 import android.view.MotionEvent;
@@ -101,5 +101,10 @@ public class GestureHandler {
 
     public float getAngle() {
         return rotAngle;
+    }
+
+    public void reset() {
+        disp.set(0, 0);
+        rotAngle = 0;
     }
 }

@@ -1,4 +1,4 @@
-package utils.ui;
+package def.statix.utils.ui;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

@@ -4,13 +4,14 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 
 import def.statix.R;
+import def.statix.construction.Force;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
 
 /**
  * Created by Lux on 17.03.14.
  */
-public class ForceBuilder extends ConstructionUnitBuilder{
+public class ForceBuilder extends ConstructionUnitBuilder {
 
     private Context context; // TODO: refactor later.
 
@@ -23,9 +24,10 @@ public class ForceBuilder extends ConstructionUnitBuilder{
     @Override
     public void setType(ConstructionUnitType type) {
         assert context != null;
-        switch ((ForceType)type) {
+        unit.setType(type);
+        switch ((ForceType) type) {
             case CONCENTRATED: {
-                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.force_conc));
+                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.force_concentrated));
                 break;
             }
             case MOMENT: {
@@ -47,5 +49,10 @@ public class ForceBuilder extends ConstructionUnitBuilder{
     @Override
     public void setPosition(float x, float y) {
         unit.setPosition(x, y);
+    }
+
+    @Override
+    public void createNewUnit() {
+        unit = new Force();
     }
 }

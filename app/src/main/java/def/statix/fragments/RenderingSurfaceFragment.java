@@ -1,8 +1,7 @@
 package def.statix.fragments;
 
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,21 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
-
+import def.statix.ActivityMain;
 import def.statix.R;
-import def.statix.construction.Force;
+import def.statix.construction.ConstructionUnit;
 import def.statix.construction.unittypes.BindingType;
+import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
+import def.statix.construction.unittypes.PlankType;
 import def.statix.rendering.SceneController;
-import utils.capricom.ArcMenu;
-import utils.touchmenotapps.RadialMenuItem;
-import utils.touchmenotapps.RadialMenuWidget;
-import utils.ui.GestureAdapter;
-import utils.ui.GestureHandler;
-import utils.ui.StatusManager;
+import def.statix.utils.capricom.ArcMenu;
+import def.statix.utils.drag.DragSource;
+import def.statix.utils.drag.DragView;
+import def.statix.utils.drag.DropTarget;
+import def.statix.utils.drag.DropableSurface;
+import def.statix.utils.ui.GestureAdapter;
+import def.statix.utils.ui.GestureHandler;
+import def.statix.utils.ui.StatusManager;
+import def.statix.utils.ui.editors.UnitEditor;
+import def.statix.utils.ui.editors.UnitEditorManager;
 
 /**
  * Created by Lux on 16.02.14.
@@ -35,28 +38,113 @@ import utils.ui.StatusManager;
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
 
 
-    private GestureDetectorCompat gestureDetector;
-    private RelativeLayout frame;
+    private DropableSurface frame;
     private SceneController sceneController;
-    private Point touch; /// TODO: get rid of it as soon as possible...
+    private GestureDetectorCompat gestureDetector;
     private GestureHandler gestureHandler;
-    private RadialMenuWidget creationMenu;
-    private CreationMenuBuilder menuBuilder;
+
     private ArcMenu overlayMenu;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera,
-                                                 R.drawable.composer_music,
-                                                 R.drawable.composer_place,
-                                                 R.drawable.composer_place,
-                                                 R.drawable.shaolin, //shaolins are placeholders to move 'close' button down
-                                                 R.drawable.shaolin,
-                                                 R.drawable.composer_sleep};
+            R.drawable.composer_music,
+            R.drawable.composer_place,
+            R.drawable.composer_place,
+            R.drawable.shaolin, //shaolins are placeholders to move 'close' button down
+            R.drawable.shaolin,
+            R.drawable.composer_sleep};
 
-    private enum ModifyActions      { NONE, CREATING, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT };
-    private enum CreationMenuType   { ALL, PLANK, FORCES, BINDINGS_AND_PLANKS };
 
-    // create enum depending on this id's:
-    // 0 - scale left, 1 - rotate left, 2 - rotate right, 3 - scale right, 4 - close
+    private enum ModifyActions {NONE, CREATING, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT;}
+
+    ;
+
+    public void startCreatingPlank() {
+        modifyAction = ModifyActions.CREATING;
+    }
+
+    public void stopCreatingPlank() {
+        if (modifyAction == ModifyActions.CREATING)
+            modifyAction = ModifyActions.NONE;
+    }
+
     private ModifyActions modifyAction = ModifyActions.NONE;
+
+    /**
+     * Handler of the dragging, which responses for creating objects
+     */
+    private class DragHandler implements DropTarget {
+
+        @Override
+        public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
+            if (!(dragInfo instanceof ConstructionUnitType)) return; // ignore garbage if any...
+
+            if (dragInfo instanceof PlankType) {
+                sceneController.beginPlank(x, y);
+            } else if (dragInfo instanceof BindingType) {
+                sceneController.addBinding(x, y, (BindingType) dragInfo);
+            } else if (dragInfo instanceof ForceType) {
+                sceneController.addForce(x, y, (ForceType) dragInfo);
+            }
+
+        }
+
+        @Override
+        public boolean acceptDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
+            ///TODO: Check for accessibility to drop in requested location
+            return true;
+        }
+
+        @Override
+        public Rect estimateDropLocation(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo, Rect recycle) {
+            ///TODO: here can be placed some "magnetic" features to clamp dropped object
+            return null;
+        }
+
+        @Override
+        public void onDragEnter(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
+        }
+
+        @Override
+        public void onDragOver(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
+        }
+
+        @Override
+        public void onDragExit(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
+        }
+
+        @Override
+        public void getHitRect(Rect outRect) {
+            frame.getHitRect(outRect);
+        }
+
+        @Override
+        public void getLocationOnScreen(int[] loc) {
+            frame.getLocationOnScreen(loc);
+        }
+
+        @Override
+        public int getLeft() {
+            return frame.getLeft();
+        }
+
+        @Override
+        public int getTop() {
+            return frame.getTop();
+        }
+    }
+
+
+    private void initDragger() {
+        ActivityMain activity = (ActivityMain) getActivity();
+        assert (activity != null);
+        activity.getDragController().addDropTarget(frame); // connect surface to the dragController, so it can accept drops
+        activity.getDragController().addDropTarget(new DragHandler()); // separate controller from view
+    }
+
+    private void initializeGestures() {
+        GestureAdapter gestureAdapter = new GestureAdapter();
+        gestureDetector = new GestureDetectorCompat(this.getActivity(), gestureAdapter);
+        gestureHandler = new GestureHandler();
+    }
 
     private void initOverlayMenu() {
         overlayMenu = new ArcMenu(this.getActivity());
@@ -101,16 +189,17 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             });
 
             overlayMenu.addItem(item);
-            if (i == itemCount - 1)
+            if (i == itemCount - 1) // close item
                 item.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         sceneController.removeSelected();
+                        UnitEditorManager.getInstance().hideActiveEditor();
                         hideOverlayMenu();
                     }
                 });
         }
-        // makes those 2 shaolins invisible....
+        // makes those shaolins invisible....
         overlayMenu.getItem(itemCount - 2).setVisibility(View.INVISIBLE);
         overlayMenu.getItem(itemCount - 3).setVisibility(View.INVISIBLE);
 
@@ -121,7 +210,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
     private void moveOverlayMenu(int x, int y) {
         assert overlayMenu.getLayoutParams() != null;
-        ((RelativeLayout.LayoutParams) overlayMenu.getLayoutParams()).setMargins(x - overlayMenu.getWidth() / 2, y - overlayMenu.getHeight() / 2, 0, 0);
+        ((DropableSurface.LayoutParams) overlayMenu.getLayoutParams()).setMargins(x - overlayMenu.getWidth() / 2, y - overlayMenu.getHeight() / 2, 0, 0);
         overlayMenu.requestLayout();
     }
 
@@ -133,228 +222,24 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         overlayMenu.setVisibility(View.VISIBLE);
     }
 
-    // Tool for building specific menus
-    private class CreationMenuBuilder {
-
-        private RadialMenuWidget menuPlank;
-        private RadialMenuWidget menuBindingsAndForces;
-        private RadialMenuWidget menuForces;
-        private RadialMenuWidget menuAll;
-
-        private CreationMenuBuilder() {
-            menuPlank = buildCreationMenu(CreationMenuType.PLANK);
-            menuForces = buildCreationMenu(CreationMenuType.FORCES);
-            menuBindingsAndForces = buildCreationMenu(CreationMenuType.BINDINGS_AND_PLANKS);
-            menuAll = buildCreationMenu(CreationMenuType.ALL);
-        }
-
-        public RadialMenuWidget getCreationMenu(CreationMenuType type) {
-            switch (type) {
-                case PLANK:
-                    return menuPlank;
-                case FORCES:
-                    return menuForces;
-                case BINDINGS_AND_PLANKS:
-                    return menuBindingsAndForces;
-                default:
-                    return menuAll;
-            }
-        }
-
-        public RadialMenuWidget buildCreationMenu(CreationMenuType type) {
-            RadialMenuWidget r = initMenu();
-            switch (type) {
-
-                case PLANK:
-                    r.setCenterCircle(createPlankItem());
-                    break;
-                case FORCES:
-                    r = buildForcesMenu();
-                    break;
-                case BINDINGS_AND_PLANKS:
-                    r = buildBindingsMenu();
-                    r.setCenterCircle(createPlankItem());
-                    break;
-                default:
-                    r.addMenuEntry(createPlankItem());
-                    r.addMenuEntry(createBindingsItem());
-                    r.addMenuEntry(createForcesItem());
-                    break;
-            }
-            return r;
-        }
-
-        private RadialMenuWidget initMenu() {
-            RadialMenuWidget menu = new RadialMenuWidget(RenderingSurfaceFragment.this.getActivity());
-            menu.setAnimationSpeed(0L);
-            menu.setIconSize(15, 30);
-            menu.setTextSize(13);
-            menu.setOutlineColor(Color.BLACK, 225);
-            menu.setInnerRingColor(0x0099CC, 180);
-            menu.setOuterRingColor(0x0099CC, 180);
-            return menu;
-        }
-
-        private RadialMenuItem createCloseItem() {
-            RadialMenuItem close = new RadialMenuItem("close", null);
-            close.setDisplayIcon(R.drawable.composer_icn_plus_normal);
-            close.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    creationMenu.dismiss();
-                }
-            });
-            return close;
-        }
-
-        private RadialMenuItem createPlankItem() {
-            RadialMenuItem plank = new RadialMenuItem("plank", getString(R.string.units_beam));
-            plank.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-
-                    creationMenu.dismiss();
-                    modifyAction = ModifyActions.CREATING;
-                    StatusManager.setStatus(RenderingSurfaceFragment.this.getActivity().getString(R.string.hint_creating_object));
-                }
-            });
-            plank.setDisplayIcon(R.drawable.plank_icon);
-            return plank;
-        }
-
-        private RadialMenuItem createBindingStaticItem() {
-            RadialMenuItem bStatic = new RadialMenuItem("static", getString(R.string.units_bindings_static));
-            bStatic.setDisplayIcon(R.drawable.binding_stationary_icon);
-            bStatic.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    sceneController.addBinding(touch.x, touch.y, BindingType.STATIC);
-                    creationMenu.dismiss();
-                }
-            });
-            return bStatic;
-        }
-
-        private RadialMenuItem createBindingFixedItem() {
-            RadialMenuItem bFixed = new RadialMenuItem("fixed", getString(R.string.units_bindings_fixed));
-            bFixed.setDisplayIcon(R.drawable.binding_const_icon);
-            bFixed.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    sceneController.addBinding(touch.x, touch.y, BindingType.FIXED);
-                    creationMenu.dismiss();
-                }
-            });
-            return bFixed;
-        }
-
-        private RadialMenuItem createBindingMovableItem() {
-            RadialMenuItem bMovable = new RadialMenuItem("movable", getString(R.string.units_bindings_movable));
-            bMovable.setDisplayIcon(R.drawable.binding_movalbe_icon);
-            bMovable.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    sceneController.addBinding(touch.x, touch.y, BindingType.MOVABLE);
-                    creationMenu.dismiss();
-                }
-            });
-            return bMovable;
-        }
-
-        private RadialMenuItem createBindingsItem() {
-            RadialMenuItem bindings = new RadialMenuItem("binding", getString(R.string.units_bindings));
-            bindings.setDisplayIcon(R.drawable.binding_const_icon);
-            ArrayList<RadialMenuItem> bindingsChildren = new ArrayList<>();
-            bindingsChildren.add(createBindingFixedItem());
-            bindingsChildren.add(createBindingMovableItem());
-            bindingsChildren.add(createBindingStaticItem());
-            bindings.setMenuChildren(bindingsChildren);
-            return bindings;
-        }
-
-        private RadialMenuWidget buildBindingsMenu() {
-            RadialMenuWidget menu = initMenu();
-            menu.addMenuEntry(createBindingFixedItem());
-            menu.addMenuEntry(createBindingMovableItem());
-            menu.addMenuEntry(createBindingStaticItem());
-            return menu;
-        }
-
-        private RadialMenuItem createForceConcentratedItem() {
-            RadialMenuItem fConc = new RadialMenuItem("concentrated", getString(R.string.units_forces_concentrated));
-            fConc.setDisplayIcon(R.drawable.force_conc_icon);
-            fConc.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    sceneController.addForce(touch.x, touch.y, ForceType.CONCENTRATED);
-                    creationMenu.dismiss();
-                    creationMenu.setActivated(false);
-                }
-            });
-            return fConc;
-        }
-
-        private RadialMenuItem createForceDistributedItem() {
-            RadialMenuItem fDist = new RadialMenuItem("distributed", getString(R.string.units_forces_distributed));
-            fDist.setDisplayIcon(R.drawable.force_distributed_icon);
-            fDist.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    sceneController.addForce(touch.x, touch.y, ForceType.DISTRIBUTED);
-                    creationMenu.dismiss();
-                }
-            });
-            return fDist;
-        }
-
-        private RadialMenuItem createForceMomentItem() {
-            RadialMenuItem fMom = new RadialMenuItem("moment", getString(R.string.units_forces_moment));
-            fMom.setDisplayIcon(R.drawable.force_moment_icon);
-            fMom.setOnMenuItemPressed(new RadialMenuItem.RadialMenuItemClickListener() {
-                @Override
-                public void execute() {
-                    sceneController.addForce(touch.x, touch.y, ForceType.MOMENT);
-                    creationMenu.dismiss();
-                }
-            });
-            return fMom;
-        }
-
-        private RadialMenuItem createForcesItem() {
-            RadialMenuItem forces = new RadialMenuItem("forces", getString(R.string.units_forces));
-            forces.setDisplayIcon(R.drawable.force_conc_icon);
-            ArrayList<RadialMenuItem> forcesChildren = new ArrayList<>();
-            forcesChildren.add(createForceConcentratedItem());
-            forcesChildren.add(createForceDistributedItem());
-            forcesChildren.add(createForceMomentItem());
-            forces.setMenuChildren(forcesChildren);
-            return forces;
-        }
-
-        private RadialMenuWidget buildForcesMenu() {
-            RadialMenuWidget menu = initMenu();
-            menu.addMenuEntry(createForceConcentratedItem());
-            menu.addMenuEntry(createForceDistributedItem());
-            menu.addMenuEntry(createForceMomentItem());
-            return menu;
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         sceneController = new SceneController(getActivity());
         initializeGestures();
-        frame = new RelativeLayout(this.getActivity());
+        frame = new DropableSurface(this.getActivity());
         frame.setClipChildren(false);
-        frame.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        frame.setLayoutParams(new DropableSurface.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         sceneController.getSurface().setOnTouchListener(this);
         frame.addView(sceneController.getSurface());
 
         initOverlayMenu();
-        menuBuilder = new CreationMenuBuilder();
+        initDragger();
         frame.addView(overlayMenu);
 
-        StatusManager.setStatus(getString(R.string.hint_open_menu));
+        sceneController.addForce(100, 100, ForceType.DISTRIBUTED);
+        sceneController.addForce(300, 300, ForceType.DISTRIBUTED);
+        sceneController.addForce(200, 200, ForceType.DISTRIBUTED);
+        StatusManager.setStatus(getString(R.string.hint_create_object));
         return frame;
     }
 
@@ -370,63 +255,31 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         sceneController.getSurface().resume();
     }
 
-    private void initializeGestures() {
-        GestureAdapter gestureAdapter = new GestureAdapter();
-        gestureDetector = new GestureDetectorCompat(this.getActivity(), gestureAdapter);
-        gestureDetector.setIsLongpressEnabled(true);
-        gestureAdapter.setOnTapListener(new GestureAdapter.TapListener() {
-            @Override
-            public void onDoubleTap(float touchX, float touchY) {
-                if (RenderingSurfaceFragment.this.modifyAction != ModifyActions.NONE)
-                    return; // ignore accidentally gestures while editing objects
-                int x = (int) touchX;
-                int y = (int) touchY;
-                if (x <= 70) x = 70;    // bound screen edges
-                else if (x <= sceneController.getSurface().getWidth() - 70)
-                    x -= 0.35 * x; // magic offset...
-                else x -= 0.45 * x;
-
-                y += 50;
-
-                creationMenu.show(frame, x, y);
-                creationMenu.setCenterLocation(x, y);
-            }
-
-            @Override
-            public void onLongTap(float touchX, float touchY) {
-                onDoubleTap(touchX, touchY); // support old way to add objects
-            }
-
-            @Override
-            public void onTapStarted(float touchX, float touchY) {
-
-            }
-        });
-        gestureHandler = new GestureHandler();
-    }
-
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         gestureDetector.onTouchEvent(motionEvent);
         if (modifyAction != ModifyActions.NONE)  // calculates only when something is gonna be modified
             gestureHandler.onTouchEvent(motionEvent);
 
-        switch(motionEvent.getAction()){
+        switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 hideOverlayMenu();
-                this.touch = new Point((int) motionEvent.getX(), (int) motionEvent.getY());
-                sceneController.select(touch.x, touch.y);
-
                 if (modifyAction == ModifyActions.CREATING) {
                     sceneController.beginPlank(motionEvent.getX(), motionEvent.getY()); // move plank creation from menu for clarity (menu must only switches actions)
                     StatusManager.setStatus(this.getActivity().getString(R.string.hint_creation_edit_object));
-                } else if (sceneController.isObjectSelected()) {
-                    creationMenu = menuBuilder.getCreationMenu(CreationMenuType.FORCES);
-                    PointF rotCenter = new PointF(sceneController.getSelected().getBoundingRect().centerX(),
-                                                  sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
-                    gestureHandler.setRotationCenter(rotCenter);
-                } else
-                    creationMenu = menuBuilder.getCreationMenu(CreationMenuType.PLANK);
+                } else {
+                    sceneController.select((int) motionEvent.getX(), (int) motionEvent.getY());
+                    if (sceneController.isObjectSelected()) {
+                        UnitEditor editor = UnitEditorManager.getInstance().getEditorForUnit((ConstructionUnit) sceneController.getSelected());
+                        UnitEditorManager.getInstance().hideActiveEditor();
+                        UnitEditorManager.getInstance().showEditor(editor);
+                        PointF rotCenter = new PointF(sceneController.getSelected().getBoundingRect().centerX(),
+                                sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
+                        gestureHandler.setRotationCenter(rotCenter);
+                    } else {
+                        UnitEditorManager.getInstance().hideActiveEditor();
+                    }
+                }
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
@@ -457,10 +310,10 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             }
             case MotionEvent.ACTION_UP: {
                 modifyAction = ModifyActions.NONE;
-                    /// TODO: apply transform here if needed
+                /// TODO: apply transform here if needed
                 if (sceneController.getUnconfirmedPlank() != null) {
                     sceneController.confirmPlank();
-                } else if (sceneController.isObjectSelected()){
+                } else if (sceneController.isObjectSelected()) {
                     sceneController.applyTransformToSelected();
                     RectF r = sceneController.getSelected().getBoundingRect();
                     moveOverlayMenu((int) r.centerX(), (int) r.centerY());
@@ -468,7 +321,6 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                 } else {
                     hideOverlayMenu();
                 }
-                StatusManager.setStatus(creationMenu.isActivated() ? getString(R.string.hint_choose_object) : getString(R.string.hint_open_menu));
                 break;
             }
         }

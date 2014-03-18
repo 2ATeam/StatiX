@@ -1,19 +1,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-
-        android:layout_above="@+id/toolbox" />
+        android:id="@+id/editor_container"
+        android:animateLayoutChanges="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/status_container" />
 
     <FrameLayout
-        android:id="@+id/toolbox"
-        android:layout_alignParentBottom="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:id="@+id/toolbox_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/status_container" />
+
+    <FrameLayout
+        android:id="@+id/surface_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/toolbox_container"
+        android:layout_above="@+id/status_container"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/editor_container" />
+
+    <FrameLayout
+        android:id="@+id/status_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

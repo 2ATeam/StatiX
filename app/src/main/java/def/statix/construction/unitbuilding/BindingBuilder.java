@@ -4,13 +4,14 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 
 import def.statix.R;
+import def.statix.construction.Binding;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 
 /**
  * Created by Lux on 22.02.14.
  */
-public class BindingBuilder extends ConstructionUnitBuilder{
+public class BindingBuilder extends ConstructionUnitBuilder {
 
     private Context context;
 
@@ -24,17 +25,17 @@ public class BindingBuilder extends ConstructionUnitBuilder{
     public void setType(ConstructionUnitType type) {
         unit.setType(type);
         // load specific image. if type is not of BindingType enumeration - the placeholder image will not be replaced.
-        switch ((BindingType)type){
-            case FIXED:{
-                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_const));
+        switch ((BindingType) type) {
+            case FIXED: {
+                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_fixed));
                 break;
             }
-            case MOVABLE:{
+            case MOVABLE: {
                 unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_movalbe));
                 break;
             }
-            case STATIC:{
-                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_stationary));
+            case STATIC: {
+                unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.binding_static));
                 break;
             }
         }
@@ -44,5 +45,10 @@ public class BindingBuilder extends ConstructionUnitBuilder{
     @Override
     public void setPosition(float x, float y) {
         unit.setPosition(x, y);
+    }
+
+    @Override
+    public void createNewUnit() {
+        unit = new Binding();
     }
 }

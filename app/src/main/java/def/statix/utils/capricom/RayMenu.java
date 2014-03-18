@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2012 Capricorn
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package utils.capricom;
+package def.statix.utils.capricom;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,87 +18,50 @@ import android.widget.RelativeLayout;
 
 import def.statix.R;
 
-/**
- * A custom view that looks like the menu in <a href="https://path.com">Path
- * 2.0</a> (for iOS).
- *
- * @author Capricorn
- */
-public class ArcMenu extends RelativeLayout {
-    private ArcLayout mArcLayout;
+public class RayMenu extends RelativeLayout {
+    private RayLayout mRayLayout;
 
     private ImageView mHintView;
 
-    private ViewGroup mControlLayout;
-    private boolean defaultMiddleButton = true;
-
-    public ArcMenu(Context context) {
+    public RayMenu(Context context) {
         super(context);
         init(context);
     }
 
-    public ArcMenu(Context context, AttributeSet attrs) {
+    public RayMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
-        applyAttrs(attrs);
     }
 
     private void init(Context context) {
+        setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+        setClipChildren(false);
+
         LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        li.inflate(R.layout.arc_menu, this);
+        li.inflate(R.layout.ray_menu, this);
 
-        mArcLayout = (ArcLayout) findViewById(R.id.item_layout);
-        mHintView = (ImageView) findViewById(R.id.control_hint);
+        mRayLayout = (RayLayout) findViewById(R.id.item_layout);
 
-        mControlLayout = (ViewGroup) findViewById(R.id.control_layout);
-        mControlLayout.setClickable(true);
-        mControlLayout.setOnTouchListener(new OnTouchListener() {
+        final ViewGroup controlLayout = (ViewGroup) findViewById(R.id.control_layout);
+        controlLayout.setClickable(true);
+        controlLayout.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (!defaultMiddleButton) return false;
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mHintView.startAnimation(createHintSwitchAnimation(mArcLayout.isExpanded()));
-                    mArcLayout.switchState(true);
+                    mHintView.startAnimation(createHintSwitchAnimation(mRayLayout.isExpanded()));
+                    mRayLayout.switchState(true);
                 }
 
                 return false;
             }
         });
 
-
-    }
-
-    private void applyAttrs(AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ArcLayout, 0, 0);
-
-            float fromDegrees = a.getFloat(R.styleable.ArcLayout_fromDegrees, ArcLayout.DEFAULT_FROM_DEGREES);
-            float toDegrees = a.getFloat(R.styleable.ArcLayout_toDegrees, ArcLayout.DEFAULT_TO_DEGREES);
-            mArcLayout.setArc(fromDegrees, toDegrees);
-
-            int defaultChildSize = mArcLayout.getChildSize();
-            int newChildSize = a.getDimensionPixelSize(R.styleable.ArcLayout_childSize, defaultChildSize);
-            mArcLayout.setChildSize(newChildSize);
-
-            a.recycle();
-        }
-    }
-
-    public int getItemsCount() {
-        return mArcLayout.getChildCount();
-    }
-
-    public View getItem(int index) {
-        return mArcLayout.getChildAt(index);
-    }
-
-    public void addItem(View item) {
-        mArcLayout.addView(item);
+        mHintView = (ImageView) findViewById(R.id.control_hint);
     }
 
     public void addItem(View item, OnClickListener listener) {
-        mArcLayout.addView(item);
+        mRayLayout.addView(item);
         item.setOnClickListener(getItemClickListener(listener));
     }
 
@@ -149,15 +95,15 @@ public class ArcMenu extends RelativeLayout {
                     }
                 });
 
-                final int itemCount = mArcLayout.getChildCount();
+                final int itemCount = mRayLayout.getChildCount();
                 for (int i = 0; i < itemCount; i++) {
-                    View item = mArcLayout.getChildAt(i);
+                    View item = mRayLayout.getChildAt(i);
                     if (viewClicked != item) {
                         bindItemAnimation(item, false, 300);
                     }
                 }
 
-                mArcLayout.invalidate();
+                mRayLayout.invalidate();
                 mHintView.startAnimation(createHintSwitchAnimation(true));
 
                 if (listener != null) {
@@ -175,13 +121,13 @@ public class ArcMenu extends RelativeLayout {
     }
 
     private void itemDidDisappear() {
-        final int itemCount = mArcLayout.getChildCount();
+        final int itemCount = mRayLayout.getChildCount();
         for (int i = 0; i < itemCount; i++) {
-            View item = mArcLayout.getChildAt(i);
+            View item = mRayLayout.getChildAt(i);
             item.clearAnimation();
         }
 
-        mArcLayout.switchState(false);
+        mRayLayout.switchState(false);
     }
 
     private static Animation createItemDisapperAnimation(final long duration, final boolean isClicked) {
@@ -207,35 +153,5 @@ public class ArcMenu extends RelativeLayout {
 
         return animation;
     }
-
-    public void setDegreeses(float from, float to) {
-        mArcLayout.setArc(from, to);
-    }
-
-    public void setChildSize(int size) {
-        mArcLayout.setChildSize(size);
-    }
-
-    public void expand(boolean animated) {
-        if (!mArcLayout.isExpanded()) {
-            mArcLayout.switchState(animated);
-        }
-    }
-
-    public void collapse(boolean animated) {
-        if (mArcLayout.isExpanded()) {
-            mArcLayout.switchState(animated);
-        }
-    }
-
-    public void setMainButtonVisible(boolean isVisible) {
-        mControlLayout.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    public void setMainButtonTouchListener(OnTouchListener listener) {
-        defaultMiddleButton = false;
-        mControlLayout.setOnTouchListener(listener);
-    }
-
 
 }

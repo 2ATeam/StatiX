@@ -12,7 +12,10 @@ import def.statix.rendering.Sprite;
  * Basic entity, which represents an archetype for all physical objects on the scene.
  */
 
-public class ConstructionUnit extends Renderable {
+public abstract class ConstructionUnit extends Renderable {
+
+    protected static long _instance_counter = 0;
+    protected long ID;
 
     private Force outgoingForce;
     private ConstructionUnitType type;
@@ -21,20 +24,20 @@ public class ConstructionUnit extends Renderable {
         this.outgoingForce = outgoingForce;
         position = new PointF(location.x, location.y);
         isAttached = false;
+        ID = ++_instance_counter;
     }
 
     public ConstructionUnit() {
-        position = new PointF();
-        isAttached = false;
+        this(null, new PointF());
         // some default initialization will be here.
         // maybe applying the gravity or smth. like that.
     }
 
-    public void setPosition(PointF location){
+    public void setPosition(PointF location) {
         this.position = location; // TODO: position should be converted from location(screen coordinates).
     }
 
-    public void setPosition(float x, float y){
+    public void setPosition(float x, float y) {
         this.position.set(x, y); // TODO: position should be converted from location(screen coordinates).
     }
 
@@ -57,5 +60,10 @@ public class ConstructionUnit extends Renderable {
 
     public Force getOutgoingForce() {
         return outgoingForce;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (this.getClass().isInstance(o) && ((ConstructionUnit) o).ID == this.ID);
     }
 }

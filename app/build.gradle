@@ -37,6 +37,4 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:+'
-    compile files('libs/radial-menu-v4.jar')
-    compile files('libs/radial-menu-v1.jar')
 }

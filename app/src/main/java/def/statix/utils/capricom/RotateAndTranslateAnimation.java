@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils.capricom;
+package def.statix.utils.capricom;
 
 import android.view.animation.Animation;
 import android.view.animation.Transformation;

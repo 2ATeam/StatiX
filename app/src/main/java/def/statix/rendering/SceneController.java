@@ -5,7 +5,6 @@ import android.graphics.PointF;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import def.statix.construction.Force;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
 import def.statix.construction.unitbuilding.ForceBuilder;
@@ -14,6 +13,7 @@ import def.statix.construction.unitbuilding.PlankBuilder;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
+import def.statix.construction.unittypes.PlankType;
 
 /**
  * Created by Lux on 20.02.14.
@@ -64,15 +64,15 @@ public class SceneController {
     public void confirmPlank() {
         //calc top left corner offset of the plank:
         float x = unconfirmedPlank.getBegin().x < unconfirmedPlank.getEnd().x ?
-                  unconfirmedPlank.getBegin().x : unconfirmedPlank.getEnd().x;
+                unconfirmedPlank.getBegin().x : unconfirmedPlank.getEnd().x;
 
         float y = unconfirmedPlank.getBegin().y < unconfirmedPlank.getEnd().y ?
-                  unconfirmedPlank.getBegin().y : unconfirmedPlank.getEnd().y;
+                unconfirmedPlank.getBegin().y : unconfirmedPlank.getEnd().y;
 
         PointF unitLocation = new PointF(x, y);
 
         plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUbPaint());
-        addUnit(plankBuilder, unitLocation.x, unitLocation.y, null);
+        addUnit(plankBuilder, unitLocation.x, unitLocation.y, PlankType.PLANK);
         unconfirmedPlank = null; // no need to render unconfirmed plank any more.
         renderingSurface.setUnconfirmedPlank(null);
     }
@@ -108,10 +108,10 @@ public class SceneController {
             selectedObject.getOverlay().translate(x, y);
         } else {
             float dx = (x - selectedObject.getSpriteLocation().x) > attachThreshold ?
-                        x - selectedObject.getSpriteLocation().x : 0;
+                    x - selectedObject.getSpriteLocation().x : 0;
 
             float dy = (y - selectedObject.getSpriteLocation().y) > attachThreshold ?
-                        y - selectedObject.getSpriteLocation().y : 0;
+                    y - selectedObject.getSpriteLocation().y : 0;
 
             if (dx > 0 || dy > 0)
                 selectedObject.setAttached(false);
@@ -122,7 +122,7 @@ public class SceneController {
         selectedObject.update();
     }
 
-    public void removeSelected(){
+    public void removeSelected() {
         if (selectedObject != null) {
             sceneObjects.remove(selectedObject);
             selectedObject = null;
