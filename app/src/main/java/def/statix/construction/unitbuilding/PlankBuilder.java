@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 
 import def.statix.R;
+import def.statix.construction.Plank;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.rendering.UnconfirmedPlank;
 
@@ -16,40 +17,28 @@ import def.statix.rendering.UnconfirmedPlank;
  */
 public class PlankBuilder extends ConstructionUnitBuilder {
 
-    private UnconfirmedPlank plank;
+    private UnconfirmedPlank uncPlank;
     private Paint plankPaint;
     private PointF location;
+    private Plank plank;
 
-    private Bitmap createBitmap(Context context) {
-        if (plank != null && plankPaint != null) {
-            PointF begin = plank.getBegin();
-            PointF end = plank.getEnd();
-            int strokeOffset = 40;
-            int frameOffset = strokeOffset / 2;
-            int width =  (int) ((begin.x < end.x) ? (end.x - begin.x) : (begin.x - end.x));
-            int height = (int) ((begin.y < end.y) ? (end.y - begin.y) : (begin.y - end.y));
-            Bitmap image = Bitmap.createBitmap(width + strokeOffset, height + strokeOffset, Bitmap.Config.ARGB_4444);
-            Canvas canvas = new Canvas(image);
-            canvas.drawLine(begin.x - location.x + frameOffset,
-                            begin.y - location.y + frameOffset,
-                            end.x   - location.x + frameOffset,
-                            end.y   - location.y + frameOffset, plankPaint);
-            return  image;
-        }
-        return BitmapFactory.decodeResource(context.getResources(), R.drawable.plank); // placeholder.
+    @Override
+    public void createNewUnit() {
+        unit = new Plank(uncPlank.getLength());
+        plank = (Plank) unit;
     }
 
     @Override
     public void setRepresentation(Context context) {
         unit.setImage(createBitmap(context));
-        unit.getOverlay().addJoint(plank.getBegin());
-        unit.getOverlay().addJoint(plank.getEnd());
+        unit.getOverlay().addJoint(uncPlank.getBegin());
+        unit.getOverlay().addJoint(uncPlank.getEnd());
         unit.getOverlay().createPlankOverlay();
     }
 
     @Override
     public void setType(ConstructionUnitType type) {
-        unit.setType(null); // there is no type of plank now. it is just plank. nothing else.
+        unit.setType(null); // there is no type of plank now. it is just uncPlank. nothing else.
     }
 
     @Override
@@ -57,10 +46,37 @@ public class PlankBuilder extends ConstructionUnitBuilder {
         unit.setPosition(x, y);
     }
 
+    private Bitmap createBitmap(Context context) {
+        if (uncPlank != null && plankPaint != null) {
+            Paint txtPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            PointF begin = uncPlank.getBegin();
+            PointF end = uncPlank.getEnd();
+
+            int strokeOffset = 40;
+            int frameOffset = strokeOffset / 2;
+            int width = (int) ((begin.x < end.x) ? (end.x - begin.x) : (begin.x - end.x));
+            int height = (int) ((begin.y < end.y) ? (end.y - begin.y) : (begin.y - end.y));
+
+            Bitmap image = Bitmap.createBitmap(width + strokeOffset,
+                                              height + strokeOffset, Bitmap.Config.ARGB_4444);
+
+            PointF txtPos = new PointF(image.getWidth()  / 2 - plankPaint.getStrokeWidth(),
+                                       image.getHeight() / 2 + plankPaint.getStrokeWidth());
+
+            Canvas canvas = new Canvas(image);
+            canvas.drawLine(begin.x - location.x + frameOffset,
+                    begin.y - location.y + frameOffset,
+                    end.x - location.x + frameOffset,
+                    end.y - location.y + frameOffset, plankPaint);
+            canvas.drawText(String.valueOf(plank.getLength()), txtPos.x, txtPos.y, txtPaint);
+            return image;
+        }
+        return BitmapFactory.decodeResource(context.getResources(), R.drawable.plank); // placeholder.
+    }
+
     public void setPlankParams(UnconfirmedPlank plank, PointF unitLocation, Paint plankPaint) {
         this.plankPaint = plankPaint;
-        this.plank = plank;
+        this.uncPlank = plank;
         this.location = unitLocation;
     }
 }
-

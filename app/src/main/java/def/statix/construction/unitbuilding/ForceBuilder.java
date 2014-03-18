@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 
 import def.statix.R;
+import def.statix.construction.Force;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
 
@@ -13,6 +14,11 @@ import def.statix.construction.unittypes.ForceType;
 public class ForceBuilder extends ConstructionUnitBuilder{
 
     private Context context; // TODO: refactor later.
+
+    @Override
+    public void createNewUnit() {
+        unit = new Force();
+    }
 
     @Override
     public void setRepresentation(Context context) {

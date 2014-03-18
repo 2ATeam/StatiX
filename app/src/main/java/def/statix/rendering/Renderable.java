@@ -15,6 +15,7 @@ public class Renderable {
     protected boolean isResizeable;
     protected boolean isRotatable;
     protected boolean isTranslatable;
+    protected boolean isSelectable;
 
     protected boolean isAttached;
     protected boolean overlayType;
@@ -48,6 +49,11 @@ public class Renderable {
             return true;
         }
         return false;
+    }
+
+    public void translate(float x, float y) {
+        sprite.translate(x, y);
+        overlay.translate(x, y);
     }
 
     public PointF getSpriteLocation() {
@@ -104,6 +110,14 @@ public class Renderable {
 
     public void setTranslatable(boolean isTranslatable) {
         this.isTranslatable = isTranslatable;
+    }
+
+    public boolean isSelectable() {
+        return isSelectable;
+    }
+
+    public void setSelectable(boolean isSelectable) {
+        this.isSelectable = isSelectable;
     }
 
     public boolean isAttached() {

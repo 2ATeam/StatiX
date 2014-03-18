@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 
 import def.statix.R;
+import def.statix.construction.Binding;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 
@@ -13,6 +14,11 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 public class BindingBuilder extends ConstructionUnitBuilder{
 
     private Context context;
+
+    @Override
+    public void createNewUnit() {
+        unit = new Binding();
+    }
 
     @Override
     public void setRepresentation(Context context) {

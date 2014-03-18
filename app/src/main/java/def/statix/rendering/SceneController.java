@@ -103,9 +103,7 @@ public class SceneController {
     public void translateSelected(float x, float y) {
         float attachThreshold = 20.0f;
         if (!selectedObject.isAttached()) {
-
-            selectedObject.getSprite().translate(x, y);
-            selectedObject.getOverlay().translate(x, y);
+            selectedObject.translate(x, y);            
         } else {
             float dx = (x - selectedObject.getSpriteLocation().x) > attachThreshold ?
                         x - selectedObject.getSpriteLocation().x : 0;

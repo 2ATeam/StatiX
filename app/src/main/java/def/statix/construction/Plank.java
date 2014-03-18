@@ -6,8 +6,8 @@ package def.statix.construction;
 public class Plank extends ConstructionUnit{
     private float length;
 
-    public Plank(float lenght) {
-        this.length = lenght;
+    public Plank(float length) {
+        this.length = Math.round(length);
     }
 
     public float getLength() {
