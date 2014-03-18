@@ -4,8 +4,7 @@
     <string name="app_name">StatiX</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Настройки</string>
-    <string name="hint_choose_object">Выберите объект</string>
-    <string name="hint_open_menu">Коснитесь два раза экрана, чтоб добавить объект</string>
+    <string name="hint_create_object">Перетащите объект из панели, чтоб добавить</string>
     <string name="hint_selected_object">Объект выбран</string>
     <string name="units_beam">Балка</string>
     <string name="units_bindings">Опоры</string>
@@ -18,5 +17,9 @@
     <string name="units_forces_moment">Момент</string>
     <string name="hint_creating_object">Укажите начальное положение балки.</string>
     <string name="hint_creation_edit_object">Передвигайте палец для редактирования балки. Отпустите палец для завершения.</string>
+    <string name="label_binding_type">Тип опоры:</string>
+    <string name="label_angle">Угол:</string>
+    <string name="label_width">Длина:</string>
+    <string name="label_force_type">Тип силы:</string>
 
 </resources>

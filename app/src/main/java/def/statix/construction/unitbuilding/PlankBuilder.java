@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import def.statix.R;
 import def.statix.construction.Plank;
 import def.statix.construction.unittypes.ConstructionUnitType;
+import def.statix.construction.unittypes.PlankType;
 import def.statix.rendering.UnconfirmedPlank;
 
 /**
@@ -20,13 +21,6 @@ public class PlankBuilder extends ConstructionUnitBuilder {
     private UnconfirmedPlank uncPlank;
     private Paint plankPaint;
     private PointF location;
-    private Plank plank;
-
-    @Override
-    public void createNewUnit() {
-        unit = new Plank(uncPlank.getLength());
-        plank = (Plank) unit;
-    }
 
     @Override
     public void setRepresentation(Context context) {
@@ -38,7 +32,7 @@ public class PlankBuilder extends ConstructionUnitBuilder {
 
     @Override
     public void setType(ConstructionUnitType type) {
-        unit.setType(null); // there is no type of plank now. it is just uncPlank. nothing else.
+        unit.setType(PlankType.PLANK);
     }
 
     @Override
@@ -58,20 +52,24 @@ public class PlankBuilder extends ConstructionUnitBuilder {
             int height = (int) ((begin.y < end.y) ? (end.y - begin.y) : (begin.y - end.y));
 
             Bitmap image = Bitmap.createBitmap(width + strokeOffset,
-                                              height + strokeOffset, Bitmap.Config.ARGB_4444);
+                    height + strokeOffset, Bitmap.Config.ARGB_4444);
 
-            PointF txtPos = new PointF(image.getWidth()  / 2 - plankPaint.getStrokeWidth(),
-                                       image.getHeight() / 2 + plankPaint.getStrokeWidth());
+            PointF txtPos = new PointF(image.getWidth() / 2 - plankPaint.getStrokeWidth(),
+                    image.getHeight() / 2 + plankPaint.getStrokeWidth());
 
             Canvas canvas = new Canvas(image);
             canvas.drawLine(begin.x - location.x + frameOffset,
                     begin.y - location.y + frameOffset,
                     end.x - location.x + frameOffset,
                     end.y - location.y + frameOffset, plankPaint);
-            canvas.drawText(String.valueOf(plank.getLength()), txtPos.x, txtPos.y, txtPaint);
             return image;
         }
         return BitmapFactory.decodeResource(context.getResources(), R.drawable.plank); // placeholder.
+    }
+
+    @Override
+    public void createNewUnit() {
+        unit = new Plank();
     }
 
     public void setPlankParams(UnconfirmedPlank plank, PointF unitLocation, Paint plankPaint) {

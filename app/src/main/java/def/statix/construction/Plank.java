@@ -6,11 +6,20 @@ package def.statix.construction;
 public class Plank extends ConstructionUnit{
     private float length;
 
-    public Plank(float length) {
-        this.length = Math.round(length);
+    public Plank() {
+        this(0);
+    }
+
+    public Plank(float lenght) {
+        super();
+        this.length = lenght;
     }
 
     public float getLength() {
         return length;
+    }
+
+    public float getAngle() {
+        return 0; /// TODO: WHERE IS THE ANGLE???? T_T
     }
 }

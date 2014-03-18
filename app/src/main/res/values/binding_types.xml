@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="binding_types">
+        <item>@string/units_bindings_fixed</item>
+        <item>@string/units_bindings_movable</item>
+        <item>@string/units_bindings_static</item>
+    </string-array>
+    <string-array name="forces_types">
+        <item>@string/units_forces_concentrated</item>
+        <item>@string/units_forces_distributed</item>
+        <item>@string/units_forces_moment</item>
+    </string-array>
+</resources>

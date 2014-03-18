@@ -13,12 +13,12 @@ public abstract class ConstructionUnitBuilder {
     protected ConstructionUnit unit;
 
     public abstract void setRepresentation(Context context);
+
     public abstract void setType(ConstructionUnitType type);
+
     public abstract void setPosition(float x, float y);
 
-    public void createNewUnit() {
-        unit = new ConstructionUnit();
-    }
+    public abstract void createNewUnit();
 
     public ConstructionUnit getUnit() {
         return unit;
