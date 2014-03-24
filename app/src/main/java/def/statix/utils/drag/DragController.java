@@ -378,6 +378,7 @@ public class DragController {
         final int count = dropTargets.size();
         for (int i = count - 1; i >= 0; i--) {
             final DropTarget target = dropTargets.get(i);
+            if (target == null) continue;
             target.getHitRect(r);
             target.getLocationOnScreen(dropCoordinates);
             r.offset(dropCoordinates[0] - target.getLeft(), dropCoordinates[1] - target.getTop());

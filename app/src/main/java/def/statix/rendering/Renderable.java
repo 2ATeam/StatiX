@@ -3,10 +3,12 @@ package def.statix.rendering;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import java.util.Observable;
+
 /**
  * Created by Lux on 19.02.14.
  */
-public class Renderable {
+public class Renderable extends Observable {
 
     protected PointF position;
     protected Sprite sprite;
@@ -60,7 +62,7 @@ public class Renderable {
         return sprite.getLocation();
     }
 
-    public PointF getOverlayLocation(){
+    public PointF getOverlayLocation() {
         return overlay.getLocation();
     }
 

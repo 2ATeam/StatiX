@@ -1,4 +1,4 @@
-package def.statix.utils.ui.editors;
+package def.statix.editors;
 
 import android.content.Context;
 import android.text.Editable;
@@ -20,6 +20,8 @@ public class PlankEditor extends UnitEditor {
 
     private EditText etWidth;
     private EditText etAngle;
+    private EditText etX;
+    private EditText etY;
 
     private SeekBar sbWidth;
     private SeekBar sbAngle;
@@ -33,9 +35,13 @@ public class PlankEditor extends UnitEditor {
     protected void initializeChildViews() {
         etWidth = (EditText) view.findViewById(R.id.editor_plank_etWidth);
         etAngle = (EditText) view.findViewById(R.id.editor_plank_etAngle);
+        etX = (EditText) view.findViewById(R.id.editor_plank_etX);
+        etY = (EditText) view.findViewById(R.id.editor_plank_etY);
 
         initEditText(etWidth);
         initEditText(etAngle);
+        initEditText(etX);
+        initEditText(etY);
 
         sbWidth = (SeekBar) view.findViewById(R.id.editor_plank_sbWidth);
         sbAngle = (SeekBar) view.findViewById(R.id.editor_plank_sbAngle);
@@ -53,13 +59,23 @@ public class PlankEditor extends UnitEditor {
             Plank plank = (Plank) unit;
             etAngle.setText(String.valueOf(plank.getAngle()));
             etWidth.setText(String.valueOf(plank.getLength()));
+            etX.setText(String.valueOf(plank.getPosition().x));
+            etY.setText(String.valueOf(plank.getPosition().y));
         } else {
             etAngle.setText("0");
             etWidth.setText("0");
+            etX.setText("0");
+            etY.setText("0");
         }
     }
 
-    ///TODO: Plank editor doesn't actually edit the unit (just visualizing)
+    @Override
+    public void applyChanges() {
+        Plank plank = (Plank) unit;
+        plank.setLength(Float.parseFloat(etWidth.getText().toString()));
+        plank.setAngle(Float.parseFloat(etAngle.getText().toString()));
+    }
+
     private void initEditText(final EditText text) {
 
         text.setOnKeyListener(new View.OnKeyListener() {
@@ -104,7 +120,9 @@ public class PlankEditor extends UnitEditor {
                 seek.setProgress(value);
                 if (clampedValue != value) {
                     text.setText(String.valueOf(clampedValue / SEEK_BAR_DECIMAL_ACCURACY));
+                    applyChanges(); /// TODO: PlankEditor: may be should apply values by clicking button
                 }
+
             }
         });
 

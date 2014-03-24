@@ -30,6 +30,7 @@ public class SceneController {
     private ForceBuilder forceBuilder;
     private Context context;
 
+
     public SceneController(Context context) {
         this();
         this.renderingSurface = new RenderingSurface(context);
