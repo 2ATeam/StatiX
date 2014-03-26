@@ -4,5 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="editor_width">300dp</dimen>
     <dimen name="editor_row_margin">10dp</dimen>
-
+    <dimen name="editor_coord_field_width">50dp</dimen>
+    <dimen name="grid_screen_width">900dp</dimen>
+    <dimen name="grid_screen_height">700dp</dimen>
 </resources>

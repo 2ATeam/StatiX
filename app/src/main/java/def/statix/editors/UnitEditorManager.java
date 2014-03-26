@@ -1,4 +1,4 @@
-package def.statix.utils.ui.editors;
+package def.statix.editors;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;

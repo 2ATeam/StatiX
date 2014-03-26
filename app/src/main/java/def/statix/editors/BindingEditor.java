@@ -1,5 +1,4 @@
-package def.statix.utils.ui.editors;
-
+package def.statix.editors;
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -7,18 +6,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import def.statix.R;
+import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
-import def.statix.construction.unittypes.ForceType;
 
 /**
- * Created by AdYa on 18.03.14.
+ * Created by AdYa on 17.03.14.
  */
-public class ForceEditor extends UnitEditor {
+public class BindingEditor extends UnitEditor {
 
     Spinner spinner;
 
-    public ForceEditor() {
-        super(R.layout.force_editor, ForceType.CONCENTRATED);
+
+    public BindingEditor() {
+        super(R.layout.binding_editor, BindingType.FIXED);
     }
 
     @Override
@@ -30,14 +30,19 @@ public class ForceEditor extends UnitEditor {
     public void updateValues() {
         ConstructionUnitType type = (unit == null ? unitType : unit.getType());
         spinner.setEnabled(unit != null);
-        spinner.setSelection(((ForceType) type).ordinal());
+        spinner.setSelection(((BindingType) type).ordinal());
+    }
+
+    @Override
+    public void applyChanges() {
+        /// TODO: BindingEditor: possible changes of binding type
     }
 
     private void prepareSpinner() {
-        spinner = (Spinner) view.findViewById(R.id.editor_force_type);
+        spinner = (Spinner) view.findViewById(R.id.editor_binding_type);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
-                R.array.forces_types, android.R.layout.simple_spinner_item);
+                R.array.binding_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -45,15 +50,15 @@ public class ForceEditor extends UnitEditor {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
                 if (unit == null) return; ///TODO: Temporary solution when creating an object
                 switch (pos) {
-                    default: // default concentrated
+                    default: // default fixed
                     case 0:
-                        unit.setType(ForceType.CONCENTRATED);
+                        unit.setType(BindingType.FIXED);
                         break;
                     case 1:
-                        unit.setType(ForceType.DISTRIBUTED);
+                        unit.setType(BindingType.MOVABLE);
                         break;
                     case 2:
-                        unit.setType(ForceType.MOMENT);
+                        unit.setType(BindingType.STATIC);
                         break;
                 }
             }

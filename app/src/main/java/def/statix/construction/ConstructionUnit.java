@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 
 import def.statix.construction.unittypes.ConstructionUnitType;
+import def.statix.construction.unittypes.PlankType;
 import def.statix.rendering.Renderable;
 import def.statix.rendering.Sprite;
 
@@ -29,20 +30,21 @@ public abstract class ConstructionUnit extends Renderable {
 
     public ConstructionUnit() {
         this(null, new PointF());
-        // some default initialization will be here.
-        // maybe applying the gravity or smth. like that.
     }
 
     public void setPosition(PointF location) {
-        this.position = location; // TODO: position should be converted from location(screen coordinates).
+        assert location != null;
+        setPosition(location.x, location.y);
     }
 
     public void setPosition(float x, float y) {
         this.position.set(x, y); // TODO: position should be converted from location(screen coordinates).
+        notifyObservers();
     }
 
     public void setImage(Bitmap image) {
-        overlayType = type == null; // if true - then we are dealing with the plank. Force or binding otherwise.
+        /// TODO: Get rid of it....
+        overlayType = type == PlankType.PLANK; // if true - then we are dealing with the plank. Force or binding otherwise.
         setSprite(new Sprite(image, position.x, position.y));
     }
 
@@ -52,6 +54,7 @@ public abstract class ConstructionUnit extends Renderable {
 
     public void setType(ConstructionUnitType type) {
         this.type = type;
+        notifyObservers();
     }
 
     public void applyForce(Force force) {

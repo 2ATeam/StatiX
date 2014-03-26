@@ -36,6 +36,7 @@ public class SceneController {
 
     private Context context;
 
+
     public SceneController(Context context) {
         this();
         renderingSurface = new RenderingSurface(context);

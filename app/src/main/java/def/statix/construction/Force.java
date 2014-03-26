@@ -6,4 +6,24 @@ package def.statix.construction;
  */
 public class Force extends ConstructionUnit {
 
+///TODO: Think  about deleteing an 'outgoingForce' from ConstructionUnit - it's something unnecessary
+
+    /**
+     * Reference to the plank to which the force is applied.
+     */
+    private Plank targetPlank;
+
+    /**
+     * Applies force to specified plank.
+     */
+    public void applyToPlank(Plank plank) {
+        targetPlank = plank;
+    }
+
+    /**
+     * Get targeted plank.
+     */
+    public Plank getTargetPlank() {
+        return targetPlank;
+    }
 }

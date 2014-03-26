@@ -14,11 +14,11 @@ import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
 import def.statix.construction.unittypes.PlankType;
+import def.statix.editors.UnitEditor;
+import def.statix.editors.UnitEditorManager;
 import def.statix.utils.drag.DragMode;
 import def.statix.utils.drag.DragableToolbox;
 import def.statix.utils.ui.GestureHandler;
-import def.statix.utils.ui.editors.UnitEditor;
-import def.statix.utils.ui.editors.UnitEditorManager;
 
 /**
  * Created by AdYa on 16.03.14.
@@ -58,7 +58,7 @@ public class ToolboxFragment extends Fragment implements View.OnTouchListener {
         DragableToolbox.LayoutParams lp = new DragableToolbox.LayoutParams(DragableToolbox.LayoutParams.MATCH_PARENT, DragableToolbox.LayoutParams.WRAP_CONTENT);
         lp.setMargins(10, 10, 10, 10);
         for (int icon : TOOLS) {
-            ImageView tool = new ImageView(this.getActivity());
+            ImageView tool = new ImageView(getActivity().getApplicationContext());
             tool.setLayoutParams(lp);
             tool.setImageResource(icon);
             tool.setOnTouchListener(this);
@@ -84,7 +84,7 @@ public class ToolboxFragment extends Fragment implements View.OnTouchListener {
             UnitEditor editor = UnitEditorManager.getInstance().getEditorForUnitType(type);
             if (type instanceof PlankType) {
                 ((ActivityMain) getActivity()).getSurfaceFragment().startCreatingPlank();
-            } else {
+            } else if (type != null) {
                 ((ActivityMain) getActivity()).getSurfaceFragment().stopCreatingPlank();
             }
             UnitEditorManager.getInstance().showEditor(editor);

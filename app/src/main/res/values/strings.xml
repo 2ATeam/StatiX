@@ -21,5 +21,7 @@
     <string name="label_angle">Angle:</string>
     <string name="label_width">Width:</string>
     <string name="label_force_type">Force type:</string>
+    <string name="label_X">X:</string>
+    <string name="label_Y">Y:</string>
 
 </resources>
