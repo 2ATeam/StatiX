@@ -19,4 +19,11 @@ public class Force extends ConstructionUnit {
     public void applyToPlank(Plank plank) {
         targetPlank = plank;
     }
+
+    /**
+     * Get targeted plank.
+     */
+    public Plank getTargetPlank() {
+        return targetPlank;
+    }
 }
