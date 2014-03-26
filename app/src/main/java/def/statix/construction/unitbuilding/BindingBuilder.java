@@ -2,6 +2,7 @@ package def.statix.construction.unitbuilding;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 
 import def.statix.R;
 import def.statix.construction.Binding;
@@ -45,6 +46,7 @@ public class BindingBuilder extends ConstructionUnitBuilder {
     @Override
     public void setPosition(float x, float y) {
         unit.setPosition(x, y);
+        unit.getOverlay().addJoint(new PointF(x, y));
     }
 
     @Override

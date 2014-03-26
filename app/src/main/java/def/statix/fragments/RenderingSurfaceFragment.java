@@ -274,7 +274,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                         UnitEditorManager.getInstance().hideActiveEditor();
                         UnitEditorManager.getInstance().showEditor(editor);
                         PointF rotCenter = new PointF(sceneController.getSelected().getBoundingRect().centerX(),
-                                sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
+                        sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
                         gestureHandler.setRotationCenter(rotCenter);
                     } else {
                         UnitEditorManager.getInstance().hideActiveEditor();

@@ -16,6 +16,8 @@ public final class UnitOverlay extends Sprite{
     private static final int JOINT_DIAMETER = 20;
     private RectF boundingRect;
     private ArrayList<PointF> joints;
+    private ArrayList<Boolean> jointStickMarkers; /// TODO: debugging purpose.
+    private ArrayList<PointF> jointHitOffsets;
     private Paint overlayPaint;
     private Paint jointsPaint;
     private int width;
@@ -30,6 +32,8 @@ public final class UnitOverlay extends Sprite{
         this.sourceWidth = sourceWidth;
         this.sourceHeight = sourceHeight;
         joints = new ArrayList<>();
+        jointStickMarkers = new ArrayList<>();
+        jointHitOffsets = new ArrayList<>();
         overlayPaint = new Paint();
         overlayPaint.setARGB(200, 0, 0, 200);
         jointsPaint = new Paint();
@@ -46,8 +50,9 @@ public final class UnitOverlay extends Sprite{
 
         PointF firstJoint = new PointF(joints.get(0).x, joints.get(0).y);
         PointF secondJoint = new PointF(joints.get(1).x, joints.get(1).y);
-        firstJoint.offset(-location.x + JOINT_DIAMETER, -location.y + JOINT_DIAMETER);
-        secondJoint.offset(-location.x + JOINT_DIAMETER, -location.y + JOINT_DIAMETER);
+
+        firstJoint.offset(-location.x, -location.y);
+        secondJoint.offset(-location.x , -location.y);
 
         canvas.drawRect(JOINT_DIAMETER, JOINT_DIAMETER, width - JOINT_DIAMETER,
                                                         height - JOINT_DIAMETER, overlayPaint);
@@ -72,6 +77,20 @@ public final class UnitOverlay extends Sprite{
         updateBoundingRect();
     }
 
+    @Override
+    public void translate(float x, float y) {
+        super.translate(x, y);
+        for (int i = 0; i < joints.size(); i++)
+            joints.get(i).set(x + jointHitOffsets.get(i).x, y + jointHitOffsets.get(i).y);
+    }
+
+    @Override
+    public void offset(float dx, float dy) {
+        super.offset(dx, dy);
+        for (PointF joint : joints)
+            joint.set(joint.x + dx, joint.y + dy);
+    }
+
     public void updateBoundingRect() {
         // same dimensions as source.
         boundingRect = new RectF(srcLocation.x, srcLocation.y,
@@ -94,10 +113,29 @@ public final class UnitOverlay extends Sprite{
 }
 
     public void addJoint(PointF joint) {
+        joint.offset(JOINT_DIAMETER, JOINT_DIAMETER);
         joints.add(joint);
+        jointStickMarkers.add(false); /// TODO: debugging purpose.
     }
 
     public ArrayList<PointF> getJoints() {
         return joints;
+    }
+
+    public ArrayList<Boolean> getJointStickMarkers() {
+        return jointStickMarkers;
+    }
+
+    @Override
+    public void setHitPoint(int x, int y) {
+        jointHitOffsets.clear();
+        for (PointF joint : joints)
+            jointHitOffsets.add(new PointF(joint.x - x, joint.y - y));
+
+        super.setHitPoint(x, y);
+    }
+
+    public void setJointSticked(int index, boolean value) {
+        jointStickMarkers.set(index, value); /// TODO: debugging purpose.
     }
 }

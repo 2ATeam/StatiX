@@ -56,6 +56,11 @@ public class Renderable {
         overlay.translate(x, y);
     }
 
+    public void offset(float dx, float dy){
+        sprite.offset(dx, dy);
+        overlay.offset(dx, dy);
+    }
+
     public PointF getSpriteLocation() {
         return sprite.getLocation();
     }

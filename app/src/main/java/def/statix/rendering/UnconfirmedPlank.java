@@ -17,7 +17,8 @@ public class UnconfirmedPlank {
 
     //heavy math here :D
     public float getLength(){
-        return (float) Math.sqrt((end.x - begin.x) * (end.x - begin.x) + (end.y - begin.y) * (end.y - begin.y));
+        return (float) Math.sqrt((end.x - begin.x) * (end.x - begin.x) +
+                                 (end.y - begin.y) * (end.y - begin.y));
     }
 
     public PointF getBegin() {

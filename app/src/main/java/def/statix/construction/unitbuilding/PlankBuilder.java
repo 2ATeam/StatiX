@@ -55,7 +55,7 @@ public class PlankBuilder extends ConstructionUnitBuilder {
                     height + strokeOffset, Bitmap.Config.ARGB_4444);
 
             PointF txtPos = new PointF(image.getWidth() / 2 - plankPaint.getStrokeWidth(),
-                    image.getHeight() / 2 + plankPaint.getStrokeWidth());
+                    image.getHeight() / 2 + plankPaint.getStrokeWidth()); /// TODO: use this!
 
             Canvas canvas = new Canvas(image);
             canvas.drawLine(begin.x - location.x + frameOffset,
@@ -69,7 +69,10 @@ public class PlankBuilder extends ConstructionUnitBuilder {
 
     @Override
     public void createNewUnit() {
-        unit = new Plank();
+        if (uncPlank != null)
+            unit = new Plank(uncPlank);
+        else
+            unit = new Plank();
     }
 
     public void setPlankParams(UnconfirmedPlank plank, PointF unitLocation, Paint plankPaint) {

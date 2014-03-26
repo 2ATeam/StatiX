@@ -15,8 +15,8 @@ public class Sprite {
     protected PointF location; // screen coordinates.
     protected PointF pivotPoint;
     protected float angle;
-    private float hitOffsetX;
-    private float hitOffsetY;
+    protected float hitOffsetX;
+    protected float hitOffsetY;
 
     public Sprite(Bitmap image, float x, float y) {
         this.image = image;
@@ -46,6 +46,10 @@ public class Sprite {
 
     public void translate(float x, float y) {
         location.set(x - hitOffsetX, y - hitOffsetY); // for better UX.
+    }
+
+    public void offset(float dx, float dy){
+        location.set(location.x + dx, location.y + dy);
     }
 
     public void update() {

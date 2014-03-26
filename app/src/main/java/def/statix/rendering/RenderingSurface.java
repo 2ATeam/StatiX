@@ -25,22 +25,22 @@ public class RenderingSurface extends SurfaceView implements Runnable{
     private UnconfirmedPlank unconfirmedPlank;
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
-    private Paint rectPaint;
     private Paint ubPaint;
+    private Paint stickPaint;
     private boolean isOK; // thread is running now.
-    private static final boolean IS_DEBUG_INFO_VISIBLE = false;
+    private static final boolean IS_DEBUG_INFO_VISIBLE = true;
 
     public RenderingSurface(Context context) {
         super(context);
         surfaceHolder = getHolder();
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG); // some bitmap smoothing here
-        rectPaint = new Paint();
-        rectPaint.setARGB(75, 0, 255, 0);
         ubPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         ubPaint.setColor(Color.BLUE);
         ubPaint.setStyle(Paint.Style.STROKE);
         ubPaint.setStrokeJoin(Paint.Join.ROUND);
         ubPaint.setStrokeWidth(10.0f);
+        stickPaint = new Paint();
+        stickPaint.setARGB(255, 0, 255, 0);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class RenderingSurface extends SurfaceView implements Runnable{
             Iterator<Renderable> iterator = renderableData.iterator();
             Renderable item;
 
-            if (unconfirmedPlank != null) { // user is drawing a beam now...
+            if (unconfirmedPlank != null) { // user is drawing a plank now...
                 PointF start = unconfirmedPlank.getBegin();
                 PointF stop = unconfirmedPlank.getEnd();
                 canvas.drawLine(start.x, start.y, stop.x, stop.y, ubPaint);
@@ -65,10 +65,15 @@ public class RenderingSurface extends SurfaceView implements Runnable{
                 item = iterator.next();
                 if (item == selectedObject){
                     UnitOverlay overlay = item.getOverlay();
-                    canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
                     if (IS_DEBUG_INFO_VISIBLE){
-                          canvas.drawRect(overlay.getBoundingRect(), rectPaint); // bounding rect
+                        for (int i = 0; i < overlay.getJointStickMarkers().size(); i++){
+                            boolean sticked = overlay.getJointStickMarkers().get(i);
+                            if (sticked) {
+                                canvas.drawCircle(overlay.getJoints().get(i).x, overlay.getJoints().get(i).y, 20.0f, stickPaint);
+                            }
+                        }
                     }
+                    canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());
                 }
                 canvas.drawBitmap(item.getSprite().getImage(), item.getSpriteLocation().x, item.getSpriteLocation().y, unitPaint);
             }
@@ -109,5 +114,13 @@ public class RenderingSurface extends SurfaceView implements Runnable{
 
     public Paint getUbPaint() {
         return ubPaint;
+    }
+
+    public int getCanvasWidth() {
+        Canvas canvas = surfaceHolder.lockCanvas();
+        assert canvas != null;
+        int width = canvas.getWidth();
+        surfaceHolder.unlockCanvasAndPost(canvas);
+        return width;
     }
 }

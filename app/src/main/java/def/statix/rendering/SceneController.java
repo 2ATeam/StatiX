@@ -2,9 +2,12 @@ package def.statix.rendering;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import def.statix.construction.Plank;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
 import def.statix.construction.unitbuilding.ForceBuilder;
@@ -21,24 +24,28 @@ import def.statix.construction.unittypes.PlankType;
 public class SceneController {
 
     private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
+    private ArrayList<Plank> planks; // references from sceneObjects list.
     private UnconfirmedPlank unconfirmedPlank; // cannot be renderable.
     private Renderable selectedObject;
     private RenderingSurface renderingSurface;
+
     private Foreman foreman;
     private PlankBuilder plankBuilder;
     private BindingBuilder bindingBuilder;
     private ForceBuilder forceBuilder;
+
     private Context context;
 
     public SceneController(Context context) {
         this();
-        this.renderingSurface = new RenderingSurface(context);
-        this.renderingSurface.setModel(sceneObjects);
+        renderingSurface = new RenderingSurface(context);
+        renderingSurface.setModel(sceneObjects);
         this.context = context;
     }
 
     public SceneController() {
         sceneObjects = new CopyOnWriteArrayList<>();
+        planks = new ArrayList<>();
         foreman = new Foreman();
         plankBuilder = new PlankBuilder();
         bindingBuilder = new BindingBuilder();
@@ -60,6 +67,10 @@ public class SceneController {
         unconfirmedPlank.offset(newDx, newDy);
     }
 
+    public void editPlank(PointF newEnd) {
+        unconfirmedPlank.setEnd(newEnd);
+    }
+
     //end plank adding process. unconfirmed plank becomes renderable object.
     public void confirmPlank() {
         //calc top left corner offset of the plank:
@@ -73,6 +84,7 @@ public class SceneController {
 
         plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUbPaint());
         addUnit(plankBuilder, unitLocation.x, unitLocation.y, PlankType.PLANK);
+        planks.add((Plank) foreman.getUnit()); //reference to the recently added plank.
         unconfirmedPlank = null; // no need to render unconfirmed plank any more.
         renderingSurface.setUnconfirmedPlank(null);
     }
@@ -100,19 +112,76 @@ public class SceneController {
         selectedObject.scale(width, height);
     }
 
+    public void resizeSelectedPlank(float newLength) {
+        if (selectedObject instanceof Plank) {
+            Plank plank = (Plank) selectedObject;
+            float oxAngle = (float) Math.atan2(plank.getEnd().y - plank.getBegin().y,
+                                               plank.getEnd().x - plank.getBegin().x);
+            PointF normal = new PointF((float)Math.cos(oxAngle), (float)Math.sin(oxAngle));
+            normal.x *= newLength;
+            normal.y *= newLength;
+            normal.x += plank.getBegin().x;
+            normal.y += plank.getBegin().y;
+            beginPlank(plank.getBegin().x, plank.getBegin().y);
+            editPlank(normal);
+            sceneObjects.remove(selectedObject);
+            confirmPlank();
+        }
+    }
+
+
+    private PointF checkStick(PointF sticker){
+        float x1, y1, x2, y2;
+        for (Plank plank : planks) {
+            if (plank == selectedObject) // avoid self-checking.
+                continue;
+
+            x1 = plank.getOverlay().getJoints().get(0).x;
+            y1 = plank.getOverlay().getJoints().get(0).y;
+            x2 = plank.getOverlay().getJoints().get(1).x;
+            y2 = plank.getOverlay().getJoints().get(1).y;
+
+            if (x1 == x2)
+                x1 += 10.0f;
+            if (y1 == y2)
+                y1 += 10.0f;
+
+            float intersectFactor = Math.abs(((sticker.y - y1) / (y2 - y1)) - ((sticker.x - x1) / (x2 - x1)));
+            Log.d("DEBUG", "intersect factor: " + intersectFactor);
+            // factor should be less or equal to threshold.
+            if (intersectFactor <= 0.2f) {
+                float A, B, C, X, Y;
+                A = y1 - y2;
+                B = x2 - x1;
+                C = x1 * y2 - x2 * y1;
+                Y = (-A * sticker.x - C) / B;
+                X = (-B * sticker.y - C) / A;
+                return new PointF(X, Y);
+            }
+        }
+        return null;
+    }
+
     public void translateSelected(float x, float y) {
-        float attachThreshold = 20.0f;
+        PointF stick, joint;
         if (!selectedObject.isAttached()) {
-            selectedObject.translate(x, y);            
-        } else {
-            float dx = (x - selectedObject.getSpriteLocation().x) > attachThreshold ?
-                    x - selectedObject.getSpriteLocation().x : 0;
-
-            float dy = (y - selectedObject.getSpriteLocation().y) > attachThreshold ?
-                    y - selectedObject.getSpriteLocation().y : 0;
-
-            if (dx > 0 || dy > 0)
+            selectedObject.translate(x, y);
+            for (int i = 0; i < selectedObject.getOverlay().getJoints().size(); i++) {
+                joint = selectedObject.getOverlay().getJoints().get(i);
+                stick = checkStick(joint);
+                if (stick != null) {
+                    selectedObject.getOverlay().setJointSticked(i, true);
+                    selectedObject.offset(stick.x - joint.x, stick.y - joint.y);
+                    selectedObject.setAttached(true);
+                }
+            }
+        }
+        else {
+            float dx = Math.abs(selectedObject.getSpriteLocation().x - x);
+            float dy = Math.abs(selectedObject.getSpriteLocation().y - y);
+            if (dx >= 150.0f || dy >= 150.0f) {
                 selectedObject.setAttached(false);
+            }
         }
     }
 
