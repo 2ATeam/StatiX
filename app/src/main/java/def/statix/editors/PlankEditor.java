@@ -115,7 +115,7 @@ public class PlankEditor extends UnitEditor {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().isEmpty()) return;
                 int value = (int) (Float.parseFloat(editable.toString()) * SEEK_BAR_DECIMAL_ACCURACY);
-                int clampedValue = MathUtils.clamp(0, value, seek.getMax());
+                int clampedValue = MathUtils.clamp(0, value, seek.getMax(), true);
 
                 seek.setProgress(value);
                 if (clampedValue != value) {
