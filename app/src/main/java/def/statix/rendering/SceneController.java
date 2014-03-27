@@ -134,11 +134,11 @@ public class SceneController {
         for (Plank plank : planks) {
             if (plank == selectedObject) // avoid self-checking.
                 continue;
-
-            x1 = plank.getOverlay().getJoints().get(0).x;
-            y1 = plank.getOverlay().getJoints().get(0).y;
-            x2 = plank.getOverlay().getJoints().get(1).x;
-            y2 = plank.getOverlay().getJoints().get(1).y;
+            ArrayList<PointF> joints = plank.getOverlay().getJoints();
+            x1 = joints.get(0).x;
+            y1 = joints.get(0).y;
+            y2 = joints.get(1).y;
+            x2 = joints.get(1).x;
 
             if (x1 == x2)
                 x1 += 10.0f;

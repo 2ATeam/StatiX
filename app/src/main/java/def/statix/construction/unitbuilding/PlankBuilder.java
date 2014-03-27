@@ -64,7 +64,7 @@ public class PlankBuilder extends ConstructionUnitBuilder {
                     end.y - location.y + frameOffset, plankPaint);
             return image;
         }
-        return BitmapFactory.decodeResource(context.getResources(), R.drawable.plank); // placeholder.
+        return BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin); // placeholder.
     }
 
     @Override
