@@ -21,7 +21,6 @@ import def.statix.construction.unittypes.PlankType;
 
 public class SceneController {
 
-    // private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
     private Construction construction;
     private ArrayList<Plank> planks; // references from sceneObjects list.
     private UnconfirmedPlank unconfirmedPlank; // cannot be renderable.
@@ -116,8 +115,8 @@ public class SceneController {
         if (selectedObject instanceof Plank) {
             Plank plank = (Plank) selectedObject;
             float oxAngle = (float) Math.atan2(plank.getEnd().y - plank.getBegin().y,
-                                               plank.getEnd().x - plank.getBegin().x);
-            PointF normal = new PointF((float)Math.cos(oxAngle), (float)Math.sin(oxAngle));
+                    plank.getEnd().x - plank.getBegin().x);
+            PointF normal = new PointF((float) Math.cos(oxAngle), (float) Math.sin(oxAngle));
             normal.x *= newLength;
             normal.y *= newLength;
             normal.x += plank.getBegin().x;
@@ -129,7 +128,7 @@ public class SceneController {
         }
     }
 
-    private PointF checkStick(PointF sticker){
+    private PointF checkStick(PointF sticker) {
         float x1, y1, x2, y2;
         for (Plank plank : planks) {
             if (plank == selectedObject) // avoid self-checking.
@@ -174,8 +173,7 @@ public class SceneController {
                     selectedObject.setAttached(true);
                 }
             }
-        }
-        else {
+        } else {
             float dx = Math.abs(selectedObject.getSpriteLocation().x - x);
             float dy = Math.abs(selectedObject.getSpriteLocation().y - y);
             if (dx >= 150.0f || dy >= 150.0f) {
