@@ -201,9 +201,9 @@ public class StaticProblemSolver {
 
     private float getMomentProjection(Force force) {
         if (momentCenter == null) return 0;
-        if (force.getPosition().x < momentCenter.x) { // if force is on the left side of the moment
-            if (force.getPosition().y <)
-        }
+//        if (force.getPosition().x < momentCenter.x) { // if force is on the left side of the moment
+//            if (force.getPosition().y <)
+//        }
         switch ((ForceType) force.getType()) {
 
             case CONCENTRATED:
