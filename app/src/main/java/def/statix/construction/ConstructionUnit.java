@@ -18,11 +18,10 @@ public abstract class ConstructionUnit extends Renderable {
     protected static long _instance_counter = 0;
     protected long ID;
 
-    private Force outgoingForce;
     private ConstructionUnitType type;
+    protected float angle;
 
     public ConstructionUnit(Force outgoingForce, PointF location) {
-        this.outgoingForce = outgoingForce;
         position = new PointF(location.x, location.y);
         isAttached = false;
         ID = ++_instance_counter;
@@ -57,16 +56,17 @@ public abstract class ConstructionUnit extends Renderable {
         notifyObservers();
     }
 
-    public void applyForce(Force force) {
-        this.outgoingForce = force;
-    }
-
-    public Force getOutgoingForce() {
-        return outgoingForce;
-    }
-
     @Override
     public boolean equals(Object o) {
         return (this.getClass().isInstance(o) && ((ConstructionUnit) o).ID == this.ID);
+    }
+
+    public float getAngle() {
+        return angle;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = (angle >= 180 ? angle - 180f : angle);
+        notifyObservers();
     }
 }

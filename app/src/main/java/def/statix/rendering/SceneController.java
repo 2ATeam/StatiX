@@ -5,8 +5,9 @@ import android.graphics.PointF;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
+import def.statix.calculations.constructions.Construction;
+import def.statix.construction.ConstructionUnit;
 import def.statix.construction.Plank;
 import def.statix.construction.unitbuilding.BindingBuilder;
 import def.statix.construction.unitbuilding.ConstructionUnitBuilder;
@@ -18,15 +19,13 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
 import def.statix.construction.unittypes.PlankType;
 
-/**
- * Created by Lux on 20.02.14.
- */
 public class SceneController {
 
-    private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
+    // private CopyOnWriteArrayList<Renderable> sceneObjects; // data model.
+    private Construction construction;
     private ArrayList<Plank> planks; // references from sceneObjects list.
     private UnconfirmedPlank unconfirmedPlank; // cannot be renderable.
-    private Renderable selectedObject;
+    private ConstructionUnit selectedObject;
     private RenderingSurface renderingSurface;
 
     private Foreman foreman;
@@ -40,12 +39,12 @@ public class SceneController {
     public SceneController(Context context) {
         this();
         renderingSurface = new RenderingSurface(context);
-        renderingSurface.setModel(sceneObjects);
+        renderingSurface.setModel(construction.getRenderables());
         this.context = context;
     }
 
     public SceneController() {
-        sceneObjects = new CopyOnWriteArrayList<>();
+        construction = new Construction();
         planks = new ArrayList<>();
         foreman = new Foreman();
         plankBuilder = new PlankBuilder();
@@ -101,7 +100,7 @@ public class SceneController {
     private void addUnit(ConstructionUnitBuilder builder, float x, float y, ConstructionUnitType type) {
         foreman.setBuilder(builder);
         foreman.constructUnit(context, x, y, type);
-        sceneObjects.add(foreman.getUnit());
+        construction.addUnit(foreman.getUnit());
         selectedObject = foreman.getUnit(); // added object becomes selected.
     }
 
@@ -125,11 +124,10 @@ public class SceneController {
             normal.y += plank.getBegin().y;
             beginPlank(plank.getBegin().x, plank.getBegin().y);
             editPlank(normal);
-            sceneObjects.remove(selectedObject);
+            construction.removeUnit(selectedObject);
             confirmPlank();
         }
     }
-
 
     private PointF checkStick(PointF sticker){
         float x1, y1, x2, y2;
@@ -192,20 +190,24 @@ public class SceneController {
 
     public void removeSelected() {
         if (selectedObject != null) {
-            sceneObjects.remove(selectedObject);
+            construction.removeUnit(selectedObject);
             selectedObject = null;
         }
     }
 
     public void select(int x, int y) {
         selectedObject = null; // deselect it.
-        for (Renderable sceneObject : sceneObjects) {
+        for (ConstructionUnit sceneObject : construction) {
             if (sceneObject.hitTest(x, y)) {
                 selectedObject = sceneObject;
                 break;
             }
         }
         renderingSurface.setSelectedObject(selectedObject);
+    }
+
+    public void select(ConstructionUnit unit) {
+        selectedObject = unit;
     }
 
     public boolean isObjectSelected() {
@@ -216,7 +218,7 @@ public class SceneController {
         return renderingSurface;
     }
 
-    public Renderable getSelected() {
+    public ConstructionUnit getSelected() {
         return selectedObject;
     }
 

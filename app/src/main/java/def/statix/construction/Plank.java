@@ -14,14 +14,15 @@ public class Plank extends ConstructionUnit {
     private PointF end;
 
     public Plank() {
-        this(0);
+        this(0, 0);
     }
 
-    public Plank(float length) {
+    public Plank(float length, float angle) {
         super();
         begin = new PointF();
         end = new PointF();
         this.length = length;
+        setAngle(angle);
     }
 
     public Plank(UnconfirmedPlank plank) {
@@ -44,16 +45,7 @@ public class Plank extends ConstructionUnit {
     }
 
     public void setLength(float length) {
-        this.length = length; /// TODO: planks length editing
-        notifyObservers();
-    }
-
-    public float getAngle() {
-        return 0; /// TODO: WHERE IS THE ANGLE???? T_T
-    }
-
-    public void setAngle(float angle) {
-        /// TODO: planks angle editing
+        this.length = length;
         notifyObservers();
     }
 }

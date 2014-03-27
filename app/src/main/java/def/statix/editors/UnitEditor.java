@@ -9,16 +9,15 @@ import java.util.Observer;
 
 import def.statix.construction.ConstructionUnit;
 import def.statix.construction.unittypes.ConstructionUnitType;
+import def.statix.rendering.SceneController;
 
-/**
- * Created by AdYa on 17.03.14.
- */
 public abstract class UnitEditor implements Observer {
 
     /**
      * Inflated view for this editor.
      */
     protected View view;
+    protected SceneController scene;
 
     public View getView() {
         return view;
@@ -30,7 +29,9 @@ public abstract class UnitEditor implements Observer {
     protected ConstructionUnit unit;
     protected ConstructionUnitType unitType;
 
-    /** Resource layout which will be inflated for this editor. */
+    /**
+     * Resource layout which will be inflated for this editor.
+     */
     private int layoutResource;
 
     /**
@@ -71,7 +72,9 @@ public abstract class UnitEditor implements Observer {
         return this.unit;
     }
 
-    /** Checks whether the unit can be edited by this editor. */
+    /**
+     * Checks whether the unit can be edited by this editor.
+     */
     public boolean canEdit(ConstructionUnit unit) {
         return (unit != null && canEdit(unit.getType()));
     }
@@ -111,5 +114,14 @@ public abstract class UnitEditor implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         updateValues();
+    }
+
+
+    public void setScene(SceneController scene) {
+        this.scene = scene;
+    }
+
+    public SceneController getScene() {
+        return scene;
     }
 }

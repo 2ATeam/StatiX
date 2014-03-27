@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import def.statix.R;
+import def.statix.construction.ConstructionUnit;
 import def.statix.construction.Plank;
 import def.statix.construction.unittypes.PlankType;
 import def.statix.utils.MathUtils;
@@ -32,6 +33,12 @@ public class PlankEditor extends UnitEditor {
     }
 
     @Override
+    public void editUnit(ConstructionUnit unit) {
+        super.editUnit(unit);
+        sbWidth.setMax((int) scene.getSurface().getGridRenderer().getGrid().getWidth());
+    }
+
+    @Override
     protected void initializeChildViews() {
         etWidth = (EditText) view.findViewById(R.id.editor_plank_etWidth);
         etAngle = (EditText) view.findViewById(R.id.editor_plank_etAngle);
@@ -46,8 +53,8 @@ public class PlankEditor extends UnitEditor {
         sbWidth = (SeekBar) view.findViewById(R.id.editor_plank_sbWidth);
         sbAngle = (SeekBar) view.findViewById(R.id.editor_plank_sbAngle);
 
-        sbWidth.setMax(10000); ///TODO: set MAX_PLANK_WIDTH here
-        sbAngle.setMax(360 * SEEK_BAR_DECIMAL_ACCURACY);
+
+        sbAngle.setMax(180 * SEEK_BAR_DECIMAL_ACCURACY);
 
         linkSeekBarWithEdit(sbAngle, etAngle);
         linkSeekBarWithEdit(sbWidth, etWidth);
@@ -72,8 +79,9 @@ public class PlankEditor extends UnitEditor {
     @Override
     public void applyChanges() {
         Plank plank = (Plank) unit;
-        plank.setLength(Float.parseFloat(etWidth.getText().toString()));
-        plank.setAngle(Float.parseFloat(etAngle.getText().toString()));
+        scene.select(plank);
+        scene.resizeSelectedPlank(Float.parseFloat(etWidth.getText().toString()));
+        scene.rotateSelected(Float.parseFloat(etAngle.getText().toString()));
     }
 
     private void initEditText(final EditText text) {
