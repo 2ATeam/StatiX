@@ -2,7 +2,6 @@ package def.statix.construction.unitbuilding;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.PointF;
 
 import def.statix.R;
 import def.statix.construction.Force;
@@ -44,7 +43,7 @@ public class ForceBuilder extends ConstructionUnitBuilder {
                 unit.setImage(BitmapFactory.decodeResource(context.getResources(), R.drawable.shaolin));
             }
         }
-        unit.getOverlay().createForceOrBindingOverlay();
+        unit.getOverlay().createForceOverlay((ForceType) type);
     }
 
     @Override

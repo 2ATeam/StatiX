@@ -8,6 +8,8 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 
+import def.statix.construction.unittypes.ForceType;
+
 /**
  * Created by Lux on 02.03.14.
  */
@@ -64,13 +66,32 @@ public final class UnitOverlay extends Sprite{
     }
 
     /// TODO: refactor this. This is not according the D.R.Y. principle.
-    public void createForceOrBindingOverlay(){
+    public void createBindingOverlay(){
         this.image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
         float jointRadius = JOINT_DIAMETER / 2;
         PointF joint = new PointF(width / 2, jointRadius);
-        joints.add(joint);
+        joints.add(new PointF(location.x + joint.x, location.y + joint.y));
         canvas.drawCircle(joint.x, joint.y, jointRadius, jointsPaint);
+        canvas.drawRect(JOINT_DIAMETER, JOINT_DIAMETER, width - JOINT_DIAMETER, height - JOINT_DIAMETER, overlayPaint);
+    }
+
+    public void createForceOverlay(ForceType forceType) {
+        this.image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        float jointRadius = JOINT_DIAMETER / 2;
+        if (forceType == ForceType.CONCENTRATED) {
+            PointF topJoint = new PointF(width / 2, jointRadius);
+            PointF bottomJoint = new PointF(width / 2, height - jointRadius);
+            joints.add(new PointF(location.x + topJoint.x, location.y + topJoint.y));
+            joints.add(new PointF(location.x + bottomJoint.x, location.y + bottomJoint.y));
+            canvas.drawCircle(topJoint.x, topJoint.y, jointRadius, jointsPaint);
+            canvas.drawCircle(bottomJoint.x, bottomJoint.y, jointRadius, jointsPaint);
+        } else {
+            PointF centerJoint = new PointF(width / 2, height / 2);
+            joints.add(new PointF(location.x + centerJoint.x, location.y + centerJoint.y));
+            canvas.drawCircle(centerJoint.x, centerJoint.y, jointRadius, jointsPaint);
+        }
         canvas.drawRect(JOINT_DIAMETER, JOINT_DIAMETER, width - JOINT_DIAMETER, height - JOINT_DIAMETER, overlayPaint);
     }
 
