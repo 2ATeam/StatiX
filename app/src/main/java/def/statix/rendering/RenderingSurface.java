@@ -29,10 +29,10 @@ public class RenderingSurface extends SurfaceView implements Runnable {
     private UnconfirmedPlank unconfirmedPlank;
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
+    private Paint rectPaint;
     private Paint ubPaint;
-    private Paint stickPaint;
     private boolean isOK; // thread is running now.
-    private static final boolean IS_DEBUG_INFO_VISIBLE = true;
+    private static final boolean IS_DEBUG_INFO_VISIBLE = false;
     private GridRenderer gridRenderer;
     private Grid grid;
 
@@ -45,8 +45,8 @@ public class RenderingSurface extends SurfaceView implements Runnable {
         ubPaint.setStyle(Paint.Style.STROKE);
         ubPaint.setStrokeJoin(Paint.Join.ROUND);
         ubPaint.setStrokeWidth(10.0f);
-        stickPaint = new Paint();
-        stickPaint.setARGB(255, 0, 255, 0);
+        rectPaint = new Paint();
+        rectPaint.setARGB(200, 0, 200, 0);
 
         /// TODO: Dirty screen sizes...
         float width = getContext().getResources().getDimension(R.dimen.grid_screen_width);
@@ -86,10 +86,7 @@ public class RenderingSurface extends SurfaceView implements Runnable {
                     UnitOverlay overlay = item.getOverlay();
                     if (IS_DEBUG_INFO_VISIBLE) {
                         for (int i = 0; i < overlay.getJointStickMarkers().size(); i++) {
-                            boolean sticked = overlay.getJointStickMarkers().get(i);
-                            if (sticked) {
-                                canvas.drawCircle(overlay.getJoints().get(i).x, overlay.getJoints().get(i).y, 20.0f, stickPaint);
-                            }
+                           canvas.drawRect(item.getBoundingRect(), rectPaint);
                         }
                     }
                     canvas.drawBitmap(overlay.getImage(), overlay.getLocation().x, overlay.getLocation().y, overlay.getPaint());

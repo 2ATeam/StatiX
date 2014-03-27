@@ -3,6 +3,7 @@ package def.statix.rendering;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 /**
  * Created by Lux on 19.02.14.

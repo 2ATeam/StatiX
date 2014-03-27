@@ -2,7 +2,6 @@ package def.statix.rendering;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -104,6 +103,8 @@ public class SceneController {
     }
 
     public void rotateSelected(float angle) {
+        if (angle >= 180)
+            angle -= 180;
         selectedObject.rotate(angle);
     }
 
@@ -115,7 +116,7 @@ public class SceneController {
         if (selectedObject instanceof Plank) {
             Plank plank = (Plank) selectedObject;
             float oxAngle = (float) Math.atan2(plank.getEnd().y - plank.getBegin().y,
-                    plank.getEnd().x - plank.getBegin().x);
+                                               plank.getEnd().x - plank.getBegin().x);
             PointF normal = new PointF((float) Math.cos(oxAngle), (float) Math.sin(oxAngle));
             normal.x *= newLength;
             normal.y *= newLength;
@@ -129,54 +130,38 @@ public class SceneController {
     }
 
     private PointF checkStick(PointF sticker) {
-        float x1, y1, x2, y2;
+        float stickThreshold = 20.0f;
         for (Plank plank : planks) {
             if (plank == selectedObject) // avoid self-checking.
                 continue;
+
             ArrayList<PointF> joints = plank.getOverlay().getJoints();
-            x1 = joints.get(0).x;
-            y1 = joints.get(0).y;
-            y2 = joints.get(1).y;
-            x2 = joints.get(1).x;
-
-            if (x1 == x2)
-                x1 += 10.0f;
-            if (y1 == y2)
-                y1 += 10.0f;
-
-            float intersectFactor = Math.abs(((sticker.y - y1) / (y2 - y1)) - ((sticker.x - x1) / (x2 - x1)));
-            Log.d("DEBUG", "intersect factor: " + intersectFactor);
-            // factor should be less or equal to threshold.
-            if (intersectFactor <= 0.2f) {
-                float A, B, C, X, Y;
-                A = y1 - y2;
-                B = x2 - x1;
-                C = x1 * y2 - x2 * y1;
-                Y = (-A * sticker.x - C) / B;
-                X = (-B * sticker.y - C) / A;
-                return new PointF(X, Y);
+            for (PointF joint : joints) {
+                if (sticker.x >= joint.x - stickThreshold && sticker.x <= joint.x + stickThreshold &&
+                    sticker.y >= joint.y - stickThreshold && sticker.y <= joint.y + stickThreshold) {
+                    return new PointF(joint.x - sticker.x, joint.y - sticker.y);
+                }
             }
         }
         return null;
     }
 
     public void translateSelected(float x, float y) {
-        PointF stick, joint;
+        PointF stickOffsetVector;
         if (!selectedObject.isAttached()) {
             selectedObject.translate(x, y);
-            for (int i = 0; i < selectedObject.getOverlay().getJoints().size(); i++) {
-                joint = selectedObject.getOverlay().getJoints().get(i);
-                stick = checkStick(joint);
-                if (stick != null) {
-                    selectedObject.getOverlay().setJointSticked(i, true);
-                    selectedObject.offset(stick.x - joint.x, stick.y - joint.y);
+            for (PointF joint : selectedObject.getOverlay().getJoints()) {
+                stickOffsetVector = checkStick(joint);
+                if (stickOffsetVector != null) { // stick occurred!
+                    selectedObject.offset(stickOffsetVector.x, stickOffsetVector.y);
                     selectedObject.setAttached(true);
                 }
             }
         } else {
+            float stickThreshold = 150.0f; // in screen coords.
             float dx = Math.abs(selectedObject.getSpriteLocation().x - x);
             float dy = Math.abs(selectedObject.getSpriteLocation().y - y);
-            if (dx >= 150.0f || dy >= 150.0f) {
+            if (dx >= stickThreshold || dy >= stickThreshold) {
                 selectedObject.setAttached(false);
             }
         }

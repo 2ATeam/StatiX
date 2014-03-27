@@ -50,14 +50,17 @@ public final class UnitOverlay extends Sprite{
 
         PointF firstJoint = new PointF(joints.get(0).x, joints.get(0).y);
         PointF secondJoint = new PointF(joints.get(1).x, joints.get(1).y);
+        PointF centerJoint = new PointF(joints.get(2).x, joints.get(2).y);
 
         firstJoint.offset(-location.x, -location.y);
         secondJoint.offset(-location.x , -location.y);
+        centerJoint.offset(-location.x , -location.y);
 
         canvas.drawRect(JOINT_DIAMETER, JOINT_DIAMETER, width - JOINT_DIAMETER,
                                                         height - JOINT_DIAMETER, overlayPaint);
         canvas.drawCircle(firstJoint.x, firstJoint.y, jointRadius, jointsPaint);
         canvas.drawCircle(secondJoint.x, secondJoint.y, jointRadius, jointsPaint);
+        canvas.drawCircle(centerJoint.x, centerJoint.y, jointRadius, jointsPaint);
     }
 
     /// TODO: refactor this. This is not according the D.R.Y. principle.
