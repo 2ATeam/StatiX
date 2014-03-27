@@ -46,7 +46,8 @@ public class BindingBuilder extends ConstructionUnitBuilder {
     @Override
     public void setPosition(float x, float y) {
         unit.setPosition(x, y);
-        unit.getOverlay().addJoint(new PointF(x, y));
+        if (unit.getOverlay() != null) /// TODO: If condition in setPostition
+            unit.getOverlay().addJoint(new PointF(x, y));
     }
 
     @Override

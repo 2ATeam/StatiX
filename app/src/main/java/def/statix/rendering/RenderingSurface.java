@@ -84,8 +84,8 @@ public class RenderingSurface extends SurfaceView implements Runnable {
                 item = iterator.next();
                 if (item == selectedObject) {
                     UnitOverlay overlay = item.getOverlay();
-                    if (IS_DEBUG_INFO_VISIBLE){
-                        for (int i = 0; i < overlay.getJointStickMarkers().size(); i++){
+                    if (IS_DEBUG_INFO_VISIBLE) {
+                        for (int i = 0; i < overlay.getJointStickMarkers().size(); i++) {
                             boolean sticked = overlay.getJointStickMarkers().get(i);
                             if (sticked) {
                                 canvas.drawCircle(overlay.getJoints().get(i).x, overlay.getJoints().get(i).y, 20.0f, stickPaint);
@@ -118,6 +118,7 @@ public class RenderingSurface extends SurfaceView implements Runnable {
         renderingThread = new Thread(this);
         renderingThread.start();
     }
+
 
     public void setModel(CopyOnWriteArrayList<Renderable> model) {
         this.renderableData = model;

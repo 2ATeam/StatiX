@@ -11,13 +11,18 @@ import android.view.ViewGroup;
 
 import def.statix.ActivityMain;
 import def.statix.R;
+import def.statix.calculations.constructions.Construction;
+import def.statix.calculations.constructions.StaticProblemSolver;
 import def.statix.construction.ConstructionUnit;
+import def.statix.construction.Force;
+import def.statix.construction.Plank;
 import def.statix.construction.unittypes.BindingType;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
 import def.statix.construction.unittypes.PlankType;
 import def.statix.editors.UnitEditor;
 import def.statix.editors.UnitEditorManager;
+import def.statix.grid.GridRenderer;
 import def.statix.rendering.SceneController;
 import def.statix.utils.drag.DragSource;
 import def.statix.utils.drag.DragView;
@@ -55,7 +60,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         @Override
         public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
             if (!(dragInfo instanceof ConstructionUnitType)) return; // ignore garbage if any...
-
+///TODO: DO NOT FORGET TO APPLY FORCES TO TARGET PLANK via force.applyToPlank(plank)
             if (dragInfo instanceof PlankType) {
                 sceneController.beginPlank(x, y);
             } else if (dragInfo instanceof BindingType) {
@@ -136,6 +141,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         frame.addView(sceneController.getSurface());
         sceneController.getSurface().setOnTouchListener(this);
 
+        UnitEditorManager.getInstance().setScene(sceneController);
         StatusManager.setStatus(getString(R.string.hint_create_object));
         return frame;
     }
@@ -162,9 +168,46 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         sceneController.getSurface().resume();
     }
 
+    public GridRenderer getGridRender() {
+        return sceneController.getSurface().getGridRenderer();
+    }
+
+    private void test() {
+        Construction c = new Construction();
+        Plank p1 = new Plank(2, 90);
+        Plank p2 = new Plank(3, 0);
+        c.addUnit(p1);
+        c.addUnit(p2);
+
+        sceneController.addForce(0, 0, ForceType.CONCENTRATED);
+        ConstructionUnit unit = (sceneController.getSelected());
+        unit.setAngle(-60f);
+        ((Force) unit).applyToPlank(p1);
+        c.addUnit(unit);
+        sceneController.addForce(0, 0, ForceType.DISTRIBUTED);
+        unit = (sceneController.getSelected());
+        unit.setAngle(90f);
+        ((Force) unit).applyToPlank(p1);
+        c.addUnit(unit);
+
+        sceneController.addBinding(100, 100, BindingType.FIXED);
+        unit = (sceneController.getSelected());
+        unit.setAngle(0f);
+        c.addUnit(unit);
+
+        sceneController.addBinding(0, 0, BindingType.MOVABLE);
+        unit = (sceneController.getSelected());
+        unit.setAngle(-30f);
+        c.addUnit(unit);
+
+        StaticProblemSolver solver = new StaticProblemSolver();
+        solver.solve(c);
+    }
+
+
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-            gestureHandler.onTouchEvent(motionEvent);
+        gestureHandler.onTouchEvent(motionEvent);
 
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN: {
@@ -179,7 +222,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
                         UnitEditorManager.getInstance().hideActiveEditor();
                         UnitEditorManager.getInstance().showEditor(editor);
                         PointF rotCenter = new PointF(sceneController.getSelected().getBoundingRect().centerX(),
-                        sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
+                                sceneController.getSelected().getBoundingRect().centerY()); // rotate around whatever you want
                         gestureHandler.setRotationCenter(rotCenter);
                     } else {
                         UnitEditorManager.getInstance().hideActiveEditor();

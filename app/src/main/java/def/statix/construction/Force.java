@@ -12,6 +12,7 @@ public class Force extends ConstructionUnit {
      * Reference to the plank to which the force is applied.
      */
     private Plank targetPlank;
+    private float value;
 
     /**
      * Applies force to specified plank.
@@ -25,5 +26,13 @@ public class Force extends ConstructionUnit {
      */
     public Plank getTargetPlank() {
         return targetPlank;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public float getValue() {
+        return value;
     }
 }

@@ -136,6 +136,6 @@ public final class UnitOverlay extends Sprite{
     }
 
     public void setJointSticked(int index, boolean value) {
-        jointStickMarkers.set(index, value); /// TODO: debugging purpose.
+//        jointStickMarkers.set(index, value); /// TODO: debugging purpose.
     }
 }

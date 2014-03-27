@@ -1,12 +1,13 @@
 package def.statix.editors;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import def.statix.ActivityMain;
 import def.statix.construction.ConstructionUnit;
 import def.statix.construction.unittypes.ConstructionUnitType;
+import def.statix.rendering.SceneController;
 
 /**
  * Created by AdYa on 18.03.14.
@@ -21,7 +22,7 @@ public class UnitEditorManager {
     }
 
     private ViewGroup editorContainer;
-    private FragmentActivity parentActivity;
+    private ActivityMain parentActivity;
     private UnitEditor activeEditor;
 
     private UnitEditor[] editors;
@@ -47,13 +48,19 @@ public class UnitEditorManager {
     /**
      * Prepares manager to work
      */
-    public void prepare(FragmentActivity fragmentActivity, int editorContainer) {
+    public void prepare(ActivityMain fragmentActivity, int editorContainer) {
         parentActivity = fragmentActivity;
         this.editorContainer = (ViewGroup) ((parentActivity == null) ? null : parentActivity.findViewById(editorContainer));
         if (isReady()) {
             initEditors();
             parentActivity.getSupportFragmentManager().beginTransaction().add(editorContainer, new Fragment()).commit();
             this.editorContainer.setVisibility(View.GONE);
+        }
+    }
+
+    public void setScene(SceneController scene) {
+        for (UnitEditor editor : editors) {
+            editor.setScene(scene);
         }
     }
 
