@@ -12,6 +12,13 @@
         android:layout_alignParentLeft="true"
         android:text="@string/text_solve" />
 
+    <Button
+        android:id="@+id/bTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bSolve"
+        android:text="@string/text_test" />
+
     <TextView
         android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
