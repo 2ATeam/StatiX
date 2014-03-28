@@ -2,6 +2,7 @@ package def.statix.grid;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
 
 /**
  * Created by AdYa on 22.03.14.
@@ -72,28 +73,28 @@ public class GridRenderer {
         this.primaryAxis = axis;
     }
 
-    private float convertToScreen(float gridValue) {
+    public float convertToScreen(float gridValue) {
         return gridValue * scaleFactor;
     }
 
-    public GridPoint convertToScreen(GridPoint gridPoint) {
-        return convertToScreen(gridPoint.x, gridPoint.y);
+    public PointF convertToScreen(PointF PointF) {
+        return convertToScreen(PointF.x, PointF.y);
     }
 
-    public GridPoint convertToScreen(float gridX, float gridY) {
-        return new GridPoint(convertToScreen(gridX), screenHeight - convertToScreen(gridY));
+    public PointF convertToScreen(float gridX, float gridY) {
+        return new PointF(convertToScreen(gridX), screenHeight - convertToScreen(gridY));
     }
 
     private float convertToGrid(float screenValue) {
         return screenValue / scaleFactor;
     }
 
-    public GridPoint convertToGrid(GridPoint screenPoint) {
+    public PointF convertToGrid(PointF screenPoint) {
         return convertToGrid(screenPoint.x, screenPoint.y);
     }
 
-    public GridPoint convertToGrid(float screenX, float screenY) {
-        return new GridPoint(convertToGrid(screenX), convertToGrid(screenHeight - screenY));
+    public PointF convertToGrid(float screenX, float screenY) {
+        return new PointF(convertToGrid(screenX), convertToGrid(screenHeight - screenY));
     }
 
     public void setScreen(float screenWidth, float screenHeight) {
@@ -198,7 +199,7 @@ public class GridRenderer {
     }
 
     private void drawGridGuides(Canvas canvas) {
-        GridPoint g = convertToScreen(grid.getGuideline());
+        PointF g = convertToScreen(grid.getGuideline());
         canvas.drawLine(g.x, 0, g.x, screenHeight, gridGuidePaint);
         canvas.drawLine(0, g.y, screenWidth, g.y, gridGuidePaint);
         canvas.drawText(String.format("%.2f", grid.getGuideline().x), g.x * 1.01f, 0.96f * screenHeight, gridLabelPaint);

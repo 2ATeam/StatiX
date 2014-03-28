@@ -80,7 +80,8 @@ public class PlankEditor extends UnitEditor {
     public void applyChanges() {
         Plank plank = (Plank) unit;
         scene.select(plank);
-//        scene.resizeSelectedPlank(Float.parseFloat(etWidth.getText().toString()));
+        ///TODO: apply changes in the "apply" button event.
+//        scene.resizeSelectedPlank(scene.getSurface().getGridRenderer().convertToScreen(Float.parseFloat(etWidth.getText().toString())));
 //        scene.rotateSelected(Float.parseFloat(etAngle.getText().toString()));
     }
 

@@ -80,7 +80,7 @@ public class SceneController {
 
         PointF unitLocation = new PointF(x, y);
 
-        plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUbPaint());
+        plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUpPaint());
         addUnit(plankBuilder, unitLocation.x, unitLocation.y, PlankType.PLANK);
         planks.add((Plank) foreman.getUnit()); //reference to the recently added plank.
         unconfirmedPlank = null; // no need to render unconfirmed plank any more.
@@ -103,7 +103,7 @@ public class SceneController {
     }
 
     public void rotateSelected(float angle) {
-        if (angle >= 180)
+        if (angle > 180)
             angle -= 180;
         selectedObject.rotate(angle);
     }
@@ -158,7 +158,7 @@ public class SceneController {
                 }
             }
         } else {
-            float stickThreshold = 150.0f; // in screen coords.
+            float stickThreshold = 100.0f; // in screen coords.
             float dx = Math.abs(selectedObject.getSpriteLocation().x - x);
             float dy = Math.abs(selectedObject.getSpriteLocation().y - y);
             if (dx >= stickThreshold || dy >= stickThreshold) {

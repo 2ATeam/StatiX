@@ -30,7 +30,7 @@ public class RenderingSurface extends SurfaceView implements Runnable {
     private Renderable selectedObject; // a reference from scene controller, to determine the overlay target.
     private Paint unitPaint;
     private Paint rectPaint;
-    private Paint ubPaint;
+    private Paint upPaint;
     private boolean isOK; // thread is running now.
     private static final boolean IS_DEBUG_INFO_VISIBLE = false;
     private GridRenderer gridRenderer;
@@ -40,11 +40,11 @@ public class RenderingSurface extends SurfaceView implements Runnable {
         super(context);
         surfaceHolder = getHolder();
         unitPaint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG | Paint.ANTI_ALIAS_FLAG); // some bitmap smoothing here
-        ubPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        ubPaint.setColor(Color.BLUE);
-        ubPaint.setStyle(Paint.Style.STROKE);
-        ubPaint.setStrokeJoin(Paint.Join.ROUND);
-        ubPaint.setStrokeWidth(10.0f);
+        upPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        upPaint.setColor(Color.BLUE);
+        upPaint.setStyle(Paint.Style.STROKE);
+        upPaint.setStrokeJoin(Paint.Join.ROUND);
+        upPaint.setStrokeWidth(10.0f);
         rectPaint = new Paint();
         rectPaint.setARGB(200, 0, 200, 0);
 
@@ -77,7 +77,7 @@ public class RenderingSurface extends SurfaceView implements Runnable {
             if (unconfirmedPlank != null) { // user is drawing a beam now...
                 PointF start = unconfirmedPlank.getBegin();
                 PointF stop = unconfirmedPlank.getEnd();
-                canvas.drawLine(start.x, start.y, stop.x, stop.y, ubPaint);
+                canvas.drawLine(start.x, start.y, stop.x, stop.y, upPaint);
             }
 
             while (iterator.hasNext()) {
@@ -99,6 +99,7 @@ public class RenderingSurface extends SurfaceView implements Runnable {
 
     public void pause() {
         isOK = false;
+        //noinspection LoopStatementThatDoesntLoop
         while (true) {
             try {
                 renderingThread.join();
@@ -129,8 +130,8 @@ public class RenderingSurface extends SurfaceView implements Runnable {
         this.unconfirmedPlank = unconfirmedPlank;
     }
 
-    public Paint getUbPaint() {
-        return ubPaint;
+    public Paint getUpPaint() {
+        return upPaint;
     }
 
     public int getCanvasWidth() {

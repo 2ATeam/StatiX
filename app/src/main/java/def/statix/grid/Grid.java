@@ -1,5 +1,7 @@
 package def.statix.grid;
 
+import android.graphics.PointF;
+
 /**
  * Created by AdYa on 22.03.14.
  */
@@ -22,7 +24,7 @@ public class Grid {
     /**
      * Optional guideline coordinates.
      */
-    private GridPoint guideline;
+    private PointF guideline;
 
     /**
      * Indicates whether minor sections should be drew.
@@ -71,7 +73,7 @@ public class Grid {
     public Grid() {
         this.majorLength = 5.0f;
         this.minorSectionsCount = 5;
-        this.guideline = new GridPoint();
+        this.guideline = new PointF();
         this.showMinor = true;
         this.showGuides = false;
     }
@@ -113,11 +115,11 @@ public class Grid {
         this.guideline.set(guidelineX, guidelineY);
     }
 
-    public void setGuideline(GridPoint guideline) {
+    public void setGuideline(PointF guideline) {
         this.guideline.set(guideline);
     }
 
-    public GridPoint getGuideline() {
+    public PointF getGuideline() {
         return this.guideline;
     }
 
