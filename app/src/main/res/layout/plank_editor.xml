@@ -6,43 +6,43 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="@dimen/editor_row_margin">
+    <!-- <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_margin="@dimen/editor_row_margin">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/label_X"
-            android:gravity="center" />
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:text="@string/label_X"
+             android:gravity="center" />
 
-        <EditText
-            android:id="@+id/editor_plank_etX"
-            android:layout_width="@dimen/editor_coord_field_width"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:inputType="numberDecimal"
-            android:digits="0123456789."
-            android:maxLength="4" />
+         <EditText
+             android:id="@+id/editor_plank_etX"
+             android:layout_width="@dimen/editor_coord_field_width"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.3"
+             android:inputType="numberDecimal"
+             android:digits="0123456789."
+             android:maxLength="4" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/editor_row_margin"
-            android:text="@string/label_Y"
-            android:gravity="center" />
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:layout_marginLeft="@dimen/editor_row_margin"
+             android:text="@string/label_Y"
+             android:gravity="center" />
 
-        <EditText
-            android:id="@+id/editor_plank_etY"
-            android:layout_width="@dimen/editor_coord_field_width"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:inputType="numberDecimal"
-            android:digits="0123456789."
-            android:maxLength="4" />
-    </LinearLayout>
+         <EditText
+             android:id="@+id/editor_plank_etY"
+             android:layout_width="@dimen/editor_coord_field_width"
+             android:layout_height="wrap_content"
+             android:layout_weight="0.5"
+             android:inputType="numberDecimal"
+             android:digits="0123456789."
+             android:maxLength="4" />
+     </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
