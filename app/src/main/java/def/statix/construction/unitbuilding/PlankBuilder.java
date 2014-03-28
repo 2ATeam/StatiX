@@ -25,6 +25,7 @@ public class PlankBuilder extends ConstructionUnitBuilder {
     @Override
     public void setRepresentation(Context context) {
         unit.setImage(createBitmap(context));
+        unit.getOverlay().getJoints().clear();
         unit.getOverlay().addJoint(uncPlank.getBegin());
         unit.getOverlay().addJoint(uncPlank.getEnd());
         PointF plankCenter = new PointF(location.x + (unit.getBoundingRect().width() / 2) - 20,

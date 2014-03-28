@@ -82,7 +82,7 @@ public class PlankEditor extends UnitEditor {
         Plank plank = (Plank) unit;
         scene.select(plank);
         scene.resizeSelectedPlank(Float.parseFloat(etWidth.getText().toString()));
-        scene.rotateSelected(Float.parseFloat(etAngle.getText().toString()));
+       // scene.rotateSelected(Float.parseFloat(etAngle.getText().toString()));
     }
 
     private void initEditText(final EditText text) {
