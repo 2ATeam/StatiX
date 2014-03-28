@@ -29,5 +29,6 @@
     <string name="text_apply">Apply</string>
     <string name="label_value">Value:</string>
     <string name="text_test">Test</string>
+    <string name="text_clear">Clear</string>
 
 </resources>

@@ -34,7 +34,8 @@ public class StatusFragment extends Fragment {
 
                 if (c != null && c.canSolve()) {
                     float[] s = solver.solve(c);
-                    StatusManager.setSuccess(getString(R.string.msg_solution) + ": R = " + String.format("%.2f", s[0]) + "; X = " + String.format("%.2f", s[1]) + "; Y = " + String.format("%.2f", s[2]));
+                    if (s != null)
+                        StatusManager.setSuccess(getString(R.string.msg_solution) + ": R = " + String.format("%.2f", s[0]) + "; X = " + String.format("%.2f", s[1]) + "; Y = " + String.format("%.2f", s[2]));
                 } else
                     StatusManager.setError(getActivity().getString(R.string.msg_construction_not_ready));
             }
@@ -48,6 +49,14 @@ public class StatusFragment extends Fragment {
             }
         });
 
+        Button bClear = (Button) v.findViewById(R.id.bClear);
+        bClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ActivityMain) getActivity()).getSurfaceFragment().getScene().getConstruction().clear();
+            }
+        });
+
         StatusManager.addStatusView((TextView) v.findViewById(R.id.tvStatus));
         return v;
     }
@@ -55,6 +64,7 @@ public class StatusFragment extends Fragment {
     private void test() {
         Construction c = new Construction();
         SceneController sceneController = ((ActivityMain) getActivity()).getSurfaceFragment().getScene();
+        sceneController.getConstruction().clear();
         Plank p1 = new Plank(2, 90);
         Plank p2 = new Plank(3, 0);
         p1.setPosition(200, 200);

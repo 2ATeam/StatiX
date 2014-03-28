@@ -182,4 +182,12 @@ public class Construction implements Iterable<ConstructionUnit> {
     public Iterator<ConstructionUnit> iterator() {
         return getUnits().iterator();
     }
+
+    public void clear() {
+        renderables.clear();
+        planks.clear();
+        forces.clear();
+        bindings.clear();
+        bindingsAmount = new int[BindingType.values().length];
+    }
 }
