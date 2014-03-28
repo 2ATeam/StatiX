@@ -21,7 +21,6 @@ import def.statix.construction.unittypes.PlankType;
 public class SceneController {
 
     private Construction construction;
-    private ArrayList<Plank> planks; // references from sceneObjects list.
     private UnconfirmedPlank unconfirmedPlank; // cannot be renderable.
     private ConstructionUnit selectedObject;
     private RenderingSurface renderingSurface;
@@ -43,7 +42,6 @@ public class SceneController {
 
     public SceneController() {
         construction = new Construction();
-        planks = new ArrayList<>();
         foreman = new Foreman();
         plankBuilder = new PlankBuilder();
         bindingBuilder = new BindingBuilder();
@@ -82,7 +80,6 @@ public class SceneController {
 
         plankBuilder.setPlankParams(unconfirmedPlank, unitLocation, renderingSurface.getUpPaint());
         addUnit(plankBuilder, unitLocation.x, unitLocation.y, PlankType.PLANK);
-        planks.add((Plank) foreman.getUnit()); //reference to the recently added plank.
         unconfirmedPlank = null; // no need to render unconfirmed plank any more.
         renderingSurface.setUnconfirmedPlank(null);
     }
@@ -133,7 +130,7 @@ public class SceneController {
 
     private PointF checkStick(PointF sticker) {
         float stickThreshold = 20.0f;
-        for (Plank plank : planks) {
+        for (Plank plank : construction.getPlanks()) {
             if (plank == selectedObject) // avoid self-checking.
                 continue;
 
