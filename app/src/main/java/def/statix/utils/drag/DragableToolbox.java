@@ -1,17 +1,15 @@
 package def.statix.utils.drag;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 /**
  * Created by AdYa on 17.03.14.
  */
-public class DragableToolbox extends LinearLayout implements DragSource, DropTarget {
+public class DragableToolbox extends LinearLayout implements DragSource {
 
     private DragController dragController;
 
@@ -48,7 +46,6 @@ public class DragableToolbox extends LinearLayout implements DragSource, DropTar
     @Override
     public void setDragController(DragController dragger) {
         dragController = dragger;
-        dragController.addDropTarget(this);
     }
 
     public DragController getDragController() {
@@ -58,34 +55,6 @@ public class DragableToolbox extends LinearLayout implements DragSource, DropTar
     @Override
     public void onDropCompleted(View target, boolean success) {
 
-    }
-
-    // DropTarget implementation goes here...
-    @Override
-    public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
-    }
-
-    @Override
-    public void onDragEnter(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
-    }
-
-    @Override
-    public void onDragOver(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
-    }
-
-    @Override
-    public void onDragExit(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
-    }
-
-    @Override
-    public boolean acceptDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
-        Toast.makeText(getContext(), "View can't be droped here, so revert dragging", 5).show();
-        return false;
-    }
-
-    @Override
-    public Rect estimateDropLocation(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo, Rect recycle) {
-        return null;
     }
 
 }

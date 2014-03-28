@@ -99,4 +99,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/bApply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_apply" />
 </LinearLayout>

@@ -5,9 +5,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by AdYa on 01.03.14.
- */
 public class StatusManager {
 
     private static ArrayList<TextView> statusViews = new ArrayList<>();

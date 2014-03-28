@@ -21,5 +21,10 @@
     <string name="label_angle">Угол:</string>
     <string name="label_width">Длина:</string>
     <string name="label_force_type">Тип силы:</string>
+    <string name="text_solve">Решить</string>
+    <string name="msg_construction_not_ready">Недопустимое сочетание опор в конструкции.</string>
+    <string name="msg_solution">Решение</string>
+    <string name="text_apply">Применить</string>
+    <string name="label_value">Величина:</string>
 
 </resources>

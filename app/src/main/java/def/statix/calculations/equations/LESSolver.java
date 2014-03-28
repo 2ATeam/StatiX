@@ -156,7 +156,6 @@ public class LESSolver {
             det = tmp.determinant();
             solution[i] = det / baseDet;
         }
-        ;
         return solution;
     }
 

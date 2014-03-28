@@ -1,21 +1,36 @@
 package def.statix.editors;
 
 
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import def.statix.R;
+import def.statix.construction.Force;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.construction.unittypes.ForceType;
+import def.statix.utils.MathUtils;
 
 /**
  * Created by AdYa on 18.03.14.
  */
 public class ForceEditor extends UnitEditor {
 
+    private static int SEEK_BAR_DECIMAL_ACCURACY = 10;
+
     Spinner spinner;
+    private EditText etAngle;
+    private SeekBar sbAngle;
+    private EditText etValue;
+    private SeekBar sbValue;
 
     public ForceEditor() {
         super(R.layout.force_editor, ForceType.CONCENTRATED);
@@ -24,18 +39,40 @@ public class ForceEditor extends UnitEditor {
     @Override
     protected void initializeChildViews() {
         prepareSpinner();
+        etValue = (EditText) view.findViewById(R.id.editor_plank_etValue);
+        etAngle = (EditText) view.findViewById(R.id.editor_plank_etAngle);
+        sbAngle = (SeekBar) view.findViewById(R.id.editor_plank_sbAngle);
+
+
+        sbAngle.setMax(180 * SEEK_BAR_DECIMAL_ACCURACY);
+        sbValue = (SeekBar) view.findViewById(R.id.editor_plank_sbValue);
+
+        initEditText(etValue);
+        initEditText(etAngle);
+        linkSeekBarWithEdit(sbAngle, etAngle);
+        linkSeekBarWithEdit(sbValue, etValue);
     }
 
     @Override
     public void updateValues() {
         ConstructionUnitType type = (unit == null ? unitType : unit.getType());
-        spinner.setEnabled(unit != null);
+        spinner.setEnabled(false);
         spinner.setSelection(((ForceType) type).ordinal());
+        if (unit != null) {///TODO: Temporary solution when creating an object
+            Force force = (Force) unit;
+            etAngle.setText(String.valueOf(force.getAngle()));
+            etValue.setText(String.valueOf(force.getValue()));
+        } else {
+            etAngle.setText("0");
+            etValue.setText("0");
+        }
     }
 
     @Override
     public void applyChanges() {
-        /// TODO: ForceEditor: possible changes of force type
+        Force force = (Force) unit;
+        force.setValue(Float.parseFloat(etValue.getText().toString()));
+        force.setAngle(Float.parseFloat(etAngle.getText().toString()));
     }
 
     private void prepareSpinner() {
@@ -65,6 +102,74 @@ public class ForceEditor extends UnitEditor {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void initEditText(final EditText text) {
+
+        text.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER &&
+                        keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+
+                    InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                    UnitEditorManager.getInstance().hideEditor(ForceEditor.this);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void linkSeekBarWithEdit(SeekBar seekBar, EditText editText) {
+        final SeekBar seek = seekBar;
+        final EditText text = editText;
+
+        text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().isEmpty()) return;
+                int value = (int) (Float.parseFloat(editable.toString()) * SEEK_BAR_DECIMAL_ACCURACY);
+                int clampedValue = MathUtils.clamp(0, value, seek.getMax(), true);
+
+                seek.setProgress(value);
+                if (clampedValue != value) {
+                    text.setText(String.valueOf(clampedValue / SEEK_BAR_DECIMAL_ACCURACY));
+                }
+
+            }
+        });
+
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                text.setText(String.valueOf(progress / SEEK_BAR_DECIMAL_ACCURACY));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });

@@ -23,4 +23,67 @@
             android:layout_weight="1" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/editor_row_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/label_value"
+            android:gravity="center" />
+
+        <EditText
+            android:id="@+id/editor_plank_etValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:inputType="numberDecimal"
+            android:digits="0123456789."
+            android:maxLength="4" />
+
+        <SeekBar
+            android:id="@+id/editor_plank_sbValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/editor_row_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/label_angle"
+            android:gravity="center" />
+
+        <EditText
+            android:id="@+id/editor_plank_etAngle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:inputType="numberDecimal"
+            android:digits="0123456789."
+            android:maxLength="5" />
+
+        <SeekBar
+            android:id="@+id/editor_plank_sbAngle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/bApply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_apply" />
 </LinearLayout>

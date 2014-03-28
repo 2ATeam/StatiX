@@ -23,5 +23,10 @@
     <string name="label_force_type">Force type:</string>
     <string name="label_X">X:</string>
     <string name="label_Y">Y:</string>
+    <string name="text_solve">Solve</string>
+    <string name="msg_construction_not_ready">Construction hasn\'t got necessary bindings.</string>
+    <string name="msg_solution">Solution found</string>
+    <string name="text_apply">Apply</string>
+    <string name="label_value">Value:</string>
 
 </resources>

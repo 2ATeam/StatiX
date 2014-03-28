@@ -27,6 +27,7 @@ public class PlankEditor extends UnitEditor {
     private SeekBar sbWidth;
     private SeekBar sbAngle;
 
+    //applyChanges(); /// TODO: PlankEditor: may be should apply values by clicking button
 
     public PlankEditor() {
         super(R.layout.plank_editor, PlankType.PLANK);
@@ -35,7 +36,7 @@ public class PlankEditor extends UnitEditor {
     @Override
     public void editUnit(ConstructionUnit unit) {
         super.editUnit(unit);
-        sbWidth.setMax((int) scene.getSurface().getGridRenderer().getGrid().getWidth());
+        sbWidth.setMax((int) scene.getSurface().getGridRenderer().getGrid().getWidth() * SEEK_BAR_DECIMAL_ACCURACY);
     }
 
     @Override
@@ -80,9 +81,8 @@ public class PlankEditor extends UnitEditor {
     public void applyChanges() {
         Plank plank = (Plank) unit;
         scene.select(plank);
-        ///TODO: apply changes in the "apply" button event.
-//        scene.resizeSelectedPlank(scene.getSurface().getGridRenderer().convertToScreen(Float.parseFloat(etWidth.getText().toString())));
-//        scene.rotateSelected(Float.parseFloat(etAngle.getText().toString()));
+        scene.resizeSelectedPlank(Float.parseFloat(etWidth.getText().toString()));
+        scene.rotateSelected(Float.parseFloat(etAngle.getText().toString()));
     }
 
     private void initEditText(final EditText text) {
@@ -129,7 +129,6 @@ public class PlankEditor extends UnitEditor {
                 seek.setProgress(value);
                 if (clampedValue != value) {
                     text.setText(String.valueOf(clampedValue / SEEK_BAR_DECIMAL_ACCURACY));
-                    applyChanges(); /// TODO: PlankEditor: may be should apply values by clicking button
                 }
 
             }

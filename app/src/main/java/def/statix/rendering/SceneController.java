@@ -115,6 +115,8 @@ public class SceneController {
     public void resizeSelectedPlank(float newLength) {
         if (selectedObject instanceof Plank) {
             Plank plank = (Plank) selectedObject;
+            plank.setLength(newLength);
+            newLength = getSurface().getGridRenderer().convertToScreen(newLength);
             float oxAngle = (float) Math.atan2(plank.getEnd().y - plank.getBegin().y,
                                                plank.getEnd().x - plank.getBegin().x);
             PointF normal = new PointF((float) Math.cos(oxAngle), (float) Math.sin(oxAngle));
@@ -207,5 +209,9 @@ public class SceneController {
 
     public UnconfirmedPlank getUnconfirmedPlank() {
         return unconfirmedPlank;
+    }
+
+    public Construction getConstruction() {
+        return construction;
     }
 }

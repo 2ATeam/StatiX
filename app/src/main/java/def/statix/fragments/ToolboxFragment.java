@@ -19,6 +19,7 @@ import def.statix.editors.UnitEditorManager;
 import def.statix.utils.drag.DragMode;
 import def.statix.utils.drag.DragableToolbox;
 import def.statix.utils.ui.GestureHandler;
+import def.statix.utils.ui.StatusManager;
 
 /**
  * Created by AdYa on 16.03.14.
@@ -78,13 +79,16 @@ public class ToolboxFragment extends Fragment implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         gestureHandler.onTouchEvent(motionEvent);
-
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
             ConstructionUnitType type = getUnitTypeFromRes(view.getId());
             UnitEditor editor = UnitEditorManager.getInstance().getEditorForUnitType(type);
+            editor.clearUnit();
             if (type instanceof PlankType) {
                 ((ActivityMain) getActivity()).getSurfaceFragment().startCreatingPlank();
+                StatusManager.setStatus(getString(R.string.hint_creating_object));
             } else if (type != null) {
+                StatusManager.setStatus(getString(R.string.hint_create_object));
                 ((ActivityMain) getActivity()).getSurfaceFragment().stopCreatingPlank();
             }
             UnitEditorManager.getInstance().showEditor(editor);
@@ -93,6 +97,7 @@ public class ToolboxFragment extends Fragment implements View.OnTouchListener {
             frame.getDragController().startDrag(view, frame, getUnitTypeFromRes(view.getId()), DragMode.DRAG_MODE_MOVE);
             UnitEditorManager.getInstance().hideActiveEditor();
         }
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) StatusManager.setStatus("");
         return true;
     }
 

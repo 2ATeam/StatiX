@@ -3,10 +3,12 @@ package def.statix.editors;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.Observable;
 import java.util.Observer;
 
+import def.statix.R;
 import def.statix.construction.ConstructionUnit;
 import def.statix.construction.unittypes.ConstructionUnitType;
 import def.statix.rendering.SceneController;
@@ -104,6 +106,13 @@ public abstract class UnitEditor implements Observer {
         view = inflater.inflate(layoutResource, container, false);
         initializeChildViews();
         updateValues();
+        Button bApply = (Button) view.findViewById(R.id.bApply);
+        bApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                applyChanges();
+            }
+        });
         return view;
     }
 

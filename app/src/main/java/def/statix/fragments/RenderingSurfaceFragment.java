@@ -33,11 +33,15 @@ import def.statix.utils.ui.StatusManager;
 
 public class RenderingSurfaceFragment extends Fragment implements View.OnTouchListener {
 
-    private static final float DRAG_SENSIVITY = 15;
+    private static final float DRAG_SENSIVITY = 5;
     private DropableSurface frame;
     private DragHandler dragHandler;
     private SceneController sceneController;
     private GestureHandler gestureHandler;
+
+    public SceneController getScene() {
+        return sceneController;
+    }
 
     private enum ModifyActions {NONE, CREATING, ROTATE_LEFT, ROTATE_RIGHT, SCALE_LEFT, SCALE_RIGHT}
 
@@ -60,13 +64,14 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         @Override
         public void onDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
             if (!(dragInfo instanceof ConstructionUnitType)) return; // ignore garbage if any...
-///TODO: DO NOT FORGET TO APPLY FORCES TO TARGET PLANK via force.applyToPlank(plank)
             if (dragInfo instanceof PlankType) {
                 sceneController.beginPlank(x, y);
             } else if (dragInfo instanceof BindingType) {
                 sceneController.addBinding(x, y, (BindingType) dragInfo);
             } else if (dragInfo instanceof ForceType) {
+                Plank p = (Plank) sceneController.getSelected();
                 sceneController.addForce(x, y, (ForceType) dragInfo);
+                ((Force) sceneController.getSelected()).applyToPlank(p);
             }
 
         }
@@ -74,7 +79,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         @Override
         public boolean acceptDrop(DragSource source, int x, int y, int xOffset, int yOffset, DragView dragView, Object dragInfo) {
             sceneController.select(x, y);
-            return (sceneController.isObjectSelected() && (((ConstructionUnit) sceneController.getSelected()).getType() == PlankType.PLANK));
+            return (sceneController.isObjectSelected() && ((sceneController.getSelected()).getType() == PlankType.PLANK));
             ///TODO: Check for accessibility to drop in requested location
         }
 
@@ -176,26 +181,37 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
         Construction c = new Construction();
         Plank p1 = new Plank(2, 90);
         Plank p2 = new Plank(3, 0);
+        p1.setPosition(200, 200);
+        p2.setPosition(100, 200);
         c.addUnit(p1);
         c.addUnit(p2);
 
-        sceneController.addForce(0, 0, ForceType.CONCENTRATED);
+        sceneController.addForce(200, 200, ForceType.CONCENTRATED);
         ConstructionUnit unit = (sceneController.getSelected());
         unit.setAngle(-60f);
         ((Force) unit).applyToPlank(p1);
+        ((Force) unit).setValue(6);
         c.addUnit(unit);
-        sceneController.addForce(0, 0, ForceType.DISTRIBUTED);
+        sceneController.addForce(200, 150, ForceType.DISTRIBUTED);
         unit = (sceneController.getSelected());
-        unit.setAngle(90f);
+        unit.setAngle(90);
         ((Force) unit).applyToPlank(p1);
+        ((Force) unit).setValue(2);
         c.addUnit(unit);
 
-        sceneController.addBinding(100, 100, BindingType.FIXED);
+        sceneController.addForce(150, 200, ForceType.MOMENT);
+        unit = (sceneController.getSelected());
+        unit.setAngle(180);
+        ((Force) unit).applyToPlank(p2);
+        ((Force) unit).setValue(7);
+        c.addUnit(unit);
+
+        sceneController.addBinding(200, 100, BindingType.FIXED);
         unit = (sceneController.getSelected());
         unit.setAngle(0f);
         c.addUnit(unit);
 
-        sceneController.addBinding(0, 0, BindingType.MOVABLE);
+        sceneController.addBinding(100, 200, BindingType.MOVABLE);
         unit = (sceneController.getSelected());
         unit.setAngle(-30f);
         c.addUnit(unit);
@@ -211,6 +227,8 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
 
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+                StatusManager.setStatus("");
+                //    test();
                 sceneController.getSurface().getGridRenderer().getGrid().setShowGuides(true);
                 if (modifyAction == ModifyActions.CREATING) {
                     sceneController.beginPlank(motionEvent.getX(), motionEvent.getY());
@@ -262,6 +280,7 @@ public class RenderingSurfaceFragment extends Fragment implements View.OnTouchLi
             case MotionEvent.ACTION_UP: {
                 if (motionEvent.getX() < 0) {
                     sceneController.removeSelected();
+                    UnitEditorManager.getInstance().hideActiveEditor();
                 }
                 sceneController.getSurface().getGridRenderer().getGrid().setShowGuides(false);
                 modifyAction = ModifyActions.NONE;

@@ -1,6 +1,8 @@
 package def.statix.utils;
 
 public class MathUtils {
+    public static final float APPROXIMATION_ERROR = 0.1f;
+
     /**
      * Clamps value between to values.
      *
@@ -54,12 +56,16 @@ public class MathUtils {
     }
 
     /**
-     * Extends given array by specified increment value.
+     * Compares two values with approximation error
      */
-    private static float[] extendArraySize(float[] array, int increment) {
-        float[] temp = array.clone();
-        array = new float[array.length + increment];
-        System.arraycopy(temp, 0, array, 0, temp.length);
-        return array;
+    public static boolean approxEquals(float first, float second, float approxError) {
+        return (Math.abs(first - second) <= Math.abs(approxError));
+    }
+
+    /**
+     * Compares two values with default approximation error
+     */
+    public static boolean approxEquals(float first, float second) {
+        return approxEquals(first, second, APPROXIMATION_ERROR);
     }
 }

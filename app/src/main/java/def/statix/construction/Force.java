@@ -32,6 +32,11 @@ public class Force extends ConstructionUnit {
         this.value = value;
     }
 
+    @Override
+    public void setAngle(float angle) {
+        this.angle = (angle > 180 ? angle - 180 : angle);
+    }
+
     public float getValue() {
         return value;
     }
