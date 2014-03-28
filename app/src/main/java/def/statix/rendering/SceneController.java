@@ -102,7 +102,7 @@ public class SceneController {
     public void rotateSelected(float angle) {
         if (angle > 180)
             angle -= 180;
-        // selectedObject.rotate(angle);
+        selectedObject.rotate(angle);
     }
 
     public void scaleSelected(float width, float height) {

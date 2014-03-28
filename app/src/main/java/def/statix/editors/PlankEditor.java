@@ -43,14 +43,14 @@ public class PlankEditor extends UnitEditor {
     protected void initializeChildViews() {
         etWidth = (EditText) view.findViewById(R.id.editor_plank_etWidth);
         etAngle = (EditText) view.findViewById(R.id.editor_plank_etAngle);
-        etX = (EditText) view.findViewById(R.id.editor_plank_etX);
-        etY = (EditText) view.findViewById(R.id.editor_plank_etY);
+       /* etX = (EditText) view.findViewById(R.id.editor_plank_etX);
+        etY = (EditText) view.findViewById(R.id.editor_plank_etY);*/
 
         initEditText(etWidth);
         initEditText(etAngle);
-        initEditText(etX);
+       /* initEditText(etX);
         initEditText(etY);
-
+*/
         sbWidth = (SeekBar) view.findViewById(R.id.editor_plank_sbWidth);
         sbAngle = (SeekBar) view.findViewById(R.id.editor_plank_sbAngle);
 
@@ -67,13 +67,13 @@ public class PlankEditor extends UnitEditor {
             Plank plank = (Plank) unit;
             etAngle.setText(String.valueOf(plank.getAngle()));
             etWidth.setText(String.valueOf(plank.getLength()));
-            etX.setText(String.valueOf(plank.getPosition().x));
-            etY.setText(String.valueOf(plank.getPosition().y));
+           /* etX.setText(String.valueOf(plank.getPosition().x));
+            etY.setText(String.valueOf(plank.getPosition().y));*/
         } else {
             etAngle.setText("0");
             etWidth.setText("0");
-            etX.setText("0");
-            etY.setText("0");
+          /*  etX.setText("0");
+            etY.setText("0");*/
         }
     }
 
