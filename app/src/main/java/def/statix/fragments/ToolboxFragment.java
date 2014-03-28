@@ -30,25 +30,25 @@ public class ToolboxFragment extends Fragment implements View.OnTouchListener {
     private GestureHandler gestureHandler;
     private static int DRAG_SENSIVITY = 20;
 
-    private static int[] TOOLS = {R.drawable.plank_icon,
-            R.drawable.binding_fixed, R.drawable.binding_movalbe, R.drawable.binding_static,
-            R.drawable.force_concentrated, R.drawable.force_distributed, R.drawable.force_moment};
+    private static int[] TOOLS = {R.drawable.plank_ico,
+            R.drawable.binding_const_ico, R.drawable.binding_movable_ico, R.drawable.binding_stationar_ico,
+            R.drawable.force_conc_ico, R.drawable.force_distributed_ico, R.drawable.force_moment_ico};
 
     private ConstructionUnitType getUnitTypeFromRes(int res) {
         switch (res) {
-            case R.drawable.plank_icon:
+            case R.drawable.plank_ico:
                 return PlankType.PLANK;
-            case R.drawable.binding_fixed:
+            case R.drawable.binding_const_ico:
                 return BindingType.FIXED;
-            case R.drawable.binding_movalbe:
+            case R.drawable.binding_movable_ico:
                 return BindingType.MOVABLE;
-            case R.drawable.binding_static:
+            case R.drawable.binding_stationar_ico:
                 return BindingType.STATIC;
-            case R.drawable.force_concentrated:
+            case R.drawable.force_conc_ico:
                 return ForceType.CONCENTRATED;
-            case R.drawable.force_distributed:
+            case R.drawable.force_distributed_ico:
                 return ForceType.DISTRIBUTED;
-            case R.drawable.force_moment:
+            case R.drawable.force_moment_ico:
                 return ForceType.MOMENT;
             default:
                 return null;
