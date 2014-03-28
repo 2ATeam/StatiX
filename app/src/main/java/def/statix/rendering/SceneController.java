@@ -127,6 +127,7 @@ public class SceneController {
             beginPlank(plank.getBegin().x, plank.getBegin().y);
             editPlank(normal);
             construction.removeUnit(selectedObject);
+            planks.remove(selectedObject);
             confirmPlank();
         }
     }
