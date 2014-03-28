@@ -12,11 +12,27 @@
         android:layout_alignParentLeft="true"
         android:text="@string/text_solve" />
 
-    <TextView
-        android:id="@+id/tvStatus"
+    <Button
+        android:id="@+id/bTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bSolve"
+        android:text="@string/text_test" />
+
+    <Button
+        android:id="@+id/bClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/bTest"
+        android:text="@string/text_clear" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text=""
+        android:gravity="center"
         android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/bClear"
         android:layout_alignParentRight="true" />
 </RelativeLayout>

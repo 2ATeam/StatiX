@@ -211,6 +211,7 @@ public class GridRenderer {
             canvas.drawText(String.format("%.2f", convertToGrid(i)), i + 2, 0.98f * screenHeight, gridLabelPaint);
         }
         for (float i : majorYSections) {
+            if (convertToGrid(screenHeight - i) == 0) continue;
             canvas.drawText(String.format("%.2f", convertToGrid(screenHeight - i)), 2, i - 5, gridLabelPaint);
         }
     }

@@ -105,7 +105,7 @@ public class SceneController {
     public void rotateSelected(float angle) {
         if (angle > 180)
             angle -= 180;
-        selectedObject.rotate(angle);
+        // selectedObject.rotate(angle);
     }
 
     public void scaleSelected(float width, float height) {
@@ -118,7 +118,7 @@ public class SceneController {
             plank.setLength(newLength);
             newLength = getSurface().getGridRenderer().convertToScreen(newLength);
             float oxAngle = (float) Math.atan2(plank.getEnd().y - plank.getBegin().y,
-                                               plank.getEnd().x - plank.getBegin().x);
+                    plank.getEnd().x - plank.getBegin().x);
             PointF normal = new PointF((float) Math.cos(oxAngle), (float) Math.sin(oxAngle));
             normal.x *= newLength;
             normal.y *= newLength;
@@ -141,7 +141,7 @@ public class SceneController {
             ArrayList<PointF> joints = plank.getOverlay().getJoints();
             for (PointF joint : joints) {
                 if (sticker.x >= joint.x - stickThreshold && sticker.x <= joint.x + stickThreshold &&
-                    sticker.y >= joint.y - stickThreshold && sticker.y <= joint.y + stickThreshold) {
+                        sticker.y >= joint.y - stickThreshold && sticker.y <= joint.y + stickThreshold) {
                     return new PointF(joint.x - sticker.x, joint.y - sticker.y);
                 }
             }

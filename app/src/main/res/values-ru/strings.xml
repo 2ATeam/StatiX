@@ -26,5 +26,6 @@
     <string name="msg_solution">Решение</string>
     <string name="text_apply">Применить</string>
     <string name="label_value">Величина:</string>
+    <string name="text_clear">Очистить</string>
 
 </resources>

@@ -12,6 +12,7 @@ public class StatusManager {
     public static void addStatusView(TextView view) {
         if (view != null && !statusViews.contains(view))
             statusViews.add(view);
+        setStatus("...");
     }
 
     public static void setStatus(String statusText, int statusColor) {
