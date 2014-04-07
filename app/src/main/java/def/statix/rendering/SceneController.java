@@ -2,6 +2,7 @@ package def.statix.rendering;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -94,7 +95,8 @@ public class SceneController {
 
     private void addUnit(ConstructionUnitBuilder builder, float x, float y, ConstructionUnitType type) {
         foreman.setBuilder(builder);
-        foreman.constructUnit(context, x, y, type);
+        PointF logPos = getSurface().getGridRenderer().convertToGrid(x, y);
+        foreman.constructUnit(context, logPos.x, logPos.y, new PointF(x, y), type);
         construction.addUnit(foreman.getUnit());
         selectedObject = foreman.getUnit(); // added object becomes selected.
     }
@@ -115,7 +117,7 @@ public class SceneController {
             plank.setLength(newLength);
             newLength = getSurface().getGridRenderer().convertToScreen(newLength);
             float oxAngle = (float) Math.atan2(plank.getEnd().y - plank.getBegin().y,
-                    plank.getEnd().x - plank.getBegin().x);
+                                               plank.getEnd().x - plank.getBegin().x);
             PointF normal = new PointF((float) Math.cos(oxAngle), (float) Math.sin(oxAngle));
             normal.x *= newLength;
             normal.y *= newLength;
@@ -137,7 +139,7 @@ public class SceneController {
             ArrayList<PointF> joints = plank.getOverlay().getJoints();
             for (PointF joint : joints) {
                 if (sticker.x >= joint.x - stickThreshold && sticker.x <= joint.x + stickThreshold &&
-                        sticker.y >= joint.y - stickThreshold && sticker.y <= joint.y + stickThreshold) {
+                    sticker.y >= joint.y - stickThreshold && sticker.y <= joint.y + stickThreshold) {
                     return new PointF(joint.x - sticker.x, joint.y - sticker.y);
                 }
             }
@@ -149,6 +151,7 @@ public class SceneController {
         PointF stickOffsetVector;
         if (!selectedObject.isAttached()) {
             selectedObject.translate(x, y);
+            selectedObject.setPosition(getSurface().getGridRenderer().convertToGrid(x, y));
             for (PointF joint : selectedObject.getOverlay().getJoints()) {
                 stickOffsetVector = checkStick(joint);
                 if (stickOffsetVector != null) { // stick occurred!

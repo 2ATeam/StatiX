@@ -198,6 +198,7 @@ public class GridRenderer {
         }
     }
 
+    ///TODO: to many confusing magic here...
     private void drawGridGuides(Canvas canvas) {
         PointF g = convertToScreen(grid.getGuideline());
         canvas.drawLine(g.x, 0, g.x, screenHeight, gridGuidePaint);
@@ -206,6 +207,7 @@ public class GridRenderer {
         canvas.drawText(String.format("%.2f", grid.getGuideline().y), 0.04f * screenWidth, g.y - 5, gridLabelPaint);
     }
 
+    ///TODO: to many confusing magic here...
     private void drawGridLabels(Canvas canvas) {
         for (float i : majorXSections) {
             canvas.drawText(String.format("%.2f", convertToGrid(i)), i + 2, 0.98f * screenHeight, gridLabelPaint);

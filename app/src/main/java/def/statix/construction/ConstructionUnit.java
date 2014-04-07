@@ -41,10 +41,10 @@ public abstract class ConstructionUnit extends Renderable {
         notifyObservers();
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(Bitmap image, PointF location) {
         /// TODO: Get rid of it....
         overlayType = type == PlankType.PLANK; // if true - then we are dealing with the plank. Force or binding otherwise.
-        setSprite(new Sprite(image, position.x, position.y));
+        setSprite(new Sprite(image, location.x, location.y)); // location is in screen coords.
     }
 
     public ConstructionUnitType getType() {

@@ -1,6 +1,7 @@
 package def.statix.construction.unitbuilding;
 
 import android.content.Context;
+import android.graphics.PointF;
 
 import def.statix.construction.ConstructionUnit;
 import def.statix.construction.unittypes.ConstructionUnitType;
@@ -12,7 +13,7 @@ import def.statix.construction.unittypes.ConstructionUnitType;
 public abstract class ConstructionUnitBuilder {
     protected ConstructionUnit unit;
 
-    public abstract void setRepresentation(Context context);
+    public abstract void setRepresentation(Context context, PointF location);
 
     public abstract void setType(ConstructionUnitType type);
 

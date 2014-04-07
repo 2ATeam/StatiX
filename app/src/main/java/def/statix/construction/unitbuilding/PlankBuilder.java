@@ -23,8 +23,8 @@ public class PlankBuilder extends ConstructionUnitBuilder {
     private PointF location;
 
     @Override
-    public void setRepresentation(Context context) {
-        unit.setImage(createBitmap(context));
+    public void setRepresentation(Context context, PointF location) {
+        unit.setImage(createBitmap(context), location);
         unit.getOverlay().getJoints().clear();
         unit.getOverlay().addJoint(uncPlank.getBegin());
         unit.getOverlay().addJoint(uncPlank.getEnd());
@@ -46,7 +46,7 @@ public class PlankBuilder extends ConstructionUnitBuilder {
 
     private Bitmap createBitmap(Context context) {
         if (uncPlank != null && plankPaint != null) {
-            Paint txtPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            //Paint txtPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             PointF begin = uncPlank.getBegin();
             PointF end = uncPlank.getEnd();
 
@@ -58,8 +58,8 @@ public class PlankBuilder extends ConstructionUnitBuilder {
             Bitmap image = Bitmap.createBitmap(width + strokeOffset,
                     height + strokeOffset, Bitmap.Config.ARGB_4444);
 
-            PointF txtPos = new PointF(image.getWidth() / 2 - plankPaint.getStrokeWidth(),
-                    image.getHeight() / 2 + plankPaint.getStrokeWidth()); /// TODO: use this!
+//            PointF txtPos = new PointF(image.getWidth() / 2 - plankPaint.getStrokeWidth(),
+//                    image.getHeight() / 2 + plankPaint.getStrokeWidth()); /// TODO: use this!
 
             Canvas canvas = new Canvas(image);
             canvas.drawLine(begin.x - location.x + frameOffset,
