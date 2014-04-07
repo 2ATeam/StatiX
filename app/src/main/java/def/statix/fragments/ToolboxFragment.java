@@ -91,7 +91,7 @@ public class ToolboxFragment extends Fragment implements View.OnTouchListener {
                 StatusManager.setStatus(getString(R.string.hint_create_object));
                 ((ActivityMain) getActivity()).getSurfaceFragment().stopCreatingPlank();
             }
-            UnitEditorManager.getInstance().showEditor(editor);
+            //  UnitEditorManager.getInstance().showEditor(editor);
             gestureHandler.reset();
         } else if (!frame.getDragController().isDragging() && (gestureHandler.getDX() > DRAG_SENSIVITY || gestureHandler.getDY() > DRAG_SENSIVITY)) {
             frame.getDragController().startDrag(view, frame, getUnitTypeFromRes(view.getId()), DragMode.DRAG_MODE_MOVE);
