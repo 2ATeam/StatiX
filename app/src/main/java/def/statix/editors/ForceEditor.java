@@ -42,15 +42,16 @@ public class ForceEditor extends UnitEditor {
         etValue = (EditText) view.findViewById(R.id.editor_plank_etValue);
         etAngle = (EditText) view.findViewById(R.id.editor_plank_etAngle);
         sbAngle = (SeekBar) view.findViewById(R.id.editor_plank_sbAngle);
-
-
-        sbAngle.setMax(180 * SEEK_BAR_DECIMAL_ACCURACY);
         sbValue = (SeekBar) view.findViewById(R.id.editor_plank_sbValue);
+
+        sbAngle.setMax(360 * SEEK_BAR_DECIMAL_ACCURACY);
+        sbValue.setMax(10000);
+
 
         initEditText(etValue);
         initEditText(etAngle);
-        linkSeekBarWithEdit(sbAngle, etAngle);
-        linkSeekBarWithEdit(sbValue, etValue);
+        linkSeekBarWithEdit(sbAngle, etAngle, -180, 180);
+        linkSeekBarWithEdit(sbValue, etValue, 0, 10000);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class ForceEditor extends UnitEditor {
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER &&
                         keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-
+                    applyChanges();
                     InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -127,7 +128,7 @@ public class ForceEditor extends UnitEditor {
         });
     }
 
-    private void linkSeekBarWithEdit(SeekBar seekBar, EditText editText) {
+    private void linkSeekBarWithEdit(SeekBar seekBar, EditText editText, final float min, final float max) {
         final SeekBar seek = seekBar;
         final EditText text = editText;
 
@@ -145,12 +146,12 @@ public class ForceEditor extends UnitEditor {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().isEmpty()) return;
-                int value = (int) (Float.parseFloat(editable.toString()) * SEEK_BAR_DECIMAL_ACCURACY);
-                int clampedValue = MathUtils.clamp(0, value, seek.getMax(), true);
-
-                seek.setProgress(value);
+                int value = (int) ((Float.parseFloat(editable.toString())));
+                int clampedValue = MathUtils.clamp((int) min, value, (int) max, true);
+                int scaled = value + (int) (Math.abs(min));
+                seek.setProgress(scaled * SEEK_BAR_DECIMAL_ACCURACY);
                 if (clampedValue != value) {
-                    text.setText(String.valueOf(clampedValue / SEEK_BAR_DECIMAL_ACCURACY));
+                    text.setText(String.valueOf(clampedValue));
                 }
 
             }
@@ -160,7 +161,7 @@ public class ForceEditor extends UnitEditor {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!fromUser) return;
-                text.setText(String.valueOf(progress / SEEK_BAR_DECIMAL_ACCURACY));
+                text.setText(String.valueOf((progress / SEEK_BAR_DECIMAL_ACCURACY) - (Math.abs(min))));
             }
 
             @Override

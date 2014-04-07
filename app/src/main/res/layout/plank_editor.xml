@@ -90,8 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:inputType="numberDecimal"
-            android:digits="0123456789."
-            android:maxLength="5" />
+            android:digits="0123456789.-"
+            android:maxLength="6" />
 
         <SeekBar
             android:id="@+id/editor_plank_sbAngle"
